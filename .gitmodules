@@ -1,0 +1,3 @@
+[submodule "CoastSat"]
+	path = CoastSat
+	url = https://github.com/UoA-eResearch/CoastSat.git
