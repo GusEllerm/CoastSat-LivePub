@@ -1,5 +1,5 @@
 #!/bin/bash
-export NIWA_API_KEY="REMOVED"
+export API_KEY="${API_KEY:?Missing API_KEY}"
 
 # Activate conda env
 eval "$(conda shell.bash hook)"
