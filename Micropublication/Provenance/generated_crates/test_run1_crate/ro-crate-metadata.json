@@ -1,0 +1,163 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": [
+                {
+                    "@id": "https://w3id.org/ro/wfrun/process/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/workflow/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/provenance/0.5"
+                },
+                {
+                    "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+                }
+            ],
+            "datePublished": "2025-06-13T00:25:45+00:00",
+            "hasPart": [
+                {
+                    "@id": "test.ipynb"
+                },
+                {
+                    "@id": "code_blocks/cell_1.py"
+                },
+                {
+                    "@id": "code_blocks/cell_2.py"
+                },
+                {
+                    "@id": "code_blocks/cell_3.py"
+                }
+            ],
+            "mainEntity": {
+                "@id": "test.ipynb"
+            }
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "test.ipynb",
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow",
+                "HowTo"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-polygons_geojson"
+                }
+            ],
+            "output": [],
+            "step": [
+                {
+                    "@id": "#step-1"
+                },
+                {
+                    "@id": "#step-2"
+                },
+                {
+                    "@id": "#step-3"
+                }
+            ]
+        },
+        {
+            "@id": "#jupyter-kernel",
+            "@type": "SoftwareApplication",
+            "description": "Jupyter Notebook kernel for coastsat_stencila_env",
+            "identifier": "python3",
+            "input": [
+                {
+                    "@id": "#fp-polygons_geojson"
+                }
+            ],
+            "name": "Jupyter Notebook Kernel",
+            "output": [],
+            "programmingLanguage": "python3",
+            "softwareVersion": "3.10.17",
+            "version": "3.10.17"
+        },
+        {
+            "@id": "#step-1",
+            "@type": "HowToStep",
+            "name": "Code cell 1",
+            "position": 1,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_1.py"
+            }
+        },
+        {
+            "@id": "#step-2",
+            "@type": "HowToStep",
+            "name": "Code cell 2",
+            "position": 2,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_2.py"
+            }
+        },
+        {
+            "@id": "#step-3",
+            "@type": "HowToStep",
+            "name": "Code cell 3",
+            "position": 3,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_3.py"
+            }
+        },
+        {
+            "@id": "#fp-polygons_geojson",
+            "@type": "FormalParameter",
+            "name": "polygons.geojson"
+        },
+        {
+            "@id": "code_blocks/cell_1.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 1"
+        },
+        {
+            "@id": "code_blocks/cell_2.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-polygons_geojson"
+                }
+            ],
+            "name": "Code Cell 2"
+        },
+        {
+            "@id": "code_blocks/cell_3.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 3"
+        }
+    ]
+}

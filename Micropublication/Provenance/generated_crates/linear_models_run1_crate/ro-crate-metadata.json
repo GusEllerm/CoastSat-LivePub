@@ -1,0 +1,656 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": [
+                {
+                    "@id": "https://w3id.org/ro/wfrun/process/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/workflow/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/provenance/0.5"
+                },
+                {
+                    "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+                }
+            ],
+            "datePublished": "2025-06-13T00:25:45+00:00",
+            "hasPart": [
+                {
+                    "@id": "linear_models.ipynb"
+                },
+                {
+                    "@id": "code_blocks/cell_1.py"
+                },
+                {
+                    "@id": "code_blocks/cell_2.py"
+                },
+                {
+                    "@id": "code_blocks/cell_3.py"
+                },
+                {
+                    "@id": "code_blocks/cell_4.py"
+                },
+                {
+                    "@id": "code_blocks/cell_5.py"
+                },
+                {
+                    "@id": "code_blocks/cell_6.py"
+                },
+                {
+                    "@id": "code_blocks/cell_7.py"
+                },
+                {
+                    "@id": "code_blocks/cell_8.py"
+                },
+                {
+                    "@id": "code_blocks/cell_9.py"
+                },
+                {
+                    "@id": "code_blocks/cell_10.py"
+                },
+                {
+                    "@id": "code_blocks/cell_11.py"
+                },
+                {
+                    "@id": "code_blocks/cell_12.py"
+                },
+                {
+                    "@id": "code_blocks/cell_13.py"
+                },
+                {
+                    "@id": "code_blocks/cell_14.py"
+                },
+                {
+                    "@id": "code_blocks/cell_15.py"
+                },
+                {
+                    "@id": "code_blocks/cell_16.py"
+                },
+                {
+                    "@id": "code_blocks/cell_17.py"
+                },
+                {
+                    "@id": "code_blocks/cell_18.py"
+                },
+                {
+                    "@id": "code_blocks/cell_19.py"
+                }
+            ],
+            "mainEntity": {
+                "@id": "linear_models.ipynb"
+            }
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "linear_models.ipynb",
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow",
+                "HowTo"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-shoreline_data_run6___time_series_tidally_corrected_csv"
+                },
+                {
+                    "@id": "#fp-data_sar__transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-data_sar0939_transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                },
+                {
+                    "@id": "#fp-data___transect_time_series_tidally_corrected_csv"
+                }
+            ],
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "step": [
+                {
+                    "@id": "#step-1"
+                },
+                {
+                    "@id": "#step-2"
+                },
+                {
+                    "@id": "#step-3"
+                },
+                {
+                    "@id": "#step-4"
+                },
+                {
+                    "@id": "#step-5"
+                },
+                {
+                    "@id": "#step-6"
+                },
+                {
+                    "@id": "#step-7"
+                },
+                {
+                    "@id": "#step-8"
+                },
+                {
+                    "@id": "#step-9"
+                },
+                {
+                    "@id": "#step-10"
+                },
+                {
+                    "@id": "#step-11"
+                },
+                {
+                    "@id": "#step-12"
+                },
+                {
+                    "@id": "#step-13"
+                },
+                {
+                    "@id": "#step-14"
+                },
+                {
+                    "@id": "#step-15"
+                },
+                {
+                    "@id": "#step-16"
+                },
+                {
+                    "@id": "#step-17"
+                },
+                {
+                    "@id": "#step-18"
+                },
+                {
+                    "@id": "#step-19"
+                }
+            ]
+        },
+        {
+            "@id": "#jupyter-kernel",
+            "@type": "SoftwareApplication",
+            "description": "Jupyter Notebook kernel for Python 3",
+            "identifier": "python3",
+            "input": [
+                {
+                    "@id": "#fp-shoreline_data_run6___time_series_tidally_corrected_csv"
+                },
+                {
+                    "@id": "#fp-data_sar__transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-data_sar0939_transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                },
+                {
+                    "@id": "#fp-data___transect_time_series_tidally_corrected_csv"
+                }
+            ],
+            "name": "Jupyter Notebook Kernel",
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "programmingLanguage": "python3",
+            "softwareVersion": "3.10.12",
+            "version": "3.10.12"
+        },
+        {
+            "@id": "#step-1",
+            "@type": "HowToStep",
+            "name": "Code cell 1",
+            "position": 1,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_1.py"
+            }
+        },
+        {
+            "@id": "#step-2",
+            "@type": "HowToStep",
+            "name": "Code cell 2",
+            "position": 2,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_2.py"
+            }
+        },
+        {
+            "@id": "#step-3",
+            "@type": "HowToStep",
+            "name": "Code cell 3",
+            "position": 3,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_3.py"
+            }
+        },
+        {
+            "@id": "#step-4",
+            "@type": "HowToStep",
+            "name": "Code cell 4",
+            "position": 4,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_4.py"
+            }
+        },
+        {
+            "@id": "#step-5",
+            "@type": "HowToStep",
+            "name": "Code cell 5",
+            "position": 5,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_5.py"
+            }
+        },
+        {
+            "@id": "#step-6",
+            "@type": "HowToStep",
+            "name": "Code cell 6",
+            "position": 6,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_6.py"
+            }
+        },
+        {
+            "@id": "#step-7",
+            "@type": "HowToStep",
+            "name": "Code cell 7",
+            "position": 7,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_7.py"
+            }
+        },
+        {
+            "@id": "#step-8",
+            "@type": "HowToStep",
+            "name": "Code cell 8",
+            "position": 8,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_8.py"
+            }
+        },
+        {
+            "@id": "#step-9",
+            "@type": "HowToStep",
+            "name": "Code cell 9",
+            "position": 9,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_9.py"
+            }
+        },
+        {
+            "@id": "#step-10",
+            "@type": "HowToStep",
+            "name": "Code cell 10",
+            "position": 10,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_10.py"
+            }
+        },
+        {
+            "@id": "#step-11",
+            "@type": "HowToStep",
+            "name": "Code cell 11",
+            "position": 11,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_11.py"
+            }
+        },
+        {
+            "@id": "#step-12",
+            "@type": "HowToStep",
+            "name": "Code cell 12",
+            "position": 12,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_12.py"
+            }
+        },
+        {
+            "@id": "#step-13",
+            "@type": "HowToStep",
+            "name": "Code cell 13",
+            "position": 13,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_13.py"
+            }
+        },
+        {
+            "@id": "#step-14",
+            "@type": "HowToStep",
+            "name": "Code cell 14",
+            "position": 14,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_14.py"
+            }
+        },
+        {
+            "@id": "#step-15",
+            "@type": "HowToStep",
+            "name": "Code cell 15",
+            "position": 15,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_15.py"
+            }
+        },
+        {
+            "@id": "#step-16",
+            "@type": "HowToStep",
+            "name": "Code cell 16",
+            "position": 16,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_16.py"
+            }
+        },
+        {
+            "@id": "#step-17",
+            "@type": "HowToStep",
+            "name": "Code cell 17",
+            "position": 17,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_17.py"
+            }
+        },
+        {
+            "@id": "#step-18",
+            "@type": "HowToStep",
+            "name": "Code cell 18",
+            "position": 18,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_18.py"
+            }
+        },
+        {
+            "@id": "#step-19",
+            "@type": "HowToStep",
+            "name": "Code cell 19",
+            "position": 19,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_19.py"
+            }
+        },
+        {
+            "@id": "#fp-data___transect_time_series_tidally_corrected_csv",
+            "@type": "FormalParameter",
+            "name": "transect_time_series_tidally_corrected.csv"
+        },
+        {
+            "@id": "#fp-data_sar__transect_time_series_csv",
+            "@type": "FormalParameter",
+            "name": "transect_time_series.csv"
+        },
+        {
+            "@id": "#fp-data_sar0939_transect_time_series_csv",
+            "@type": "FormalParameter",
+            "name": "transect_time_series.csv"
+        },
+        {
+            "@id": "#fp-shoreline_data_run6___time_series_tidally_corrected_csv",
+            "@type": "FormalParameter",
+            "name": "time_series_tidally_corrected.csv"
+        },
+        {
+            "@id": "#fp-transects_extended_geojson",
+            "@type": "FormalParameter",
+            "name": "transects_extended.geojson"
+        },
+        {
+            "@id": "code_blocks/cell_1.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 1"
+        },
+        {
+            "@id": "code_blocks/cell_2.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "name": "Code Cell 2"
+        },
+        {
+            "@id": "code_blocks/cell_3.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-shoreline_data_run6___time_series_tidally_corrected_csv"
+                }
+            ],
+            "name": "Code Cell 3"
+        },
+        {
+            "@id": "code_blocks/cell_4.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-data___transect_time_series_tidally_corrected_csv"
+                }
+            ],
+            "name": "Code Cell 4"
+        },
+        {
+            "@id": "code_blocks/cell_5.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-data_sar__transect_time_series_csv"
+                }
+            ],
+            "name": "Code Cell 5"
+        },
+        {
+            "@id": "code_blocks/cell_6.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 6"
+        },
+        {
+            "@id": "code_blocks/cell_7.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 7"
+        },
+        {
+            "@id": "code_blocks/cell_8.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-data_sar0939_transect_time_series_csv"
+                }
+            ],
+            "name": "Code Cell 8"
+        },
+        {
+            "@id": "code_blocks/cell_9.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 9"
+        },
+        {
+            "@id": "code_blocks/cell_10.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 10"
+        },
+        {
+            "@id": "code_blocks/cell_11.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 11"
+        },
+        {
+            "@id": "code_blocks/cell_12.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 12"
+        },
+        {
+            "@id": "code_blocks/cell_13.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 13"
+        },
+        {
+            "@id": "code_blocks/cell_14.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 14"
+        },
+        {
+            "@id": "code_blocks/cell_15.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 15"
+        },
+        {
+            "@id": "code_blocks/cell_16.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 16"
+        },
+        {
+            "@id": "code_blocks/cell_17.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 17"
+        },
+        {
+            "@id": "code_blocks/cell_18.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 18"
+        },
+        {
+            "@id": "code_blocks/cell_19.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 19",
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,601 @@
+{
+  "$schema": "https://stencila.org/v2.1.0/Article.schema.json",
+  "@context": "https://stencila.org/v2.1.0/context.jsonld",
+  "type": "Article",
+  "headings": {
+    "type": "List",
+    "items": [
+      {
+        "type": "ListItem",
+        "content": [
+          {
+            "type": "Paragraph",
+            "content": [
+              {
+                "type": "Link",
+                "content": [
+                  {
+                    "type": "Text",
+                    "value": {
+                      "string": "Transect Overview"
+                    }
+                  }
+                ],
+                "target": "#hea_idrw7ERmqDtq8n3EGL6wwXG9"
+              }
+            ]
+          },
+          {
+            "type": "List",
+            "items": [
+              {
+                "type": "ListItem",
+                "content": [
+                  {
+                    "type": "Paragraph",
+                    "content": [
+                      {
+                        "type": "Link",
+                        "content": [
+                          {
+                            "type": "Text",
+                            "value": {
+                              "string": "Quck overview of attriubtes"
+                            }
+                          }
+                        ],
+                        "target": "#hea_SIa0KkBJQVHdFFGgXruYlwzA"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "order": "Ascending"
+          }
+        ]
+      }
+    ],
+    "order": "Ascending"
+  },
+  "content": [
+    {
+      "type": "CodeChunk",
+      "executionMode": "Always",
+      "code": {
+        "string": "id = \"sar2541-0004\"\nsite_id = \"sar2541\"\norientation = None\nalong_dist = None\nalong_dist_norm = None\nbeach_slope = None\ncil = None\ntrend = -1.4249140997799503\nn_points = 1371.0\nn_points_nonan = 1371.0\nr2_score = 0.7506075299508213\nmae = 7.9034295239197245\nrmse = 9.951619804415396\nintercept = 416.75336083964123"
+      },
+      "programmingLanguage": "python",
+      "authors": [
+        {
+          "type": "AuthorRole",
+          "author": {
+            "type": "SoftwareApplication",
+            "name": "Python",
+            "url": "/opt/miniconda3/envs/coastsat_stencila_env/bin/python3.10",
+            "softwareVersion": "3.10.17",
+            "operatingSystem": "posix macOS-15.5-arm64-arm-64bit"
+          },
+          "roleName": "Executor",
+          "lastModified": {
+            "type": "Timestamp",
+            "value": 1749780014932,
+            "timeUnit": "Millisecond"
+          }
+        }
+      ],
+      "compilationDigest": {
+        "type": "CompilationDigest",
+        "stateDigest": 8989937498662447736
+      },
+      "executionDigest": {
+        "type": "CompilationDigest",
+        "stateDigest": 8989937498662447736
+      },
+      "executionCount": 1,
+      "executionRequired": "No",
+      "executionStatus": "Succeeded",
+      "executionInstance": "python_EkPnW16x83S9iFTqELKdaY",
+      "executionEnded": {
+        "type": "Timestamp",
+        "value": 1749780014919,
+        "timeUnit": "Millisecond"
+      },
+      "executionDuration": {
+        "type": "Duration",
+        "value": 522,
+        "timeUnit": "Millisecond"
+      }
+    },
+    {
+      "type": "Heading",
+      "level": 3,
+      "content": [
+        {
+          "type": "Text",
+          "value": {
+            "string": "Narrative order decision matrix"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Paragraph",
+      "content": [
+        {
+          "type": "Text",
+          "value": {
+            "string": "This logic determines the order of the narrative sections in response to the presence of certain attributes in the transect data. Regardless we will always start with a transect overview"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Heading",
+      "level": 1,
+      "content": [
+        {
+          "type": "Text",
+          "value": {
+            "string": "Transect Overview"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Heading",
+      "level": 3,
+      "content": [
+        {
+          "type": "Text",
+          "value": {
+            "string": "Quck overview of attriubtes"
+          }
+        }
+      ]
+    },
+    {
+      "type": "List",
+      "items": [
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "id"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Unique identifier for the transect: "
+                  }
+                },
+                {
+                  "type": "CodeExpression",
+                  "code": {
+                    "string": "id"
+                  },
+                  "authors": [
+                    {
+                      "type": "AuthorRole",
+                      "author": {
+                        "type": "SoftwareApplication",
+                        "name": "Python",
+                        "url": "/opt/miniconda3/envs/coastsat_stencila_env/bin/python3.10",
+                        "softwareVersion": "3.10.17",
+                        "operatingSystem": "posix macOS-15.5-arm64-arm-64bit"
+                      },
+                      "roleName": "Executor",
+                      "lastModified": {
+                        "type": "Timestamp",
+                        "value": 1749780014932,
+                        "timeUnit": "Millisecond"
+                      }
+                    }
+                  ],
+                  "output": "sar2541-0004",
+                  "compilationDigest": {
+                    "type": "CompilationDigest",
+                    "stateDigest": 7904287001089598066
+                  },
+                  "executionDigest": {
+                    "type": "CompilationDigest",
+                    "stateDigest": 7904287001089598066
+                  },
+                  "executionCount": 1,
+                  "executionRequired": "No",
+                  "executionStatus": "Succeeded",
+                  "executionEnded": {
+                    "type": "Timestamp",
+                    "value": 1749780014932,
+                    "timeUnit": "Millisecond"
+                  },
+                  "executionDuration": {
+                    "type": "Duration",
+                    "value": 0,
+                    "timeUnit": "Millisecond"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "site_id"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Identifier for the site where the transect is located: sar2541"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "orientation"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Orientation of the transect (e.g., 'N', 'S', 'E', 'W'): None"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "along_dist"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Distance along the transect in meters: None"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "along_dist_norm"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Normalized distance along the transect: None"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "beach_slope"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Slope of the beach at the transect: None"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "cil"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Coastal Landform Index: None"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "trend"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Trend of the beach slope over time: -1.4249140997799503"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "n_points"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Total number of points in the transect: 1371.0"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "n_points_nonnan"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Number of points in the transect that are not NaN: 1371.0"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "r2_score"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": R-squared score of the trend line fit: 0.7506075299508213"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "mae"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Mean Absolute Error of the trend line fit: 7.9034295239197245"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "rmse"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Root Mean Square Error of the trend line fit: 9.951619804415396"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "content": [
+            {
+              "type": "Paragraph",
+              "content": [
+                {
+                  "type": "Strong",
+                  "content": [
+                    {
+                      "type": "Text",
+                      "value": {
+                        "string": "intercept"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Text",
+                  "value": {
+                    "string": ": Intercept of the trend line fit: 416.75336083964123"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "order": "Unordered"
+    }
+  ],
+  "executionCount": 1,
+  "executionRequired": "No",
+  "executionStatus": "Succeeded",
+  "executionEnded": {
+    "type": "Timestamp",
+    "value": 1749780014933,
+    "timeUnit": "Millisecond"
+  },
+  "executionDuration": {
+    "type": "Duration",
+    "value": 536,
+    "timeUnit": "Millisecond"
+  }
+}

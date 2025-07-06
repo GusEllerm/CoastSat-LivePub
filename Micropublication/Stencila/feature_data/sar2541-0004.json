@@ -1,0 +1,19 @@
+{
+  "id": "sar2541-0004",
+  "site_id": "sar2541",
+  "orientation": null,
+  "along_dist": null,
+  "along_dist_norm": null,
+  "beach_slope": null,
+  "cil": null,
+  "ciu": null,
+  "trend": -1.4249140997799503,
+  "n_points": 1371.0,
+  "n_points_nonan": 1371.0,
+  "r2_score": 0.7506075299508213,
+  "mae": 7.9034295239197245,
+  "mse": 99.0347367316327,
+  "rmse": 9.951619804415396,
+  "intercept": 416.75336083964123,
+  "ERODIBILITY": "High"
+}

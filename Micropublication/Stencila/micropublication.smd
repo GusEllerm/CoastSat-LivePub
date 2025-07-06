@@ -1,0 +1,39 @@
+```python exec always
+id = "{{ id }}"
+site_id = "{{ site_id }}"
+orientation = {{ orientation }}
+along_dist = {{ along_dist }}
+along_dist_norm = {{ along_dist_norm }}
+beach_slope = {{ beach_slope }}
+cil = {{ cil }}
+trend = {{ trend }}
+n_points = {{ n_points }}
+n_points_nonan = {{ n_points_nonan }}
+r2_score = {{ r2_score }}
+mae = {{ mae }}
+rmse = {{ rmse }}
+intercept = {{ intercept }}
+```
+
+### Narrative order decision matrix
+This logic determines the order of the narrative sections in response to the presence of certain attributes in the transect data. Regardless we will always start with a transect overview
+
+# Transect Overview
+
+### Quck overview of attriubtes
+
+- **id**: Unique identifier for the transect: `id`{exec} 
+- **site_id**: Identifier for the site where the transect is located: {{ site_id }}
+- **orientation**: Orientation of the transect (e.g., 'N', 'S', 'E', 'W'): {{ orientation }}
+- **along_dist**: Distance along the transect in meters: {{ along_dist }}
+- **along_dist_norm**: Normalized distance along the transect: {{ along_dist_norm }}
+- **beach_slope**: Slope of the beach at the transect: {{ beach_slope }}
+- **cil**: Coastal Landform Index: {{ cil }}
+- **trend**: Trend of the beach slope over time: {{ trend }}
+- **n_points**: Total number of points in the transect: {{ n_points }}
+- **n_points_nonnan**: Number of points in the transect that are not NaN: {{ n_points_nonan }}
+- **r2_score**: R-squared score of the trend line fit: {{ r2_score }}
+- **mae**: Mean Absolute Error of the trend line fit: {{ mae }}
+- **rmse**: Root Mean Square Error of the trend line fit: {{ rmse }}
+- **intercept**: Intercept of the trend line fit: {{ intercept }}
+
