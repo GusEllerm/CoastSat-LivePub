@@ -1,0 +1,638 @@
+
+
+<html>
+<head>
+
+
+<script type="application/ld+json"> 
+  {
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "datePublished": "2025-07-07T05:17:00+00:00",
+      "description": "Process Run Crate representing the Data Producer layer.",
+      "mentions": [
+        {
+          "@id": "#batch-process-nz"
+        },
+        {
+          "@id": "#batch-process-sardinia"
+        }
+      ],
+      "name": "E1: Data Producer",
+      "@reverse": {
+        "about": [
+          {
+            "@id": "ro-crate-metadata.json"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/wfrun/process/0.5"
+      }
+    },
+    {
+      "@id": "#batch-process-nz",
+      "@type": "CreateAction",
+      "agent": [
+        {
+          "@id": "https://orcid.org/example"
+        },
+        {
+          "@id": "#university-of-auckland"
+        }
+      ],
+      "description": "Batch process to update transect time series for New Zealand using Google Earth Engine.",
+      "instrument": {
+        "@id": "#batch-process-nz-app"
+      },
+      "name": "Update NZ transect time series",
+      "object": [
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
+        }
+      ],
+      "result": {
+        "@id": "#nz-transect-series"
+      },
+      "@reverse": {
+        "mentions": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#batch-process-sardinia",
+      "@type": "CreateAction",
+      "agent": [
+        {
+          "@id": "https://orcid.org/example"
+        },
+        {
+          "@id": "#university-of-auckland"
+        }
+      ],
+      "description": "Batch process to update transect time series for Sardinia using Google Earth Engine.",
+      "instrument": {
+        "@id": "#batch-process-sardinia-app"
+      },
+      "name": "Update Sardinia transect time series",
+      "object": [
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
+        }
+      ],
+      "result": {
+        "@id": "#sardinia-transect-series"
+      },
+      "@reverse": {
+        "mentions": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#batch-process-nz-app",
+      "@type": "SoftwareSourceCode",
+      "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/batch_process_NZ.py",
+      "description": "Application for batch processing New Zealand transect time series.",
+      "name": "Batch Process NZ Application",
+      "programmingLanguage": "Python",
+      "@reverse": {
+        "instrument": [
+          {
+            "@id": "#batch-process-nz"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#batch-process-sardinia-app",
+      "@type": "SoftwareSourceCode",
+      "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/batch_process_Sardinia.py",
+      "description": "Application for batch processing Sardinia transect time series.",
+      "name": "Batch Process Sardinia Application",
+      "programmingLanguage": "Python",
+      "@reverse": {
+        "instrument": [
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "45.91",
+      "description": "Transect time series for nzd0001",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#nz-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0002/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "31.91",
+      "description": "Transect time series for nzd0002",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#nz-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "41.29",
+      "description": "Transect time series for nzd0003",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#nz-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "75.02",
+      "description": "Transect time series for nzd0004",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#nz-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "58.50",
+      "description": "Transect time series for nzd0005",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#nz-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#nz-transect-series",
+      "@type": "Dataset",
+      "description": "Representative output files for NZD transects.",
+      "hasPart": [
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0002/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv"
+        }
+      ],
+      "name": "NZ Transect Time Series Dataset",
+      "@reverse": {
+        "result": [
+          {
+            "@id": "#batch-process-nz"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "54.00",
+      "description": "Transect time series for sar0001",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#sardinia-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0002/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "39.53",
+      "description": "Transect time series for sar0002",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#sardinia-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "54.40",
+      "description": "Transect time series for sar0003",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#sardinia-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "59.93",
+      "description": "Transect time series for sar0004",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#sardinia-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv",
+      "@type": "File",
+      "contentSize": "59.49",
+      "description": "Transect time series for sar0005",
+      "encodingFormat": "text/csv",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "#sardinia-transect-series"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#sardinia-transect-series",
+      "@type": "Dataset",
+      "description": "Representative output files for SAR transects.",
+      "hasPart": [
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0002/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv"
+        },
+        {
+          "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv"
+        }
+      ],
+      "name": "Sardinia Transect Time Series Dataset",
+      "@reverse": {
+        "result": [
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#university-of-auckland",
+      "@type": "Organization",
+      "name": "University of Auckland",
+      "@reverse": {
+        "agent": [
+          {
+            "@id": "#batch-process-nz"
+          },
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ],
+        "affiliation": [
+          {
+            "@id": "https://orcid.org/example"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://orcid.org/example",
+      "@type": "Person",
+      "affiliation": {
+        "@id": "#university-of-auckland"
+      },
+      "name": "Example name",
+      "@reverse": {
+        "agent": [
+          {
+            "@id": "#batch-process-nz"
+          },
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson",
+      "@type": "File",
+      "contentSize": "2264.32",
+      "description": "Polygon bounding boxes defining where to download imagery.",
+      "encodingFormat": "application/geo+json",
+      "@reverse": {
+        "object": [
+          {
+            "@id": "#batch-process-nz"
+          },
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson",
+      "@type": "File",
+      "contentSize": "27174.53",
+      "description": "Reference shorelines for transects.",
+      "encodingFormat": "application/geo+json",
+      "@reverse": {
+        "object": [
+          {
+            "@id": "#batch-process-nz"
+          },
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson",
+      "@type": "File",
+      "contentSize": "89989.05",
+      "description": "Transects with extended geometry for processing.",
+      "encodingFormat": "application/geo+json",
+      "@reverse": {
+        "object": [
+          {
+            "@id": "#batch-process-nz"
+          },
+          {
+            "@id": "#batch-process-sardinia"
+          }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+    
+<!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script -->
+<script src="https://unpkg.com/ro-crate-html-js/dist/ro-crate-dynamic.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<meta charset='utf-8'/>
+<style>
+
+table.table {
+  padding-bottom: 300px;
+}
+</style>
+</head>
+
+
+<body>
+
+  <nav class="navbar">
+
+    <ul class="nav navbar-nav" >
+        <li ><a href="#"><span class="glyphicon glyphicon-home dataset_name">&nbsp;E1: Data Producer</span></a></li>
+    </ul>
+
+  </nav>
+<div class="container">
+<div class="jumbotron">
+<h4 class="citation"></h3>
+<h3 class="item_name">E1: Data Producer</h4>
+
+
+<a href="./ro-crate-metadata.json">⬇️🏷️ Download all the metadata for <span class='name'>E1: Data Producer</span> in JSON-LD format</a>
+
+
+<div id="check"></div>
+
+
+</div>
+
+
+
+<div id="summary">
+<div class='all-meta'>
+           <div>
+            <h3> E1: Data Producer</h3>
+            
+            
+            
+            
+        <div id="./">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>./</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>E1: Data Producer</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Process Run Crate representing the Data Producer layer.</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2025-07-07T05:17:00+00:00</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#%23batch-process-nz">Update NZ transect time series</a></li>
+                        
+                        <li><a href="#%23batch-process-sardinia">Update Sardinia transect time series</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
+            <td style='text-align:left'><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Update NZ transect time series</h3>
+            
+            
+            
+            
+        <div id="#batch-process-nz">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#batch-process-nz</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Update NZ transect time series</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Batch process to update transect time series for New Zealand using Google Earth Engine.</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">agent<span>&nbsp;</span><a href="http://schema.org/agent">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/example">Example name</a></li>
+                        
+                        <li><a href="#%23university-of-auckland">University of Auckland</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#%23batch-process-nz-app">Batch Process NZ Application</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson</a></li>
+                        
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson</a></li>
+                        
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><a href="#%23nz-transect-series">NZ Transect Time Series Dataset</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#./">E1: Data Producer</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Update Sardinia transect time series</h3>
+            
+            
+            
+            
+        <div id="#batch-process-sardinia">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#batch-process-sardinia</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Update Sardinia transect time series</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Batch process to update transect time series for Sardinia using Google Earth Engine.</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">agent<span>&nbsp;</span><a href="http://schema.org/agent">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/example">Example name</a></li>
+                        
+                        <li><a href="#%23university-of-auckland">University of Auckland</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#%23batch-process-sardinia-app">Batch Process Sardinia Application</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson</a></li>
+                        
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson</a></li>
+                        
+                        <li><a href="#https%3A//github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson">https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><a href="#%23sardinia-transect-series">Sardinia Transect Time Series Dataset</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#./">E1: Data Producer</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/></div>
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+
+<html>
+<head>
+
+
+<script type="application/ld+json"> 
+  {
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "datePublished": "2025-07-07T05:17:00+00:00",
+      "mainEntity": {
+        "@id": "livepublication-interface"
+      },
+      "@reverse": {
+        "about": [
+          {
+            "@id": "ro-crate-metadata.json"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "livepublication-interface",
+      "@type": "Dataset",
+      "datePublished": "2025-07-07T05:17:00.493548+00:00",
+      "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
+      "hasPart": [
+        {
+          "@id": "E1-data-producer"
+        },
+        {
+          "@id": "E2.1-workflow-infrastructure"
+        },
+        {
+          "@id": "E2.2-wms"
+        },
+        {
+          "@id": "E3-experimental-results"
+        }
+      ],
+      "name": "LivePublication Interface Outputs",
+      "@reverse": {
+        "mainEntity": [
+          {
+            "@id": "./"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "E1-data-producer",
+      "@type": "RO-Crate",
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/wfrun/process/0.5"
+      },
+      "description": "Metadata and references to acquired raw data products.",
+      "hasPart": [
+        {
+          "@id": "E1-data-producer/ro-crate-metadata.json"
+        }
+      ],
+      "name": "E1: Data Producer",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "livepublication-interface"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "E2.1-workflow-infrastructure",
+      "@type": "Dataset",
+      "description": "Description of hardware and software environments used.",
+      "name": "E2.1: Workflow Infrastructure",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "livepublication-interface"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "E2.2-wms",
+      "@type": "Dataset",
+      "description": "Provenance of workflow execution including workflow steps and parameters.",
+      "name": "E2.2: Workflow Management System",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "livepublication-interface"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "E3-experimental-results",
+      "@type": "Dataset",
+      "description": "Results of the executed workflow, such as figures and summary data products.",
+      "name": "E3: Experimental Results and Outcomes",
+      "@reverse": {
+        "hasPart": [
+          {
+            "@id": "livepublication-interface"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "#uoa-coastsat",
+      "@type": "Person",
+      "name": "example"
+    },
+    {
+      "@id": "University of Auckland",
+      "@type": "Organization",
+      "name": "University of Auckland",
+      "url": "https://www.auckland.ac.nz"
+    }
+  ]
+}
+</script>
+
+    
+<!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script -->
+<script src="https://unpkg.com/ro-crate-html-js/dist/ro-crate-dynamic.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<meta charset='utf-8'/>
+<style>
+
+table.table {
+  padding-bottom: 300px;
+}
+</style>
+</head>
+
+
+<body>
+
+  <nav class="navbar">
+
+    <ul class="nav navbar-nav" >
+        <li ><a href="#"><span class="glyphicon glyphicon-home dataset_name">&nbsp;</span></a></li>
+    </ul>
+
+  </nav>
+<div class="container">
+<div class="jumbotron">
+<h4 class="citation"></h3>
+<h3 class="item_name"></h4>
+
+
+<a href="./ro-crate-metadata.json">⬇️🏷️ Download all the metadata for <span class='name'></span> in JSON-LD format</a>
+
+
+<div id="check"></div>
+
+
+</div>
+
+
+
+<div id="summary">
+<div class='all-meta'>
+           <div>
+            <h3> ./</h3>
+            
+            
+            
+            
+        <div id="./">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>./</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2025-07-07T05:17:00+00:00</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
+            <td style='text-align:left'><a href="#livepublication-interface">LivePublication Interface Outputs</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
+            <td style='text-align:left'><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> LivePublication Interface Outputs</h3>
+            
+            
+            
+            
+        <div id="livepublication-interface">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>livepublication-interface</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>LivePublication Interface Outputs</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2025-07-07T05:17:00.493548+00:00</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#E1-data-producer">E1: Data Producer</a></li>
+                        
+                        <li><a href="#E2.1-workflow-infrastructure">E2.1: Workflow Infrastructure</a></li>
+                        
+                        <li><a href="#E2.2-wms">E2.2: Workflow Management System</a></li>
+                        
+                        <li><a href="#E3-experimental-results">E3: Experimental Results and Outcomes</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
+            <td style='text-align:left'><a href="#./">./</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/></div>
+</div>
+
+
+
+
+
+</body>
+</html>

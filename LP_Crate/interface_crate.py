@@ -11,14 +11,14 @@ from e1_crate import build_e1_crate
 import os
 import argparse
 
-def build_e1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E1, output_dir):
+def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     """
     Build metadata for E1: Data Producer.
     - Identify and describe data production scripts and data outputs.
     - Describe external data sources used.
     """
     e1_output_dir = Path(output_dir) / "E1-data-producer"
-    build_e1_crate(str(e1_output_dir))
+    build_e1_crate(str(e1_output_dir), coastsat_dir)
 
     # Link E1 entity to the external crate directory
     E1["conformsTo"] = {"@id": "https://w3id.org/ro/wfrun/process/0.5"}
@@ -104,15 +104,14 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main():
     
+    # Parse command line arguments
     parser = get_parser()
     args = parser.parse_args()
+    coastsat_dir = args.coastsat_dir
+    output_dir = args.output_dir
 
     # Setup GitURL for the repo
     URL = GitURL(repo_path=args.coastsat_dir, remote_name="origin")
-    print(URL.get(args.coastsat_dir / "linear_models.ipynb"))
-
-    coastsat_dir = args.coastsat_dir
-    output_dir = args.output_dir
 
     crate = ROCrate()
     

@@ -48,7 +48,7 @@ class GitURL:
         ).strip()
 
     def get(self, local_path):
-        abs_path = os.path.abspath(local_path)
+        abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
         rel_path = os.path.relpath(abs_path, self.repo_root)
         encoded_path = quote(rel_path)
         latest_url = f"{self.remote_url}/blob/{self.branch_name}/{encoded_path}"
@@ -59,6 +59,14 @@ class GitURL:
             "commit_hash": self.commit_hash
         }
 
+    def get_size(self, local_path):
+        abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
+        if not os.path.isfile(abs_path):
+            raise FileNotFoundError(f"{abs_path} is not a file.")
+        size_bytes = os.path.getsize(abs_path)
+        size_kb = size_bytes / 1024
+        return f"{size_kb:.2f}"
+
 if __name__ == "__main__":
     # Example usage
     url_gen = GitURL(
@@ -68,3 +76,5 @@ if __name__ == "__main__":
     print("Latest URL:     ", result["latest_url"])
     print("Permalink URL:  ", result["permalink_url"])
     print("Commit Hash:    ", result["commit_hash"])
+    size = url_gen.get_size("linear_models.ipynb")
+    print("File Size:      ", size)
