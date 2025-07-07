@@ -6,17 +6,23 @@ from rocrate.model.contextentity import ContextEntity
 from pathlib import Path
 
 from helper import GitURL
+from e1_crate import build_e1_crate
 
 import os
 import argparse
 
-def build_e1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E1):
+def build_e1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E1, output_dir):
     """
     Build metadata for E1: Data Producer.
     - Identify and describe data production scripts and data outputs.
     - Describe external data sources used.
     """
-    pass
+    e1_output_dir = Path(output_dir) / "E1-data-producer"
+    build_e1_crate(str(e1_output_dir))
+
+    # Link E1 entity to the external crate directory
+    E1["conformsTo"] = {"@id": "https://w3id.org/ro/wfrun/process/0.5"}
+    E1["hasPart"] = [{"@id": "E1-data-producer/ro-crate-metadata.json"}]
 
 def build_e2_1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_1):
     """
@@ -63,7 +69,7 @@ def add_aggregate_entities(crate: ROCrate):
         "datePublished": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()}
         ))
     
-    E1 = crate.add(ContextEntity(crate, "E1-data-producer", properties={"@type": "Dataset", "name": "E1: Data Producer", "description": "Metadata and references to acquired raw data products."}))
+    E1 = crate.add(ContextEntity(crate, "E1-data-producer", properties={"@type": "RO-Crate", "name": "E1: Data Producer", "description": "Metadata and references to acquired raw data products."}))
     E2_1 = crate.add(ContextEntity(crate, "E2.1-workflow-infrastructure", properties={"@type": "Dataset", "name": "E2.1: Workflow Infrastructure", "description": "Description of hardware and software environments used."}))
     E2_2 = crate.add(ContextEntity(crate, "E2.2-wms", properties={"@type": "Dataset", "name": "E2.2: Workflow Management System", "description": "Provenance of workflow execution including workflow steps and parameters."}))
     E3 = crate.add(ContextEntity(crate, "E3-experimental-results", properties={"@type": "Dataset", "name": "E3: Experimental Results and Outcomes", "description": "Results of the executed workflow, such as figures and summary data products."}))
@@ -114,7 +120,7 @@ def main():
     contextual_entities = add_metadata(crate)
 
     # Build experiment infrastructure layers
-    build_e1(crate, coastsat_dir, URL, infrastructure_entities["E1"])
+    build_e1(crate, coastsat_dir, URL, infrastructure_entities["E1"], output_dir)
     build_e2_1(crate, coastsat_dir, URL, infrastructure_entities["E2_1"])
     build_e2_2(crate, coastsat_dir, URL, infrastructure_entities["E2_2"])
     build_e3(crate, coastsat_dir, URL, infrastructure_entities["E3"])

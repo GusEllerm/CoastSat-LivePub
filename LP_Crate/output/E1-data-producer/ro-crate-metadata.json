@@ -1,0 +1,22 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "datePublished": "2025-07-07T03:29:47+00:00",
+            "description": "Process Run Crate representing the Data Producer layer.",
+            "name": "E1: Data Producer"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/wfrun/process/0.5"
+            }
+        }
+    ]
+}
