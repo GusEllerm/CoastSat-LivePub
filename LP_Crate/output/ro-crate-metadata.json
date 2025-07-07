@@ -4,7 +4,12 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-07T05:17:00+00:00",
+            "datePublished": "2025-07-07T21:51:29+00:00",
+            "hasPart": [
+                {
+                    "@id": "batch_processes/ro-crate-metadata.json"
+                }
+            ],
             "mainEntity": {
                 "@id": "livepublication-interface"
             }
@@ -22,7 +27,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-07T05:17:00.493548+00:00",
+            "datePublished": "2025-07-07T21:51:29.488690+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -42,14 +47,14 @@
         },
         {
             "@id": "E1-data-producer",
-            "@type": "RO-Crate",
-            "conformsTo": {
-                "@id": "https://w3id.org/ro/wfrun/process/0.5"
-            },
-            "description": "Metadata and references to acquired raw data products.",
+            "@type": "Collection",
+            "description": "This Collection includes both the process run metadata and external data sources relevant to data production.",
             "hasPart": [
                 {
-                    "@id": "E1-data-producer/ro-crate-metadata.json"
+                    "@id": "batch_processes/ro-crate-metadata.json"
+                },
+                {
+                    "@id": "pacific-rim-data"
                 }
             ],
             "name": "E1: Data Producer"
@@ -82,6 +87,28 @@
             "@type": "Organization",
             "name": "University of Auckland",
             "url": "https://www.auckland.ac.nz"
+        },
+        {
+            "@id": "batch_processes/ro-crate-metadata.json",
+            "@type": [
+                "RO-Crate",
+                "ProcessRunCrate"
+            ],
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/wfrun/process/0.5"
+            },
+            "dateCreated": "2025-07-07T21:51:29.519794+00:00",
+            "description": "This Process Run represents the execution of the data production scripts.",
+            "name": "Data Producer Process Run"
+        },
+        {
+            "@id": "pacific-rim-data",
+            "@type": "Dataset",
+            "description": "External data sources used in the data production process.",
+            "encodingFormat": "text/csv",
+            "name": "Pacific Rim Data",
+            "sameAs": "https://doi.org/10.5281/zenodo.15614554",
+            "url": "https://zenodo.org/records/15614554"
         }
     ]
 }

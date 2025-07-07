@@ -66,6 +66,39 @@ class GitURL:
         size_bytes = os.path.getsize(abs_path)
         size_kb = size_bytes / 1024
         return f"{size_kb:.2f}"
+    
+
+    def get_previous_commit_hash(self):
+        return subprocess.check_output(
+            ["git", "-C", self.repo_path, "rev-list", "--max-count=1", f"{self.commit_hash}^"],
+            text=True
+        ).strip()
+
+    def get_previous(self, local_path):
+        previous_hash = self.get_previous_commit_hash()
+        abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
+        rel_path = os.path.relpath(abs_path, self.repo_root)
+        encoded_path = quote(rel_path)
+        permalink_url = f"{self.remote_url}/blob/{previous_hash}/{encoded_path}"
+        return {
+            "permalink_url": permalink_url,
+            "commit_hash": previous_hash
+        }
+
+    def get_size_at_commit(self, local_path, commit_hash):
+        rel_path = os.path.relpath(
+            os.path.abspath(os.path.join(self.repo_path, local_path)),
+            self.repo_root
+        )
+        try:
+            content = subprocess.check_output(
+                ["git", "-C", self.repo_path, "show", f"{commit_hash}:{rel_path}"],
+                stderr=subprocess.DEVNULL
+            )
+            size_kb = len(content) / 1024
+            return f"{size_kb:.2f}"
+        except subprocess.CalledProcessError:
+            raise FileNotFoundError(f"{rel_path} does not exist at commit {commit_hash}")
 
 if __name__ == "__main__":
     # Example usage
@@ -78,3 +111,10 @@ if __name__ == "__main__":
     print("Commit Hash:    ", result["commit_hash"])
     size = url_gen.get_size("linear_models.ipynb")
     print("File Size:      ", size)
+   
+
+    previous = url_gen.get_previous("linear_models.ipynb")
+    print("Previous URL:   ", previous["permalink_url"])
+    print("Previous Hash:  ", previous["commit_hash"])
+    previous_size = url_gen.get_size_at_commit("linear_models.ipynb", previous["commit_hash"])
+    print("Previous Size:  ", previous_size)
