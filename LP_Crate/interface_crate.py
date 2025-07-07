@@ -77,12 +77,28 @@ def add_aggregate_entities(crate: ROCrate):
         "E3": E3
     }
 
-
-def main():
+def get_parser() -> argparse.ArgumentParser:
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Build LivePublication interface crate.")
-    parser.add_argument("--coastsat-dir", type=Path, required=False, default=Path("/Users/eller/Projects/CoastSat_Implementation/CoastSat"), help="Path to CoastSat project directory.")
-    parser.add_argument("--output-dir", type=Path, required=False, default=Path("/Users/eller/Projects/CoastSat_Implementation/LP_Crate/output"), help="Directory to write the interface RO-Crate.") 
+    parser.add_argument(
+        "--coastsat-dir",
+        type=Path,
+        required=False,
+        default=Path(__file__).parent.parent / "CoastSat",
+        help="Path to CoastSat project directory."
+    )  
+    parser.add_argument(
+        "--output-dir", 
+        type=Path, 
+        required=False, 
+        default=Path(__file__).parent / "output", 
+        help="Directory to write the interface RO-Crate."
+    ) 
+    return parser
+
+def main():
+    
+    parser = get_parser()
     args = parser.parse_args()
 
     # Setup GitURL for the repo
