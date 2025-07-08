@@ -4,10 +4,13 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-07T23:07:37+00:00",
+            "datePublished": "2025-07-08T02:22:57+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
+                },
+                {
+                    "@id": "update.sh"
                 }
             ],
             "mainEntity": {
@@ -27,7 +30,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-07T23:07:37.293260+00:00",
+            "datePublished": "2025-07-08T02:22:57.522308+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -69,6 +72,9 @@
             "@id": "E2.2-wms",
             "@type": "Dataset",
             "description": "Provenance of workflow execution including workflow steps and parameters.",
+            "hasPart": {
+                "@id": "update.sh"
+            },
             "name": "E2.2: Workflow Management System"
         },
         {
@@ -97,7 +103,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-07T23:07:37.924217+00:00",
+            "dateCreated": "2025-07-08T02:22:57.977886+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -109,6 +115,27 @@
             "name": "Pacific Rim Data",
             "sameAs": "https://doi.org/10.5281/zenodo.15614554",
             "url": "https://zenodo.org/records/15614554"
+        },
+        {
+            "@id": "Bash",
+            "@type": "ComputerLanguage",
+            "description": "Bash is a Unix shell and command language.",
+            "name": "Bash"
+        },
+        {
+            "@id": "update.sh",
+            "@type": [
+                "SoftwareSourceCode",
+                "HowTo",
+                "File"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/update.sh",
+            "description": "This script updates the CoastSat project and executes the computational workflow.",
+            "encodingFormat": "text/x-sh",
+            "name": "CoastSat Update Script",
+            "programmingLanguage": {
+                "@id": "Bash"
+            }
         }
     ]
 }

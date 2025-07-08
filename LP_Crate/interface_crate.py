@@ -32,6 +32,8 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     }))
 
     # Add Pacific Rim data source
+    # This is an external dataset used in the data production process
+    # It is not part of the process run crate but is linked to E1
     pacific_rim_data = crate.add(ContextEntity(crate, "pacific-rim-data", properties={
         "@type": "Dataset",
         "name": "Pacific Rim Data",
@@ -57,8 +59,25 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
     Build metadata for E2.2: Workflow Management System.
     - Link to external provenance crate or describe internal WMS behavior.
     """
-    # TODO: implement or link to provenance crate integration
-    pass
+    programming_language = crate.add(ContextEntity(crate, "Bash", properties={
+        "@type": "ComputerLanguage",
+        "name": "Bash",
+        "description": "Bash is a Unix shell and command language."
+    }))
+
+    workflow = crate.add_file(
+        Path(coastsat_dir) / "update.sh",
+        properties={
+            "@type": ["SoftwareSourceCode", "HowTo", "File"],
+            "name": "CoastSat Update Script",
+            "description": "This script updates the CoastSat project and executes the computational workflow.",
+            "programmingLanguage": programming_language,
+            "encodingFormat": "text/x-sh",
+            "codeRepository": URL.get("update.sh")["permalink_url"],
+    })
+
+    E2_2["hasPart"] = workflow
+    
 
 def build_e3(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E3):
     """
