@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:41:51+00:00",
+            "datePublished": "2025-07-08T02:53:39+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -45,7 +45,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:41:51.385209+00:00",
+            "datePublished": "2025-07-08T02:53:39.543142+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -118,7 +118,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-08T02:41:51.915350+00:00",
+            "dateCreated": "2025-07-08T02:53:40.051607+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -185,7 +185,7 @@
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
             "encodingFormat": "application/x-ipynb+json",
             "name": "tidal_correction.ipynb",
-            "position": 0,
+            "position": "0",
             "programmingLanguage": {
                 "@id": "Python"
             }
@@ -200,7 +200,7 @@
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/slope_estimation.ipynb",
             "encodingFormat": "application/x-ipynb+json",
             "name": "slope_estimation.ipynb",
-            "position": 1,
+            "position": "1",
             "programmingLanguage": {
                 "@id": "Python"
             }
@@ -215,7 +215,7 @@
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
             "encodingFormat": "application/x-ipynb+json",
             "name": "tidal_correction.ipynb",
-            "position": 2,
+            "position": "2",
             "programmingLanguage": {
                 "@id": "Python"
             }
@@ -230,7 +230,7 @@
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/linear_models.ipynb",
             "encodingFormat": "application/x-ipynb+json",
             "name": "linear_models.ipynb",
-            "position": 3,
+            "position": "3",
             "programmingLanguage": {
                 "@id": "Python"
             }
@@ -245,7 +245,7 @@
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/make_xlsx.py",
             "encodingFormat": "text/x-python",
             "name": "make_xlsx.py",
-            "position": 4,
+            "position": "4",
             "programmingLanguage": {
                 "@id": "Python"
             }

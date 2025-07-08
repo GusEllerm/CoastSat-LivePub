@@ -126,7 +126,7 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
             "programmingLanguage": python_language,
             "encodingFormat": encoding,
             "codeRepository": URL.get(filename)["permalink_url"],
-            "position": position
+            "position": str(position)
         })
         notebook_entities.append({"@id": entity.id})
 
