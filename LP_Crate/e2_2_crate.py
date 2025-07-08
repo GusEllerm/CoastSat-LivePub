@@ -4,7 +4,7 @@ from rocrate.rocrate import ROCrate
 from pathlib import Path
 import argparse
 
-def build_provenance_crate(coastsat_dir: Path) -> ROCrate:
+def build_e2_2_crate(output_dir: str, coastsat_dir: str) -> ROCrate:
     """
     Build a provenance RO-Crate describing the WMS layer (E2.2).
     This crate may later be linked into the interface crate.
@@ -14,6 +14,7 @@ def build_provenance_crate(coastsat_dir: Path) -> ROCrate:
     # TODO: Implement logic to extract workflow execution provenance
     # Example: capture shell script execution, Jupyter runs, etc.
 
+    crate.write(output_dir)
     return crate
 
 def main():

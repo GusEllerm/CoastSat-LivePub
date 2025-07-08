@@ -3,9 +3,11 @@ from rocrate.model.person import Person
 from rocrate.model.contextentity import ContextEntity
 from rocrate.model.data_entity import DataEntity
 from pathlib import Path
+from collections import Counter
 
 from helper import GitURL
 from e1_crate import build_e1_crate
+from e2_2_crate import build_e2_2_crate
 
 import os
 import argparse
@@ -54,18 +56,7 @@ def build_e2_1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_1):
     # TODO: implement infrastructure discovery
     pass
 
-def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
-    """
-    Build metadata for E2.2: Workflow Management System.
-    - Link to external provenance crate or describe internal WMS behavior.
-    """
-    programming_language = crate.add(ContextEntity(crate, "Bash", properties={
-        "@type": "ComputerLanguage",
-        "name": "Bash",
-        "description": "Bash is a Unix shell and command language."
-    }))
-
-    update_script_path = Path(coastsat_dir) / "update.sh"
+def parse_update_script(update_script_path: Path) -> tuple[list[str], list[str]]:
     comments = []
     step_files = []
     with open(update_script_path, "r") as f:
@@ -80,17 +71,29 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
                         step_files.append(token)
             elif line.startswith("./make_xlsx.py"):
                 step_files.append("make_xlsx.py")
+    return comments, step_files
 
-    workflow = crate.add_file(
-        Path(coastsat_dir) / "update.sh",
+def create_update_workflow_entity(crate: ROCrate, update_script_path: Path, comments: list[str], URL: GitURL) -> ContextEntity:
+    programming_language = crate.add(ContextEntity(crate, "Bash", properties={
+        "@type": "ComputerLanguage",
+        "name": "Bash",
+        "description": "Bash is a Unix shell and command language."
+    }))
+
+    return crate.add_file(
+        update_script_path,
         properties={
             "@type": ["SoftwareSourceCode", "HowTo", "File"],
             "name": "CoastSat Update Script",
             "description": "This script updates the CoastSat project and executes the computational workflow.\n\nComments:\n" + "\n".join(comments),
             "programmingLanguage": programming_language,
             "encodingFormat": "text/x-sh",
-            "codeRepository": URL.get("update.sh")["permalink_url"],
-    })
+            "codeRepository": URL.get("update.sh")["permalink_url"]
+        }
+    )
+
+def create_workflow_step_entities(crate: ROCrate, coastsat_dir: Path, step_files: list[str], URL: GitURL) -> list[dict]:
+    from collections import Counter
 
     python_language = crate.add(ContextEntity(crate, "Python", properties={
         "@type": "ComputerLanguage",
@@ -98,30 +101,24 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
         "url": "https://www.python.org/"
     }))
 
-    from collections import Counter
-
     counts = Counter(step_files)
     seen = {}
     notebook_entities = []
+
     for position, filename in enumerate(step_files):
         count = seen.get(filename, 0) + 1
         seen[filename] = count
         if counts[filename] > 1:
-            stem = filename.rsplit('.', 1)[0]
-            suffix = filename.rsplit('.', 1)[1]
+            stem, suffix = filename.rsplit('.', 1)
             identifier = f"{stem}-{count}.{suffix}"
         else:
             identifier = filename
+
         filepath = Path(coastsat_dir) / filename
-        if filename.endswith(".ipynb"):
-            types = ["File", "HowToStep", "SoftwareSourceCode"]
-            encoding = "application/x-ipynb+json"
-        else:
-            types = ["File", "HowToStep", "SoftwareSourceCode"]
-            encoding = "text/x-python"
-        
+        encoding = "application/x-ipynb+json" if filename.endswith(".ipynb") else "text/x-python"
+
         entity = crate.add_file(filepath, identifier, properties={
-            "@type": types,
+            "@type": ["File", "HowToStep", "SoftwareSourceCode"],
             "name": filename,
             "programmingLanguage": python_language,
             "encodingFormat": encoding,
@@ -130,9 +127,55 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
         })
         notebook_entities.append({"@id": entity.id})
 
-    workflow["step"] = notebook_entities
+    return notebook_entities
 
-    E2_2["hasPart"] = workflow
+def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict], coastsat_dir: Path, output_dir: Path):
+    notebook_crates = []
+    for i, filename in enumerate(step_entities):
+        fileid = filename["@id"]
+        if not fileid.endswith(".ipynb"):
+            continue
+        stem, suffix = fileid.rsplit(".", 1)
+
+        e2_2_direcory = "notebooks"
+        e2_2_subdirectory = Path(output_dir) / e2_2_direcory / stem
+        e2_2_subdirectory.mkdir(parents=True, exist_ok=True)
+        build_e2_2_crate(str(e2_2_subdirectory), coastsat_dir)
+        crate_manifest_path = Path(e2_2_subdirectory) / "ro-crate-metadata.json"
+        crate_manifest = crate_manifest_path.relative_to(output_dir).as_posix()
+        notebook_crate_entity = crate.add(DataEntity(crate, crate_manifest, properties={
+            "@type": "RO-Crate",
+            "name": f"{fileid} Provenance Crate",
+            "description": f"Provenance RO-Crate for notebook/script {fileid}."        
+        }))
+        notebook_crates.append(notebook_crate_entity)
+        
+        # Link the notebook crate to its assoicated step entity
+        step_entity = crate.get(fileid)
+        step_entity["exampleOfWork"] = notebook_crate_entity
+    return notebook_crates
+
+def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
+    """
+    Build metadata for E2.2: Workflow Management System.
+    - Link to external provenance crate or describe internal WMS behavior.
+    """
+    update_script_path = Path(coastsat_dir) / "update.sh"
+    comments, step_files = parse_update_script(update_script_path)
+
+    workflow_entity = create_update_workflow_entity(crate, update_script_path, comments, URL)
+    step_entities = create_workflow_step_entities(crate, coastsat_dir, step_files, URL)
+
+    workflow_entity["step"] = step_entities
+
+    # --- Add notebook provenance crates for each step file ---
+    create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
+
+    # Also link workflow_entity (update.sh) to E2_2
+    if "hasPart" in E2_2:
+        E2_2["hasPart"].append(workflow_entity)
+    else:
+        E2_2["hasPart"] = [workflow_entity]
     
 
 def build_e3(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E3):
@@ -232,7 +275,7 @@ def main():
     # Build experiment infrastructure layers
     build_e1(crate, coastsat_dir, URL, infrastructure_entities["E1"], output_dir)
     build_e2_1(crate, coastsat_dir, URL, infrastructure_entities["E2_1"])
-    build_e2_2(crate, coastsat_dir, URL, infrastructure_entities["E2_2"])
+    build_e2_2(crate, coastsat_dir, URL, infrastructure_entities["E2_2"], output_dir)
     build_e3(crate, coastsat_dir, URL, infrastructure_entities["E3"])
 
     # Write crate to specified output directory

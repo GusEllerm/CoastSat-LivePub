@@ -4,7 +4,8 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:53:39+00:00",
+            "conformsTo": "https://w3id.org/ro/wfrun/process/0.5",
+            "datePublished": "2025-07-08T23:03:00+00:00",
             "description": "Process Run Crate representing the Data Producer layer.",
             "mentions": [
                 {
@@ -68,9 +69,23 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0005/transect_time_series.csv"
                 }
             ],
-            "result": {
-                "@id": "#nz-transect-series-output"
-            }
+            "result": [
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv"
+                }
+            ]
         },
         {
             "@id": "#batch-process-sardinia",
@@ -114,9 +129,23 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0005/transect_time_series.csv"
                 }
             ],
-            "result": {
-                "@id": "#sardinia-transect-series-output"
-            }
+            "result": [
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv"
+                }
+            ]
         },
         {
             "@id": "#batch-process-nz-app",
@@ -240,29 +269,6 @@
             "encodingFormat": "text/csv"
         },
         {
-            "@id": "#nz-transect-series-output",
-            "@type": "Dataset",
-            "description": "Representative output files for NZD transects.",
-            "hasPart": [
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0002/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv"
-                }
-            ],
-            "name": "NZ Transect Time Series Output Dataset"
-        },
-        {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv",
             "@type": "File",
             "contentSize": "54.00",
@@ -296,29 +302,6 @@
             "contentSize": "59.49",
             "description": "Transect time series for sar0005",
             "encodingFormat": "text/csv"
-        },
-        {
-            "@id": "#sardinia-transect-series-output",
-            "@type": "Dataset",
-            "description": "Representative output files for SAR transects.",
-            "hasPart": [
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0002/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv"
-                }
-            ],
-            "name": "Sardinia Transect Time Series Output Dataset"
         },
         {
             "@id": "#university-of-auckland",

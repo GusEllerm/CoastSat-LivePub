@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:53:39+00:00",
+            "datePublished": "2025-07-08T23:03:00+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -26,6 +26,18 @@
                 },
                 {
                     "@id": "make_xlsx.py"
+                },
+                {
+                    "@id": "notebooks/tidal_correction-1/ro-crate-metadata.json"
+                },
+                {
+                    "@id": "notebooks/slope_estimation/ro-crate-metadata.json"
+                },
+                {
+                    "@id": "notebooks/tidal_correction-2/ro-crate-metadata.json"
+                },
+                {
+                    "@id": "notebooks/linear_models/ro-crate-metadata.json"
                 }
             ],
             "mainEntity": {
@@ -45,7 +57,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:53:39.543142+00:00",
+            "datePublished": "2025-07-08T23:03:00.313521+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -87,9 +99,11 @@
             "@id": "E2.2-wms",
             "@type": "Dataset",
             "description": "Provenance of workflow execution including workflow steps and parameters.",
-            "hasPart": {
-                "@id": "update.sh"
-            },
+            "hasPart": [
+                {
+                    "@id": "update.sh"
+                }
+            ],
             "name": "E2.2: Workflow Management System"
         },
         {
@@ -118,7 +132,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-08T02:53:40.051607+00:00",
+            "dateCreated": "2025-07-08T23:03:00.914208+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -184,6 +198,9 @@
             ],
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
             "encodingFormat": "application/x-ipynb+json",
+            "exampleOfWork": {
+                "@id": "notebooks/tidal_correction-1/ro-crate-metadata.json"
+            },
             "name": "tidal_correction.ipynb",
             "position": "0",
             "programmingLanguage": {
@@ -199,6 +216,9 @@
             ],
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/slope_estimation.ipynb",
             "encodingFormat": "application/x-ipynb+json",
+            "exampleOfWork": {
+                "@id": "notebooks/slope_estimation/ro-crate-metadata.json"
+            },
             "name": "slope_estimation.ipynb",
             "position": "1",
             "programmingLanguage": {
@@ -214,6 +234,9 @@
             ],
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
             "encodingFormat": "application/x-ipynb+json",
+            "exampleOfWork": {
+                "@id": "notebooks/tidal_correction-2/ro-crate-metadata.json"
+            },
             "name": "tidal_correction.ipynb",
             "position": "2",
             "programmingLanguage": {
@@ -229,6 +252,9 @@
             ],
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/linear_models.ipynb",
             "encodingFormat": "application/x-ipynb+json",
+            "exampleOfWork": {
+                "@id": "notebooks/linear_models/ro-crate-metadata.json"
+            },
             "name": "linear_models.ipynb",
             "position": "3",
             "programmingLanguage": {
@@ -249,6 +275,30 @@
             "programmingLanguage": {
                 "@id": "Python"
             }
+        },
+        {
+            "@id": "notebooks/tidal_correction-1/ro-crate-metadata.json",
+            "@type": "RO-Crate",
+            "description": "Provenance RO-Crate for notebook/script tidal_correction-1.ipynb.",
+            "name": "tidal_correction-1.ipynb Provenance Crate"
+        },
+        {
+            "@id": "notebooks/slope_estimation/ro-crate-metadata.json",
+            "@type": "RO-Crate",
+            "description": "Provenance RO-Crate for notebook/script slope_estimation.ipynb.",
+            "name": "slope_estimation.ipynb Provenance Crate"
+        },
+        {
+            "@id": "notebooks/tidal_correction-2/ro-crate-metadata.json",
+            "@type": "RO-Crate",
+            "description": "Provenance RO-Crate for notebook/script tidal_correction-2.ipynb.",
+            "name": "tidal_correction-2.ipynb Provenance Crate"
+        },
+        {
+            "@id": "notebooks/linear_models/ro-crate-metadata.json",
+            "@type": "RO-Crate",
+            "description": "Provenance RO-Crate for notebook/script linear_models.ipynb.",
+            "name": "linear_models.ipynb Provenance Crate"
         }
     ]
 }

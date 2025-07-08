@@ -84,12 +84,8 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
     action_id = action.id.lower()
     if "nz" in action_id:
         tag = "nzd"
-        output_id = "#nz-transect-series-output"
-        dataset_name = "NZ Transect Time Series Output Dataset"
     elif "sardinia" in action_id:
         tag = "sar"
-        output_id = "#sardinia-transect-series-output"
-        dataset_name = "Sardinia Transect Time Series Output Dataset"
     else:
         return  # unrecognized action id
 
@@ -109,14 +105,7 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
         )
         file_entities.append(file_entity)
 
-    dataset = crate.add(ContextEntity(crate, output_id, {
-        "@type": "Dataset",
-        "name": dataset_name,
-        "description": f"Representative output files for {tag.upper()} transects.",
-        "hasPart": file_entities
-    }))
-
-    action["result"] = dataset
+    return file_entities
 
 def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
     """
@@ -201,8 +190,8 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
     sar_timeseries_inputs = add_time_series_inputs(crate, limit=5, action=sardinia_action, URL=URL)
 
     # Add example outputs. This draws from the current commit's data files
-    add_time_series_outputs(crate, limit=5, action=nz_action, URL=URL)
-    add_time_series_outputs(crate, limit=5, action=sardinia_action, URL=URL)
+    nz_timeseries_outputs = add_time_series_outputs(crate, limit=5, action=nz_action, URL=URL)
+    sar_timeseries_outputs = add_time_series_outputs(crate, limit=5, action=sardinia_action, URL=URL)
     
     Organisation = add_organization(crate,
         "#university-of-auckland",
@@ -235,14 +224,17 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
     # Link CreateActions to root dataset
     root = crate.root_dataset
     root["mentions"] = [nz_action, sardinia_action]
+    root["conformsTo"] = "https://w3id.org/ro/wfrun/process/0.5"
     for action in actions:
         action["agent"] = [Author, Organisation]
         if action == nz_action:
             action["instrument"] = nz_app
             action["object"] = input_files + nz_timeseries_inputs
+            action["result"] = nz_timeseries_outputs
         else:
             action["instrument"] = sardinia_app
             action["object"] = input_files + sar_timeseries_inputs
+            action["result"] = sar_timeseries_outputs
 
     # Write to output
     crate.write(output_dir)
