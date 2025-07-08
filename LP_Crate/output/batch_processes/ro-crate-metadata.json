@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-07T21:51:29+00:00",
+            "datePublished": "2025-07-07T23:07:37+00:00",
             "description": "Process Run Crate representing the Data Producer layer.",
             "mentions": [
                 {
@@ -44,17 +44,32 @@
             "name": "Update NZ transect time series",
             "object": [
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/shorelines.geojson"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0001/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0005/transect_time_series.csv"
                 }
             ],
             "result": {
-                "@id": "#nz-transect-series"
+                "@id": "#nz-transect-series-output"
             }
         },
         {
@@ -75,17 +90,32 @@
             "name": "Update Sardinia transect time series",
             "object": [
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/shorelines.geojson"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0001/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0005/transect_time_series.csv"
                 }
             ],
             "result": {
-                "@id": "#sardinia-transect-series"
+                "@id": "#sardinia-transect-series-output"
             }
         },
         {
@@ -103,6 +133,76 @@
             "description": "Application for batch processing Sardinia transect time series.",
             "name": "Batch Process Sardinia Application",
             "programmingLanguage": "Python"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0001/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "45.65",
+            "description": "Transect time series for nzd0001",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0002/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "31.55",
+            "description": "Transect time series for nzd0002",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "41.04",
+            "description": "Transect time series for nzd0003",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "73.83",
+            "description": "Transect time series for nzd0004",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "57.96",
+            "description": "Transect time series for nzd0005",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0001/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "53.92",
+            "description": "Transect time series for sar0001",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0002/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "39.47",
+            "description": "Transect time series for sar0002",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "54.26",
+            "description": "Transect time series for sar0003",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.76",
+            "description": "Transect time series for sar0004",
+            "encodingFormat": "text/csv"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.33",
+            "description": "Transect time series for sar0005",
+            "encodingFormat": "text/csv"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv",
@@ -140,7 +240,7 @@
             "encodingFormat": "text/csv"
         },
         {
-            "@id": "#nz-transect-series",
+            "@id": "#nz-transect-series-output",
             "@type": "Dataset",
             "description": "Representative output files for NZD transects.",
             "hasPart": [
@@ -160,7 +260,7 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv"
                 }
             ],
-            "name": "NZ Transect Time Series Dataset"
+            "name": "NZ Transect Time Series Output Dataset"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv",
@@ -198,7 +298,7 @@
             "encodingFormat": "text/csv"
         },
         {
-            "@id": "#sardinia-transect-series",
+            "@id": "#sardinia-transect-series-output",
             "@type": "Dataset",
             "description": "Representative output files for SAR transects.",
             "hasPart": [
@@ -218,7 +318,7 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv"
                 }
             ],
-            "name": "Sardinia Transect Time Series Dataset"
+            "name": "Sardinia Transect Time Series Output Dataset"
         },
         {
             "@id": "#university-of-auckland",
@@ -234,23 +334,23 @@
             "name": "Example name"
         },
         {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/polygons.geojson",
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson",
             "@type": "File",
             "contentSize": "2264.32",
             "description": "Polygon bounding boxes defining where to download imagery.",
             "encodingFormat": "application/geo+json"
         },
         {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/shorelines.geojson",
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/shorelines.geojson",
             "@type": "File",
             "contentSize": "27174.53",
             "description": "Reference shorelines for transects.",
             "encodingFormat": "application/geo+json"
         },
         {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson",
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson",
             "@type": "File",
-            "contentSize": "89989.05",
+            "contentSize": "89972.61",
             "description": "Transects with extended geometry for processing.",
             "encodingFormat": "application/geo+json"
         }

@@ -69,10 +69,14 @@ class GitURL:
     
 
     def get_previous_commit_hash(self):
-        return subprocess.check_output(
-            ["git", "-C", self.repo_path, "rev-list", "--max-count=1", f"{self.commit_hash}^"],
+        # Find the second most recent commit with message "auto update"
+        log_output = subprocess.check_output(
+            ["git", "-C", self.repo_path, "log", "--grep=auto update", "--pretty=format:%H"],
             text=True
-        ).strip()
+        ).strip().splitlines()
+        if len(log_output) < 2:
+            raise ValueError("Less than two 'auto update' commits found.")
+        return log_output[1]
 
     def get_previous(self, local_path):
         previous_hash = self.get_previous_commit_hash()

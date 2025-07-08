@@ -76,7 +76,7 @@ def add_file_entity(crate: ROCrate, identifier: str, content_size, description, 
 
     return crate.add(ContextEntity(crate, identifier, properties))
 
-def add_example_outputs_for_action(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
+def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
     """
     Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
     based on its @id (nz or sardinia) and sets a Dataset as its result.
@@ -84,12 +84,12 @@ def add_example_outputs_for_action(crate: ROCrate, limit: Optional[int], action:
     action_id = action.id.lower()
     if "nz" in action_id:
         tag = "nzd"
-        output_id = "#nz-transect-series"
-        dataset_name = "NZ Transect Time Series Dataset"
+        output_id = "#nz-transect-series-output"
+        dataset_name = "NZ Transect Time Series Output Dataset"
     elif "sardinia" in action_id:
         tag = "sar"
-        output_id = "#sardinia-transect-series"
-        dataset_name = "Sardinia Transect Time Series Dataset"
+        output_id = "#sardinia-transect-series-output"
+        dataset_name = "Sardinia Transect Time Series Output Dataset"
     else:
         return  # unrecognized action id
 
@@ -117,6 +117,41 @@ def add_example_outputs_for_action(crate: ROCrate, limit: Optional[int], action:
     }))
 
     action["result"] = dataset
+
+def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
+    """
+    Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
+    based on its @id (nz or sardinia) and sets a Dataset as its result.
+    """
+    action_id = action.id.lower()
+    if "nz" in action_id:
+        tag = "nzd"
+        output_id = "#nz-transect-series-input"
+        dataset_name = "NZ Transect Time Series Input Dataset"
+    elif "sardinia" in action_id:
+        tag = "sar"
+        output_id = "#sardinia-transect-series-input"
+        dataset_name = "Sardinia Transect Time Series Input Dataset"
+    else:
+        return  # unrecognized action id
+
+    site_root = os.path.join(URL.repo_path, "data")
+    matched_dirs = sorted([d for d in os.listdir(site_root) if d.startswith(tag)])
+    selected = matched_dirs if limit is None else matched_dirs[:limit]
+
+    file_entities = []
+    for site_id in selected:
+        remote_path = f"data/{site_id}/transect_time_series.csv"
+        file_entity = add_file_entity(
+            crate,
+            identifier=URL.get_previous(remote_path)["permalink_url"],
+            content_size=URL.get_size_at_commit(remote_path, URL.get_previous(remote_path)['commit_hash']), 
+            description=f"Transect time series for {site_id}",
+            encoding_format="text/csv"
+        )
+        file_entities.append(file_entity)
+
+    return file_entities
 
 def build_e1_crate(output_dir: str, coastsat_dir: str):
     
@@ -160,9 +195,14 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
     ]
     nz_app, sardinia_app = software
 
-    # Add example outputs with limit = 1
-    add_example_outputs_for_action(crate, limit=5, action=nz_action, URL=URL)
-    add_example_outputs_for_action(crate, limit=5, action=sardinia_action, URL=URL)
+    # Add example inputs. This draws from the previous commit's data files
+    # to ensure reproducibility, as the current commit may not have the same files.
+    nz_timeseries_inputs = add_time_series_inputs(crate, limit=5, action=nz_action, URL=URL)
+    sar_timeseries_inputs = add_time_series_inputs(crate, limit=5, action=sardinia_action, URL=URL)
+
+    # Add example outputs. This draws from the current commit's data files
+    add_time_series_outputs(crate, limit=5, action=nz_action, URL=URL)
+    add_time_series_outputs(crate, limit=5, action=sardinia_action, URL=URL)
     
     Organisation = add_organization(crate,
         "#university-of-auckland",
@@ -175,18 +215,18 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
     
     input_files = [
         add_file_entity(crate,
-                        URL.get("polygons.geojson")['permalink_url'],
-                        content_size=URL.get_size("polygons.geojson"),
+                        URL.get_previous("polygons.geojson")['permalink_url'],
+                        content_size=URL.get_size_at_commit("polygons.geojson", URL.get_previous("polygons.geojson")['commit_hash']),
                         description="Polygon bounding boxes defining where to download imagery.",
                         encoding_format="application/geo+json"),
         add_file_entity(crate,
-                        URL.get("shorelines.geojson")['permalink_url'],
-                        content_size=URL.get_size("shorelines.geojson"),
+                        URL.get_previous("shorelines.geojson")['permalink_url'],
+                        content_size=URL.get_size_at_commit("shorelines.geojson", URL.get_previous("shorelines.geojson")['commit_hash']),
                         description="Reference shorelines for transects.",
                         encoding_format="application/geo+json"),
         add_file_entity(crate,
-                        URL.get("transects_extended.geojson")['permalink_url'],
-                        content_size=URL.get_size("transects_extended.geojson"),
+                        URL.get_previous("transects_extended.geojson")['permalink_url'],
+                        content_size=URL.get_size_at_commit("transects_extended.geojson", URL.get_previous("transects_extended.geojson")['commit_hash']),
                         description="Transects with extended geometry for processing.",
                         encoding_format="application/geo+json")
     ]
@@ -197,11 +237,12 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
     root["mentions"] = [nz_action, sardinia_action]
     for action in actions:
         action["agent"] = [Author, Organisation]
-        action["object"] = input_files
         if action == nz_action:
             action["instrument"] = nz_app
+            action["object"] = input_files + nz_timeseries_inputs
         else:
             action["instrument"] = sardinia_app
+            action["object"] = input_files + sar_timeseries_inputs
 
     # Write to output
     crate.write(output_dir)

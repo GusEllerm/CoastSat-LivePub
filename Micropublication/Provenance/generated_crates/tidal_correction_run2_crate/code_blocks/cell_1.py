@@ -10,3 +10,5 @@ from glob import glob
 from coastsat import SDS_transects
 import json
 import matplotlib.pyplot as plt
+import dotenv
+dotenv.load_dotenv()
