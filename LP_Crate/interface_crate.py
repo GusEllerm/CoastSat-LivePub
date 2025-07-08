@@ -65,16 +65,72 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2):
         "description": "Bash is a Unix shell and command language."
     }))
 
+    update_script_path = Path(coastsat_dir) / "update.sh"
+    comments = []
+    step_files = []
+    with open(update_script_path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith("#") and not line.startswith("#!"):
+                comments.append(line)
+            if line.startswith("jupyter nbconvert"):
+                tokens = line.split()
+                for token in tokens:
+                    if token.endswith(".ipynb"):
+                        step_files.append(token)
+            elif line.startswith("./make_xlsx.py"):
+                step_files.append("make_xlsx.py")
+
     workflow = crate.add_file(
         Path(coastsat_dir) / "update.sh",
         properties={
             "@type": ["SoftwareSourceCode", "HowTo", "File"],
             "name": "CoastSat Update Script",
-            "description": "This script updates the CoastSat project and executes the computational workflow.",
+            "description": "This script updates the CoastSat project and executes the computational workflow.\n\nComments:\n" + "\n".join(comments),
             "programmingLanguage": programming_language,
             "encodingFormat": "text/x-sh",
             "codeRepository": URL.get("update.sh")["permalink_url"],
     })
+
+    python_language = crate.add(ContextEntity(crate, "Python", properties={
+        "@type": "ComputerLanguage",
+        "name": "Python",
+        "url": "https://www.python.org/"
+    }))
+
+    from collections import Counter
+
+    counts = Counter(step_files)
+    seen = {}
+    notebook_entities = []
+    for position, filename in enumerate(step_files):
+        count = seen.get(filename, 0) + 1
+        seen[filename] = count
+        if counts[filename] > 1:
+            stem = filename.rsplit('.', 1)[0]
+            suffix = filename.rsplit('.', 1)[1]
+            identifier = f"{stem}-{count}.{suffix}"
+        else:
+            identifier = filename
+        filepath = Path(coastsat_dir) / filename
+        if filename.endswith(".ipynb"):
+            types = ["File", "HowToStep", "SoftwareSourceCode"]
+            encoding = "application/x-ipynb+json"
+        else:
+            types = ["File", "HowToStep", "SoftwareSourceCode"]
+            encoding = "text/x-python"
+        
+        entity = crate.add_file(filepath, identifier, properties={
+            "@type": types,
+            "name": filename,
+            "programmingLanguage": python_language,
+            "encodingFormat": encoding,
+            "codeRepository": URL.get(filename)["permalink_url"],
+            "position": position
+        })
+        notebook_entities.append({"@id": entity.id})
+
+    workflow["step"] = notebook_entities
 
     E2_2["hasPart"] = workflow
     

@@ -4,13 +4,28 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:22:57+00:00",
+            "datePublished": "2025-07-08T02:41:51+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
                 },
                 {
                     "@id": "update.sh"
+                },
+                {
+                    "@id": "tidal_correction-1.ipynb"
+                },
+                {
+                    "@id": "slope_estimation.ipynb"
+                },
+                {
+                    "@id": "tidal_correction-2.ipynb"
+                },
+                {
+                    "@id": "linear_models.ipynb"
+                },
+                {
+                    "@id": "make_xlsx.py"
                 }
             ],
             "mainEntity": {
@@ -30,7 +45,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T02:22:57.522308+00:00",
+            "datePublished": "2025-07-08T02:41:51.385209+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -103,7 +118,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-08T02:22:57.977886+00:00",
+            "dateCreated": "2025-07-08T02:41:51.915350+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -130,11 +145,109 @@
                 "File"
             ],
             "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/update.sh",
-            "description": "This script updates the CoastSat project and executes the computational workflow.",
+            "description": "This script updates the CoastSat project and executes the computational workflow.\n\nComments:\n# For new sites, first we need to run tidal_correction to fetch the tides, then we can run slope_estimation, then we can use the slopes to apply the tidal correction\n# This is why tidal_correction.ipynb is run twice",
             "encodingFormat": "text/x-sh",
             "name": "CoastSat Update Script",
             "programmingLanguage": {
                 "@id": "Bash"
+            },
+            "step": [
+                {
+                    "@id": "tidal_correction-1.ipynb"
+                },
+                {
+                    "@id": "slope_estimation.ipynb"
+                },
+                {
+                    "@id": "tidal_correction-2.ipynb"
+                },
+                {
+                    "@id": "linear_models.ipynb"
+                },
+                {
+                    "@id": "make_xlsx.py"
+                }
+            ]
+        },
+        {
+            "@id": "Python",
+            "@type": "ComputerLanguage",
+            "name": "Python",
+            "url": "https://www.python.org/"
+        },
+        {
+            "@id": "tidal_correction-1.ipynb",
+            "@type": [
+                "File",
+                "HowToStep",
+                "SoftwareSourceCode"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
+            "encodingFormat": "application/x-ipynb+json",
+            "name": "tidal_correction.ipynb",
+            "position": 0,
+            "programmingLanguage": {
+                "@id": "Python"
+            }
+        },
+        {
+            "@id": "slope_estimation.ipynb",
+            "@type": [
+                "File",
+                "HowToStep",
+                "SoftwareSourceCode"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/slope_estimation.ipynb",
+            "encodingFormat": "application/x-ipynb+json",
+            "name": "slope_estimation.ipynb",
+            "position": 1,
+            "programmingLanguage": {
+                "@id": "Python"
+            }
+        },
+        {
+            "@id": "tidal_correction-2.ipynb",
+            "@type": [
+                "File",
+                "HowToStep",
+                "SoftwareSourceCode"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/tidal_correction.ipynb",
+            "encodingFormat": "application/x-ipynb+json",
+            "name": "tidal_correction.ipynb",
+            "position": 2,
+            "programmingLanguage": {
+                "@id": "Python"
+            }
+        },
+        {
+            "@id": "linear_models.ipynb",
+            "@type": [
+                "File",
+                "HowToStep",
+                "SoftwareSourceCode"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/linear_models.ipynb",
+            "encodingFormat": "application/x-ipynb+json",
+            "name": "linear_models.ipynb",
+            "position": 3,
+            "programmingLanguage": {
+                "@id": "Python"
+            }
+        },
+        {
+            "@id": "make_xlsx.py",
+            "@type": [
+                "File",
+                "HowToStep",
+                "SoftwareSourceCode"
+            ],
+            "codeRepository": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/make_xlsx.py",
+            "encodingFormat": "text/x-python",
+            "name": "make_xlsx.py",
+            "position": 4,
+            "programmingLanguage": {
+                "@id": "Python"
             }
         }
     ]
