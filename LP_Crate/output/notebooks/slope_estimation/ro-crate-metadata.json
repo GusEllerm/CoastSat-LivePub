@@ -4,7 +4,41 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-08T23:03:00+00:00"
+            "conformsTo": [
+                {
+                    "@id": "https://w3id.org/ro/wfrun/process/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/workflow/0.1"
+                },
+                {
+                    "@id": "https://w3id.org/ro/wfrun/provenance/0.5"
+                },
+                {
+                    "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+                }
+            ],
+            "datePublished": "2025-07-09T02:31:19+00:00",
+            "hasPart": [
+                {
+                    "@id": "slope_estimation.ipynb"
+                },
+                {
+                    "@id": "code_blocks/cell_1.py"
+                },
+                {
+                    "@id": "code_blocks/cell_2.py"
+                },
+                {
+                    "@id": "code_blocks/cell_3.py"
+                },
+                {
+                    "@id": "code_blocks/cell_4.py"
+                }
+            ],
+            "mainEntity": {
+                "@id": "slope_estimation.ipynb"
+            }
         },
         {
             "@id": "ro-crate-metadata.json",
@@ -15,6 +49,177 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/crate/1.1"
             }
+        },
+        {
+            "@id": "slope_estimation.ipynb",
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow",
+                "HowTo"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-tides_csv"
+                },
+                {
+                    "@id": "#fp-transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "step": [
+                {
+                    "@id": "#step-1"
+                },
+                {
+                    "@id": "#step-2"
+                },
+                {
+                    "@id": "#step-3"
+                },
+                {
+                    "@id": "#step-4"
+                }
+            ]
+        },
+        {
+            "@id": "#jupyter-kernel",
+            "@type": "SoftwareApplication",
+            "description": "Jupyter Notebook kernel for Python 3",
+            "identifier": "python3",
+            "input": [
+                {
+                    "@id": "#fp-tides_csv"
+                },
+                {
+                    "@id": "#fp-transect_time_series_csv"
+                },
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "name": "Jupyter Notebook Kernel",
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "programmingLanguage": "python3",
+            "softwareVersion": "3.12.3",
+            "version": "3.12.3"
+        },
+        {
+            "@id": "#step-1",
+            "@type": "HowToStep",
+            "name": "Code cell 1",
+            "position": 1,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_1.py"
+            }
+        },
+        {
+            "@id": "#step-2",
+            "@type": "HowToStep",
+            "name": "Code cell 2",
+            "position": 2,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_2.py"
+            }
+        },
+        {
+            "@id": "#step-3",
+            "@type": "HowToStep",
+            "name": "Code cell 3",
+            "position": 3,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_3.py"
+            }
+        },
+        {
+            "@id": "#step-4",
+            "@type": "HowToStep",
+            "name": "Code cell 4",
+            "position": 4,
+            "tool": {
+                "@id": "#jupyter-kernel"
+            },
+            "workExample": {
+                "@id": "code_blocks/cell_4.py"
+            }
+        },
+        {
+            "@id": "#fp-tides_csv",
+            "@type": "FormalParameter",
+            "name": "tides.csv"
+        },
+        {
+            "@id": "#fp-transect_time_series_csv",
+            "@type": "FormalParameter",
+            "name": "transect_time_series.csv"
+        },
+        {
+            "@id": "#fp-transects_extended_geojson",
+            "@type": "FormalParameter",
+            "name": "transects_extended.geojson"
+        },
+        {
+            "@id": "code_blocks/cell_1.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 1"
+        },
+        {
+            "@id": "code_blocks/cell_2.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ],
+            "name": "Code Cell 2"
+        },
+        {
+            "@id": "code_blocks/cell_3.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "name": "Code Cell 3"
+        },
+        {
+            "@id": "code_blocks/cell_4.py",
+            "@type": [
+                "File",
+                "SoftwareSourceCode"
+            ],
+            "input": [],
+            "name": "Code Cell 4",
+            "output": [
+                {
+                    "@id": "#fp-transects_extended_geojson"
+                }
+            ]
         }
     ]
 }

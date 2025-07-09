@@ -1,19 +1,16 @@
-
+from notebook_provenance.notebook_to_provcrate import generate_provenance_crate_for_notebook
 
 from rocrate.rocrate import ROCrate
 from pathlib import Path
 import argparse
 
-def build_e2_2_crate(output_dir: str, coastsat_dir: str) -> ROCrate:
+def build_e2_2_crate(output_dir: str, coastsat_dir: str, notebook_path: str) -> ROCrate:
     """
     Build a provenance RO-Crate describing the WMS layer (E2.2).
     This crate may later be linked into the interface crate.
     """
-    crate = ROCrate()
 
-    # TODO: Implement logic to extract workflow execution provenance
-    # Example: capture shell script execution, Jupyter runs, etc.
-
+    crate = generate_provenance_crate_for_notebook(notebook_path, output_dir)
     crate.write(output_dir)
     return crate
 

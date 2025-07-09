@@ -10,6 +10,7 @@ from e1_crate import build_e1_crate
 from e2_2_crate import build_e2_2_crate
 
 import os
+import shutil
 import argparse
 
 def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
@@ -140,7 +141,7 @@ def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict],
         e2_2_direcory = "notebooks"
         e2_2_subdirectory = Path(output_dir) / e2_2_direcory / stem
         e2_2_subdirectory.mkdir(parents=True, exist_ok=True)
-        build_e2_2_crate(str(e2_2_subdirectory), coastsat_dir)
+        build_e2_2_crate(str(e2_2_subdirectory), coastsat_dir, coastsat_dir / crate.get(fileid)["name"])
         crate_manifest_path = Path(e2_2_subdirectory) / "ro-crate-metadata.json"
         crate_manifest = crate_manifest_path.relative_to(output_dir).as_posix()
         notebook_crate_entity = crate.add(DataEntity(crate, crate_manifest, properties={
@@ -170,6 +171,11 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
 
     # --- Add notebook provenance crates for each step file ---
     create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
+
+    # Remove code_blocks directory from {output_dir}/notebooks if it exists
+    code_blocks_dir = Path(output_dir) / "notebooks" / "code_blocks"
+    if code_blocks_dir.exists() and code_blocks_dir.is_dir():
+        shutil.rmtree(code_blocks_dir)
 
     # Also link workflow_entity (update.sh) to E2_2
     if "hasPart" in E2_2:
