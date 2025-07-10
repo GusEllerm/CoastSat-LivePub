@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-10T02:52:09+00:00",
+            "datePublished": "2025-07-10T03:45:01+00:00",
             "hasPart": [
                 {
                     "@id": "slope_estimation.ipynb"
@@ -169,7 +169,8 @@
             ],
             "input": [],
             "name": "Code Cell 1",
-            "output": []
+            "output": [],
+            "sha256": "44b7d1379c903d0936a08ceb400faf9bcb60a2a0b0651b8be6ca22a2d8652f4c"
         },
         {
             "@id": "code_blocks/cell_2.py",
@@ -182,7 +183,8 @@
                 }
             ],
             "name": "Code Cell 2",
-            "output": []
+            "output": [],
+            "sha256": "1a1d222d91a7575d75929e0ad2cbeee5e935b7395764195949db9deaa94e500a"
         },
         {
             "@id": "code_blocks/cell_3.py",
@@ -191,7 +193,8 @@
             ],
             "input": [],
             "name": "Code Cell 3",
-            "output": []
+            "output": [],
+            "sha256": "e70519a3fc41e01f2e3d0d0840d30bd958d64a4421e2290667bda0d9605e29d8"
         },
         {
             "@id": "code_blocks/cell_4.py",
@@ -211,7 +214,8 @@
                 {
                     "@id": "#fp-transects_extended_geojson"
                 }
-            ]
+            ],
+            "sha256": "1e649dd031ffb2e5ec75d5411fa895d5eb4af22a8ccfdce9b62529df1a0d223f"
         },
         {
             "@id": "#create-action-1",

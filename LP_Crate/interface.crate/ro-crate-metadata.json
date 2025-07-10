@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-10T02:50:28+00:00",
+            "datePublished": "2025-07-10T03:44:59+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -57,7 +57,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-10T02:50:28.528599+00:00",
+            "datePublished": "2025-07-10T03:44:59.108961+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -132,7 +132,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-10T02:52:07.582648+00:00",
+            "dateCreated": "2025-07-10T03:44:59.864437+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -205,7 +205,8 @@
             "position": "0",
             "programmingLanguage": {
                 "@id": "Python"
-            }
+            },
+            "sha256": "ee5b70f8ab3b850e7d88c6e36c9e360206ff368e99cf6d38f1fd04353270f47f"
         },
         {
             "@id": "slope_estimation.ipynb",
@@ -223,7 +224,8 @@
             "position": "1",
             "programmingLanguage": {
                 "@id": "Python"
-            }
+            },
+            "sha256": "febfd0e5d83cc25dc5b856e5d56df1b352147e122a63e65b3d667597e7334b6d"
         },
         {
             "@id": "tidal_correction-2.ipynb",
@@ -241,7 +243,8 @@
             "position": "2",
             "programmingLanguage": {
                 "@id": "Python"
-            }
+            },
+            "sha256": "ee5b70f8ab3b850e7d88c6e36c9e360206ff368e99cf6d38f1fd04353270f47f"
         },
         {
             "@id": "linear_models.ipynb",
@@ -259,7 +262,8 @@
             "position": "3",
             "programmingLanguage": {
                 "@id": "Python"
-            }
+            },
+            "sha256": "b05ba627fc2e38acd0cd8a6db905d11001882157cdd9bae3cb3f472aa79c958b"
         },
         {
             "@id": "make_xlsx.py",
@@ -274,7 +278,8 @@
             "position": "4",
             "programmingLanguage": {
                 "@id": "Python"
-            }
+            },
+            "sha256": "dca8f73eef061d10d4b25e85f91afe82adf6995498557cf6f0996e86f91fab2e"
         },
         {
             "@id": "notebooks/tidal_correction-1/ro-crate-metadata.json",

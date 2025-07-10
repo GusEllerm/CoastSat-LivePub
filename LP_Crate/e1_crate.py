@@ -63,7 +63,7 @@ def add_organization(crate: ROCrate, identifier: str, name: str):
     return crate.add(ContextEntity(crate, identifier, properties))
 
 
-def add_file_entity(crate: ROCrate, identifier: str, content_size, description, encoding_format: None):
+def add_file_entity(crate: ROCrate, identifier: str, content_size, description, encoding_format: None, sha_256: Optional[str] = None):
     """
     Helper function to add a File entity to the RO-Crate.
     """
@@ -71,12 +71,13 @@ def add_file_entity(crate: ROCrate, identifier: str, content_size, description, 
         "@type": "File",
         "encodingFormat": encoding_format,
         "contentSize": content_size,
+        "sha256": sha_256,
         "description": description
     }
 
     return crate.add(ContextEntity(crate, identifier, properties))
 
-def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
+def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir):
     """
     Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
     based on its @id (nz or sardinia) and sets a Dataset as its result.
@@ -94,20 +95,22 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
     selected = matched_dirs if limit is None else matched_dirs[:limit]
 
     file_entities = []
-    for site_id in selected:
+    for site_id in selected:        
         remote_path = f"data/{site_id}/transect_time_series.csv"
+        local_path = f"{coastsat_dir}/data/{site_id}/transect_time_series.csv"
         file_entity = add_file_entity(
             crate,
             identifier=URL.get(remote_path)["permalink_url"],
             content_size=URL.get_size(remote_path), 
             description=f"Transect time series for {site_id}",
+            sha_256=URL.get_file_hash(local_path),
             encoding_format="text/csv"
         )
         file_entities.append(file_entity)
 
     return file_entities
 
-def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL):
+def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir):
     """
     Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
     based on its @id (nz or sardinia) and sets a Dataset as its result.
@@ -131,11 +134,13 @@ def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: Context
     file_entities = []
     for site_id in selected:
         remote_path = f"data/{site_id}/transect_time_series.csv"
+        local_path = f"data/{site_id}/transect_time_series.csv"
         file_entity = add_file_entity(
             crate,
             identifier=URL.get_previous(remote_path)["permalink_url"],
             content_size=URL.get_size_at_commit(remote_path, URL.get_previous(remote_path)['commit_hash']), 
             description=f"Transect time series for {site_id}",
+            sha_256=URL.get_file_hash(local_path, "previous"),
             encoding_format="text/csv"
         )
         file_entities.append(file_entity)
@@ -186,12 +191,13 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
 
     # Add example inputs. This draws from the previous commit's data files
     # to ensure reproducibility, as the current commit may not have the same files.
-    nz_timeseries_inputs = add_time_series_inputs(crate, limit=None, action=nz_action, URL=URL)
-    sar_timeseries_inputs = add_time_series_inputs(crate, limit=None, action=sardinia_action, URL=URL)
+    limit = 5
+    nz_timeseries_inputs = add_time_series_inputs(crate, limit, nz_action, URL, coastsat_dir)
+    sar_timeseries_inputs = add_time_series_inputs(crate, limit, sardinia_action, URL, coastsat_dir)
 
     # Add example outputs. This draws from the current commit's data files
-    nz_timeseries_outputs = add_time_series_outputs(crate, limit=None, action=nz_action, URL=URL)
-    sar_timeseries_outputs = add_time_series_outputs(crate, limit=None, action=sardinia_action, URL=URL)
+    nz_timeseries_outputs = add_time_series_outputs(crate, limit, nz_action, URL, coastsat_dir)
+    sar_timeseries_outputs = add_time_series_outputs(crate, limit, sardinia_action, URL, coastsat_dir)
     
     Organisation = add_organization(crate,
         "#university-of-auckland",
@@ -207,16 +213,19 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
                         URL.get_previous("polygons.geojson")['permalink_url'],
                         content_size=URL.get_size_at_commit("polygons.geojson", URL.get_previous("polygons.geojson")['commit_hash']),
                         description="Polygon bounding boxes defining where to download imagery.",
+                        sha_256=URL.get_file_hash("polygons.geojson"),
                         encoding_format="application/geo+json"),
         add_file_entity(crate,
                         URL.get_previous("shorelines.geojson")['permalink_url'],
                         content_size=URL.get_size_at_commit("shorelines.geojson", URL.get_previous("shorelines.geojson")['commit_hash']),
                         description="Reference shorelines for transects.",
+                        sha_256=URL.get_file_hash("shorelines.geojson"),
                         encoding_format="application/geo+json"),
         add_file_entity(crate,
                         URL.get_previous("transects_extended.geojson")['permalink_url'],
                         content_size=URL.get_size_at_commit("transects_extended.geojson", URL.get_previous("transects_extended.geojson")['commit_hash']),
                         description="Transects with extended geometry for processing.",
+                        sha_256=URL.get_file_hash("transects_extended.geojson"),
                         encoding_format="application/geo+json")
     ]
     polygon_file, shoreline_file, transects_file = input_files

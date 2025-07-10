@@ -12,6 +12,7 @@ from e2_2_crate import build_e2_2_crate
 import os
 import shutil
 import argparse
+import hashlib
 
 def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     """
@@ -93,8 +94,15 @@ def create_update_workflow_entity(crate: ROCrate, update_script_path: Path, comm
         }
     )
 
+def compute_sha256(filepath: Path) -> str:
+    """Compute the SHA256 hash of a file."""
+    hash_sha256 = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
 def create_workflow_step_entities(crate: ROCrate, coastsat_dir: Path, step_files: list[str], URL: GitURL) -> list[dict]:
-    from collections import Counter
 
     python_language = crate.add(ContextEntity(crate, "Python", properties={
         "@type": "ComputerLanguage",
@@ -124,7 +132,8 @@ def create_workflow_step_entities(crate: ROCrate, coastsat_dir: Path, step_files
             "programmingLanguage": python_language,
             "encodingFormat": encoding,
             "codeRepository": URL.get(filename)["permalink_url"],
-            "position": str(position)
+            "position": str(position),
+            "sha256": compute_sha256(filepath) if filepath.is_file() else None,
         })
         notebook_entities.append({"@id": entity.id})
 

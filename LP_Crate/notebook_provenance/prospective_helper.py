@@ -2,12 +2,14 @@ import re
 import os
 import nbformat
 import json
+import hashlib
 from pathlib import Path
 from glob import glob
 from typing import List, Dict, Set, Tuple, Any
 from rocrate.rocrate import ROCrate
 from rocrate.model.contextentity import ContextEntity
 from .provenance_types import NotebookCellProvenance
+
 
 def parse_notebook_cells(notebook_path: str) -> List[str]:
     with open(notebook_path, "r", encoding="utf-8") as f:
@@ -89,6 +91,22 @@ def _normalize_interpolated_path(path: str) -> str:
 
     return path
 
+def file_sha256(filepath: str) -> str:
+    """
+    Compute the SHA256 hash of a file.
+
+    Parameters:
+        filepath (str): Path to the file.
+
+    Returns:
+        str: SHA256 hex digest of the file.
+    """
+    sha256 = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            sha256.update(chunk)
+    return sha256.hexdigest()
+
 def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_path, notebook_file, cell_entities, formal_params):
     
     code_blocks_dir = Path(crate_output_dir).parent / "code_blocks"
@@ -106,7 +124,8 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
             dest_path=f"code_blocks/{code_filename}",
             properties={
                 "@type": ["SoftwareApplication"],
-                "name": f"Code Cell {i+1}"
+                "name": f"Code Cell {i+1}",
+                "sha256": file_sha256(str(code_path)),
             }
         )
         cell.software_app = code_file
@@ -199,10 +218,6 @@ def add_prov_results(crate: ROCrate, cell_entities: List[NotebookCellProvenance]
     """
     Add ProvResult entities for each CreateAction, scraping the jupyter notebook for Plotly results. 
     """
-    import json
-    from pathlib import Path
-    import nbformat
-
     # Open the notebook
     with open(notebook_path, "r", encoding="utf-8") as f:
         notebook = nbformat.read(f, as_version=4)

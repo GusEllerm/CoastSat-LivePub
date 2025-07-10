@@ -1,6 +1,7 @@
 import os
 import subprocess
 import logging
+import hashlib
 from urllib.parse import quote
 
 # Configure logging
@@ -103,6 +104,35 @@ class GitURL:
             return f"{size_kb:.2f}"
         except subprocess.CalledProcessError:
             raise FileNotFoundError(f"{rel_path} does not exist at commit {commit_hash}")
+
+    def get_file_hash(self, local_path, which="current"):
+        """
+        Return SHA-256 hash of the file contents for the specified commit state.
+        which: "current" for working directory file, "previous" for the second most recent 'auto update' commit
+        """
+        if which == "current":
+            abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
+            if not os.path.isfile(abs_path):
+                raise FileNotFoundError(f"{abs_path} is not a file.")
+            with open(abs_path, "rb") as f:
+                content = f.read()
+        elif which == "previous":
+            previous_hash = self.get_previous_commit_hash()
+            rel_path = os.path.relpath(
+                os.path.abspath(os.path.join(self.repo_path, local_path)),
+                self.repo_root
+            )
+            try:
+                content = subprocess.check_output(
+                    ["git", "-C", self.repo_path, "show", f"{previous_hash}:{rel_path}"],
+                    stderr=subprocess.DEVNULL
+                )
+            except subprocess.CalledProcessError:
+                raise FileNotFoundError(f"{rel_path} does not exist at commit {previous_hash}")
+        else:
+            raise ValueError("Invalid 'which' parameter. Use 'current' or 'previous'.")
+
+        return hashlib.sha256(content).hexdigest()
 
 if __name__ == "__main__":
     # Example usage
