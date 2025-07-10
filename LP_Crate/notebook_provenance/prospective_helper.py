@@ -105,21 +105,31 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
             source=str(code_path),
             dest_path=f"code_blocks/{code_filename}",
             properties={
-                "@type": ["File", "SoftwareSourceCode"],
+                "@type": ["SoftwareApplication"],
                 "name": f"Code Cell {i+1}"
             }
         )
-
+        cell.software_app = code_file
         cell.howto_step["workExample"] = {"@id": code_file.id}
 
         # Match file paths used in this code block
         input_paths, output_paths = extract_unique_file_paths([cell.source])
+        cell.input_files = [formal_params[os.path.basename(p)] for p in sorted(set(input_paths)) if os.path.basename(p) in formal_params]
+        cell.output_files = [formal_params[os.path.basename(p)] for p in sorted(set(output_paths)) if os.path.basename(p) in formal_params]
 
-        # Attach formal parameters to this code file (avoid duplicates)
-        if input_paths:
-            code_file["input"] = [{"@id": formal_params[p].id} for p in sorted(set(input_paths)) if p in formal_params]
-        if output_paths:
-            code_file["output"] = [{"@id": formal_params[p].id} for p in sorted(set(output_paths)) if p in formal_params]
+        # Attach formal parameters to this code file (avoid duplicates, use basename as key)
+        code_file["input"] = [
+            {"@id": formal_params[os.path.basename(p)].id}
+            for p in sorted(set(input_paths))
+            if os.path.basename(p) in formal_params
+        ] if input_paths else []
+        code_file["output"] = [
+            {"@id": formal_params[os.path.basename(p)].id}
+            for p in sorted(set(output_paths))
+            if os.path.basename(p) in formal_params
+        ] if output_paths else []
+
+    return cell_entities
 
 
 def create_formal_parameters(crate, source_lines: List[str], notebook_file, software_app, collapse_formal_parameters: bool = True) -> Dict[str, ContextEntity]:
@@ -152,9 +162,90 @@ def create_formal_parameters(crate, source_lines: List[str], notebook_file, soft
     input_ids = sorted({formal_params[get_fp_key(p)].id for p in input_paths if get_fp_key(p) in formal_params})
     output_ids = sorted({formal_params[get_fp_key(p)].id for p in output_paths if get_fp_key(p) in formal_params})
 
-    notebook_file["input"] = [{"@id": i} for i in input_ids]
-    notebook_file["output"] = [{"@id": i} for i in output_ids]
-    software_app["input"] = [{"@id": i} for i in input_ids]
-    software_app["output"] = [{"@id": i} for i in output_ids]
+    notebook_file["input"] = [{"@id": i} for i in input_ids] if input_ids else []
+    notebook_file["output"] = [{"@id": i} for i in output_ids] if output_ids else []
 
     return formal_params
+
+def get_matching_notebook_cell(cell_entity: NotebookCellProvenance, notebook_path: str) -> Dict:
+    """
+    Given a NotebookCellProvenance object and a notebook path, return the matching notebook cell.
+    Assumes that the code in `cell_entity.source` matches exactly the source in the notebook cell.
+    """
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+        for cell in notebook.cells:
+            if cell.cell_type == "code" and cell.get("source", "") == cell_entity.source:
+                return cell
+    return {}
+
+
+def add_create_actions(crate: ROCrate, cell_entities: List[NotebookCellProvenance], notebook_path):
+    """
+    Add CreateAction entities for each code cell step, linking them to the notebook file.
+    """
+    for cell in cell_entities:
+        action = crate.add(ContextEntity(crate, f"#create-action-{cell.howto_step.id.split('-')[-1]}", properties={
+            "@type": "CreateAction",
+            "instrument": {"@id": cell.software_app.id},
+        }))
+        
+        cell.create_action = action
+        cell.howto_step["about"] = {"@id": action.id}
+
+    return cell_entities
+
+def add_prov_results(crate: ROCrate, cell_entities: List[NotebookCellProvenance], notebook_path, crate_output_dir):
+    """
+    Add ProvResult entities for each CreateAction, scraping the jupyter notebook for Plotly results. 
+    """
+    import json
+    from pathlib import Path
+    import nbformat
+
+    # Open the notebook
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    # Find crate output directory
+    crate_output_dir = Path(crate_output_dir).parent
+    plotly_output_dir = crate_output_dir / "plotly_results"
+    plotly_output_dir.mkdir(parents=True, exist_ok=True)
+
+    for cell in cell_entities:
+        # Find the matching cell in the notebook
+        matched_cell = get_matching_notebook_cell(cell, notebook_path)
+        if not matched_cell:
+            continue
+
+        outputs = matched_cell.get("outputs", [])
+        for j, output in enumerate(outputs):
+            if (
+                output.get("output_type") == "display_data" and
+                "application/vnd.plotly.v1+json" in output.get("data", {})
+            ):
+                plot_data = output["data"]["application/vnd.plotly.v1+json"]
+                # Compose result filename
+                result_filename = f"{cell.howto_step.id.strip('#')}_plotly_{j+1}.json"
+                result_path = plotly_output_dir / result_filename
+
+                # Save Plotly JSON to file
+                with open(result_path, "w", encoding="utf-8") as f:
+                    json.dump(plot_data, f)
+
+                # Add file to crate and link as result
+                result_file = crate.add_file(
+                    source=str(result_path),
+                    dest_path=f"plotly_results/{result_filename}",
+                    properties={
+                        "@type": "MediaObject",
+                        "encodingFormat": "application/vnd.plotly.v1+json",
+                        "name": f"Plotly chart from {cell.howto_step.id}"
+                    }
+                )
+
+                cell.prov_result = result_file
+                cell.create_action["result"] = {"@id": result_file.id}
+
+    return cell_entities
+

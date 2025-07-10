@@ -177,6 +177,11 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     if code_blocks_dir.exists() and code_blocks_dir.is_dir():
         shutil.rmtree(code_blocks_dir)
 
+    # Remove plotly_results directory from {output_dir}/notebooks if it exists
+    plotly_results_dir = Path(output_dir) / "notebooks" / "plotly_results"
+    if plotly_results_dir.exists() and plotly_results_dir.is_dir():
+        shutil.rmtree(plotly_results_dir)
+
     # Also link workflow_entity (update.sh) to E2_2
     if "hasPart" in E2_2:
         E2_2["hasPart"].append(workflow_entity)
@@ -257,7 +262,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--output-dir", 
         type=Path, 
         required=False, 
-        default=Path(__file__).parent / "output", 
+        default=Path(__file__).parent / "interface.crate", 
         help="Directory to write the interface RO-Crate."
     ) 
     return parser

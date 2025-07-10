@@ -23,8 +23,8 @@ def main():
     coastsat_dir = args.coastsat_dir
     output_dir = args.output_dir
 
-    crate = build_provenance_crate(coastsat_dir)
-    crate.write(output_dir)
+    # crate = build_provenance_crate(coastsat_dir)
+    # crate.write(output_dir)
 
 if __name__ == "__main__":
     main()

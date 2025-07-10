@@ -186,12 +186,12 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
 
     # Add example inputs. This draws from the previous commit's data files
     # to ensure reproducibility, as the current commit may not have the same files.
-    nz_timeseries_inputs = add_time_series_inputs(crate, limit=5, action=nz_action, URL=URL)
-    sar_timeseries_inputs = add_time_series_inputs(crate, limit=5, action=sardinia_action, URL=URL)
+    nz_timeseries_inputs = add_time_series_inputs(crate, limit=None, action=nz_action, URL=URL)
+    sar_timeseries_inputs = add_time_series_inputs(crate, limit=None, action=sardinia_action, URL=URL)
 
     # Add example outputs. This draws from the current commit's data files
-    nz_timeseries_outputs = add_time_series_outputs(crate, limit=5, action=nz_action, URL=URL)
-    sar_timeseries_outputs = add_time_series_outputs(crate, limit=5, action=sardinia_action, URL=URL)
+    nz_timeseries_outputs = add_time_series_outputs(crate, limit=None, action=nz_action, URL=URL)
+    sar_timeseries_outputs = add_time_series_outputs(crate, limit=None, action=sardinia_action, URL=URL)
     
     Organisation = add_organization(crate,
         "#university-of-auckland",

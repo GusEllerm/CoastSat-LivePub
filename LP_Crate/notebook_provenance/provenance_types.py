@@ -9,7 +9,9 @@ class NotebookCellProvenance:
     howto_step: ContextEntity
     index: Optional[int] = None
     create_action: Optional[Any] = None
+    prov_result: Optional[Any] = None
     control_action: Optional[Any] = None
+    software_app: Optional[ContextEntity] = None
     input_files: Optional[List[Any]] = None
     output_files: Optional[List[Any]] = None
 
