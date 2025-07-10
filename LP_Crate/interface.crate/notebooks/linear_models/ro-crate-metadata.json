@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-10T03:45:03+00:00",
+            "datePublished": "2025-07-10T04:27:01+00:00",
             "hasPart": [
                 {
                     "@id": "linear_models.ipynb"
@@ -494,7 +494,8 @@
         {
             "@id": "code_blocks/cell_1.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 1",
@@ -504,7 +505,8 @@
         {
             "@id": "code_blocks/cell_2.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -518,7 +520,8 @@
         {
             "@id": "code_blocks/cell_3.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -532,7 +535,8 @@
         {
             "@id": "code_blocks/cell_4.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -546,7 +550,8 @@
         {
             "@id": "code_blocks/cell_5.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -560,7 +565,8 @@
         {
             "@id": "code_blocks/cell_6.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 6",
@@ -570,7 +576,8 @@
         {
             "@id": "code_blocks/cell_7.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 7",
@@ -580,7 +587,8 @@
         {
             "@id": "code_blocks/cell_8.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -594,7 +602,8 @@
         {
             "@id": "code_blocks/cell_9.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 9",
@@ -604,7 +613,8 @@
         {
             "@id": "code_blocks/cell_10.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 10",
@@ -614,7 +624,8 @@
         {
             "@id": "code_blocks/cell_11.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 11",
@@ -624,7 +635,8 @@
         {
             "@id": "code_blocks/cell_12.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 12",
@@ -634,7 +646,8 @@
         {
             "@id": "code_blocks/cell_13.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 13",
@@ -644,7 +657,8 @@
         {
             "@id": "code_blocks/cell_14.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 14",
@@ -654,7 +668,8 @@
         {
             "@id": "code_blocks/cell_15.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 15",
@@ -664,7 +679,8 @@
         {
             "@id": "code_blocks/cell_16.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 16",
@@ -674,7 +690,8 @@
         {
             "@id": "code_blocks/cell_17.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 17",
@@ -684,7 +701,8 @@
         {
             "@id": "code_blocks/cell_18.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 18",
@@ -694,7 +712,8 @@
         {
             "@id": "code_blocks/cell_19.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 19",

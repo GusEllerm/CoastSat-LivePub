@@ -123,7 +123,7 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
             source=str(code_path),
             dest_path=f"code_blocks/{code_filename}",
             properties={
-                "@type": ["SoftwareApplication"],
+                "@type": ["SoftwareApplication", "File"],
                 "name": f"Code Cell {i+1}",
                 "sha256": file_sha256(str(code_path)),
             }

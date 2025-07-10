@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-10T03:45:01+00:00",
+            "datePublished": "2025-07-10T04:26:59+00:00",
             "hasPart": [
                 {
                     "@id": "slope_estimation.ipynb"
@@ -165,7 +165,8 @@
         {
             "@id": "code_blocks/cell_1.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 1",
@@ -175,7 +176,8 @@
         {
             "@id": "code_blocks/cell_2.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
@@ -189,7 +191,8 @@
         {
             "@id": "code_blocks/cell_3.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [],
             "name": "Code Cell 3",
@@ -199,7 +202,8 @@
         {
             "@id": "code_blocks/cell_4.py",
             "@type": [
-                "SoftwareApplication"
+                "SoftwareApplication",
+                "File"
             ],
             "input": [
                 {
