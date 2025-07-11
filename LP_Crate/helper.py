@@ -84,11 +84,26 @@ class GitURL:
         abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
         rel_path = os.path.relpath(abs_path, self.repo_root)
         encoded_path = quote(rel_path)
-        permalink_url = f"{self.remote_url}/blob/{previous_hash}/{encoded_path}"
-        return {
-            "permalink_url": permalink_url,
-            "commit_hash": previous_hash
-        }
+        # Check if file exists at previous commit
+        try:
+            subprocess.check_output(
+                ["git", "-C", self.repo_path, "show", f"{previous_hash}:{rel_path}"],
+                stderr=subprocess.DEVNULL
+            )
+            permalink_url = f"{self.remote_url}/blob/{previous_hash}/{encoded_path}"
+            return {
+                "permalink_url": permalink_url,
+                "commit_hash": previous_hash,
+                "exists": True
+            }
+        except subprocess.CalledProcessError:
+            # Fallback to current file
+            permalink_url = f"{self.remote_url}/blob/{self.commit_hash}/{encoded_path}"
+            return {
+                "permalink_url": permalink_url,
+                "commit_hash": self.commit_hash,
+                "exists": False
+            }
 
     def get_size_at_commit(self, local_path, commit_hash):
         rel_path = os.path.relpath(

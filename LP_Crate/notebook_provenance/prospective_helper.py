@@ -133,8 +133,13 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
 
         # Match file paths used in this code block
         input_paths, output_paths = extract_unique_file_paths([cell.source])
-        cell.input_files = [formal_params[os.path.basename(p)] for p in sorted(set(input_paths)) if os.path.basename(p) in formal_params]
-        cell.output_files = [formal_params[os.path.basename(p)] for p in sorted(set(output_paths)) if os.path.basename(p) in formal_params]
+        cell.input_params = [formal_params[os.path.basename(p)] for p in sorted(set(input_paths)) if os.path.basename(p) in formal_params]
+        cell.output_params = [formal_params[os.path.basename(p)] for p in sorted(set(output_paths)) if os.path.basename(p) in formal_params]
+        cell.input_files = sorted(set(input_paths))
+        cell.output_files = sorted(set(output_paths))
+
+        # Add reference to parent notebook
+        cell.notebook_path = notebook_path
 
         # Attach formal parameters to this code file (avoid duplicates, use basename as key)
         code_file["input"] = [

@@ -11,8 +11,8 @@ from rocrate.model.contextentity import ContextEntity
 from .prospective_helper import (
     create_software_application,
     create_code_cell_steps,
-    link_steps_to_code_blocks,
     create_formal_parameters,
+    link_steps_to_code_blocks,
     add_create_actions,
     add_prov_results
 )
@@ -39,24 +39,20 @@ def generate_prospective_entities(crate, notebook_path, crate_output_dir) -> Pro
     # Gather all source lines and create formal parameters
     source_lines = [cell.source for cell in cell_entities]
     formal_params = create_formal_parameters(crate, source_lines, notebook_file, software_app)
-    link_steps_to_code_blocks(crate, crate_output_dir, notebook_path, notebook_file, cell_entities, formal_params)
+    cell_prov = link_steps_to_code_blocks(crate, crate_output_dir, notebook_path, notebook_file, cell_entities, formal_params)
     add_create_actions(crate, cell_entities, notebook_path)
     add_prov_results(crate, cell_entities, notebook_path, crate_output_dir)
 
     crate.mainEntity["targetProduct"] = software_app
 
-    return ProspectiveIndex(
-        main_workflow=notebook_file,
-        software_app=software_app,
-        steps=cell_entities,
-        formal_params=formal_params
-    )
+    return cell_prov
+
 
 def generate_provenance_crate_for_notebook(notebook_path, crate_path):
     crate = ROCrate()
-    generate_prospective_entities(crate, notebook_path, crate_path)
+    cell_prov = generate_prospective_entities(crate, notebook_path, crate_path)
     
-    return crate
+    return crate, cell_prov
 
 if __name__ == "__main__":
     import argparse

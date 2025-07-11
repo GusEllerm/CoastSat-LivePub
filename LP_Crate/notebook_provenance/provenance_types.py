@@ -12,8 +12,12 @@ class NotebookCellProvenance:
     prov_result: Optional[Any] = None
     control_action: Optional[Any] = None
     software_app: Optional[ContextEntity] = None
-    input_files: Optional[List[Any]] = None
-    output_files: Optional[List[Any]] = None
+    input_params: Optional[List[Any]] = None
+    output_params: Optional[List[Any]] = None
+    input_files: Optional[List[ContextEntity]] = None
+    output_files: Optional[List[ContextEntity]] = None
+    notebook_path: Optional[str] = None
+    parent_notebook: Optional[ContextEntity] = None
 
 @dataclass
 class ProspectiveIndex:
