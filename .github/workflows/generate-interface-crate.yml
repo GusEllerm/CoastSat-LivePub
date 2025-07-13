@@ -22,6 +22,7 @@ jobs:
 
       - name: Check Python and pip packages
         run: |
+          conda activate coastsat_stencila_env
           which python
           python -m pip list
 
