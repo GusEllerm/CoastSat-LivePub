@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout this repo with submodules
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      # - name: Checkout this repo with submodules
+      #   uses: actions/checkout@v4
+      #   with:
+      #     submodules: recursive
 
       - name: Set up Conda
         uses: conda-incubator/setup-miniconda@v2
@@ -20,6 +20,11 @@ jobs:
           environment-file: environment.yaml
           python-version: "3.10"
 
-      - name: Generate Interface Crate
+      - name: Check Python and pip packages
         run: |
-          python LP_Crate/interface_crate.py
+          which python
+          python -m pip list
+
+      # - name: Generate Interface Crate
+      #   run: |
+      #     python LP_Crate/interface_crate.py
