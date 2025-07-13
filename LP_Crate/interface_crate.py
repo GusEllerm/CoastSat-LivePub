@@ -382,7 +382,7 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     # --- Add notebook provenance crates for each step file ---
     notebook_crates, cell_prov = create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
 
-    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=None)
+    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=2)
 
     # Remove code_blocks directory from {output_dir}/notebooks if it exists
     code_blocks_dir = Path(output_dir) / "notebooks" / "code_blocks"

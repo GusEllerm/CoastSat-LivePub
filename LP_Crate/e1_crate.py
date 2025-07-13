@@ -191,7 +191,7 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
 
     # Add example inputs. This draws from the previous commit's data files
     # to ensure reproducibility, as the current commit may not have the same files.
-    limit = None
+    limit = 2
     nz_timeseries_inputs = add_time_series_inputs(crate, limit, nz_action, URL, coastsat_dir)
     sar_timeseries_inputs = add_time_series_inputs(crate, limit, sardinia_action, URL, coastsat_dir)
 

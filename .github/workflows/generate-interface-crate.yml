@@ -13,14 +13,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          activate-environment: coastsat_stencila_env
+          environment-file: environment.yaml
           python-version: "3.10"
-
-      - name: Install Python dependencies
-        run: |
-          pip install -r requirements.txt
 
       - name: Test Message
         run: echo "This worked"
