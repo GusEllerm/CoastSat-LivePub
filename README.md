@@ -44,7 +44,28 @@ git commit -am "Update CoastSat submodule"
 
 ---
 
-### 3. About `LP_Crate`
+### 3. Create and Activate Conda Environment
+
+This project uses a Conda environment `environment.yaml`. To create and activate the environment:
+
+```bash
+conda env create -f environment.yaml
+conda activate coastsat_stencila_env
+```
+
+---
+
+### 4. Run the Interface Crate Generator
+
+Once the environment is active, you can generate the `interface.crate` by running:
+
+```bash
+python LP_Crate/interface_crate.py --coastsat-dir CoastSat --output-dir interface.crate
+```
+
+---
+
+### 5. About `LP_Crate`
 
 The `LP_Crate/` directory contains logic for generating a LivePublication-compatible interface crate (`interface.crate`) that documents the structure and execution of the CoastSat workflow.
 
