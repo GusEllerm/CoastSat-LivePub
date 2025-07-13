@@ -422,12 +422,13 @@ def add_metadata(crate: ROCrate):
         "organisation": UoA_org
     }
     
-def add_aggregate_entities(crate: ROCrate):
+def add_aggregate_entities(crate: ROCrate, URL: GitURL):
     crate.mainEntity = crate.add(ContextEntity(crate, "livepublication-interface", properties={
         "@type": "Dataset",
         "name": "LivePublication Interface Outputs",
         "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
-        "datePublished": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()}
+        "datePublished": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        "version": URL.get_commit_info_for_file("update.sh")["commit_url"]}
         ))
     
     E1 = crate.add(ContextEntity(crate, "E1-data-producer", properties={
@@ -492,7 +493,7 @@ def main():
 
     crate = ROCrate()
     
-    infrastructure_entities = add_aggregate_entities(crate)
+    infrastructure_entities = add_aggregate_entities(crate, URL)
     contextual_entities = add_metadata(crate)
 
     # Build experiment infrastructure layers

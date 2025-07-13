@@ -148,6 +148,29 @@ class GitURL:
             raise ValueError("Invalid 'which' parameter. Use 'current' or 'previous'.")
 
         return hashlib.sha256(content).hexdigest()
+    
+    def get_commit_info_for_file(self, local_path):
+        """
+        Returns the latest commit hash that modified the given file
+        and a link to the GitHub page for that commit.
+        """
+        abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
+        rel_path = os.path.relpath(abs_path, self.repo_root)
+
+        try:
+            commit_hash = subprocess.check_output(
+                ["git", "-C", self.repo_path, "log", "-n", "1", "--pretty=format:%H", "--", rel_path],
+                text=True
+            ).strip()
+
+            commit_url = f"{self.remote_url}/commit/{commit_hash}"
+            return {
+                "commit_hash": commit_hash,
+                "commit_url": commit_url
+            }
+
+        except subprocess.CalledProcessError:
+            raise ValueError(f"Could not retrieve commit info for file: {rel_path}")
 
 if __name__ == "__main__":
     # Example usage
@@ -167,3 +190,6 @@ if __name__ == "__main__":
     print("Previous Hash:  ", previous["commit_hash"])
     previous_size = url_gen.get_size_at_commit("linear_models.ipynb", previous["commit_hash"])
     print("Previous Size:  ", previous_size)
+
+    commit_info = url_gen.get_commit_info_for_file("linear_models.ipynb")["commit_url"]
+    print("Commit Info:    ", commit_info)
