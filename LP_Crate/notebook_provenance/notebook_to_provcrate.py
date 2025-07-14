@@ -50,6 +50,7 @@ def generate_prospective_entities(crate, notebook_path, crate_output_dir) -> Pro
 
 def generate_provenance_crate_for_notebook(notebook_path, crate_path):
     crate = ROCrate()
+    crate.name = f"Notebook Provenance Crate ({str(notebook_path).split(os.sep)[-1]})"
     cell_prov = generate_prospective_entities(crate, notebook_path, crate_path)
     
     return crate, cell_prov

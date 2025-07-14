@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-13T22:10:00+00:00",
+            "datePublished": "2025-07-14T00:54:18+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -42,7 +42,8 @@
             ],
             "mainEntity": {
                 "@id": "livepublication-interface"
-            }
+            },
+            "name": "LivePublication Interface Crate"
         },
         {
             "@id": "ro-crate-metadata.json",
@@ -57,7 +58,7 @@
         {
             "@id": "livepublication-interface",
             "@type": "Dataset",
-            "datePublished": "2025-07-13T22:10:00.238072+00:00",
+            "datePublished": "2025-07-14T00:54:18.046818+00:00",
             "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
             "hasPart": [
                 {
@@ -133,7 +134,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-13T22:10:02.043190+00:00",
+            "dateCreated": "2025-07-14T00:54:18.924809+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },

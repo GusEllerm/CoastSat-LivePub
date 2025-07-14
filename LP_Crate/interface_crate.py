@@ -423,6 +423,9 @@ def add_metadata(crate: ROCrate):
     }
     
 def add_aggregate_entities(crate: ROCrate, URL: GitURL):
+
+    crate.name = "LivePublication Interface Crate"
+
     crate.mainEntity = crate.add(ContextEntity(crate, "livepublication-interface", properties={
         "@type": "Dataset",
         "name": "LivePublication Interface Outputs",
