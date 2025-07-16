@@ -47,16 +47,20 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     # Add Pacific Rim data source
     # This is an external dataset used in the data production process
     # It is not part of the process run crate but is linked to E1
-    pacific_rim_data = crate.add(ContextEntity(crate, "pacific-rim-data", properties={
+    pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554", properties={
         "@type": "Dataset",
         "name": "Pacific Rim Data",
         "description": "External data sources used in the data production process.",
         "encodingFormat": "text/csv",
-        "url": "https://zenodo.org/records/15614554",
         "sameAs": "https://doi.org/10.5281/zenodo.15614554"
     }))
 
     # Link E1 entity to the external crate directory
+    existing_parts = crate.root_dataset.get("hasPart", [])
+    if not isinstance(existing_parts, list):
+        existing_parts = [existing_parts] if existing_parts else []
+    crate.root_dataset["hasPart"] = existing_parts + [pacific_rim_data]
+
     E1["hasPart"] = [process_run_crate, pacific_rim_data]
 
 def build_e2_1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_1):
@@ -257,6 +261,12 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                                     "indicating changes happened between major releases."
                                 )
                             file_entity = crate.add(ContextEntity(crate, prev_info["permalink_url"], properties=props))
+
+                            existing_parts = crate.root_dataset.get("hasPart", [])
+                            if not isinstance(existing_parts, list):
+                                existing_parts = [existing_parts] if existing_parts else []
+                            crate.root_dataset["hasPart"] = existing_parts + [file_entity]
+
                             input_files.add(file_entity)
                     else:
                         prev_info = URL.get_previous(file_path)
@@ -272,6 +282,12 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                                 "indicating changes happened between major releases."
                             )
                         file_entity = crate.add(ContextEntity(crate, prev_info["permalink_url"], properties=props))
+
+                        existing_parts = crate.root_dataset.get("hasPart", [])
+                        if not isinstance(existing_parts, list):
+                            existing_parts = [existing_parts] if existing_parts else []
+                        crate.root_dataset["hasPart"] = existing_parts + [file_entity]
+
                         input_files.add(file_entity)
 
             for file in (cell.output_files or []):
@@ -305,6 +321,12 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                                     "indicating changes happened between major releases."
                                 )
                             file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+
+                            existing_parts = crate.root_dataset.get("hasPart", [])
+                            if not isinstance(existing_parts, list):
+                                existing_parts = [existing_parts] if existing_parts else []
+                            crate.root_dataset["hasPart"] = existing_parts + [file_entity]
+
                             output_files.add(file_entity)
                     else:
                         info = URL.get(file_path)
@@ -320,6 +342,12 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                                 "indicating changes happened between major releases."
                             )
                         file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+
+                        existing_parts = crate.root_dataset.get("hasPart", [])
+                        if not isinstance(existing_parts, list):
+                            existing_parts = [existing_parts] if existing_parts else []
+                        crate.root_dataset["hasPart"] = existing_parts + [file_entity]
+
                         output_files.add(file_entity)
                     
         
@@ -382,7 +410,7 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     # --- Add notebook provenance crates for each step file ---
     notebook_crates, cell_prov = create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
 
-    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=2)
+    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=None)
 
     # Remove code_blocks directory from {output_dir}/notebooks if it exists
     code_blocks_dir = Path(output_dir) / "notebooks" / "code_blocks"
@@ -427,30 +455,30 @@ def add_aggregate_entities(crate: ROCrate, URL: GitURL):
     crate.name = "LivePublication Interface Crate"
 
     crate.mainEntity = crate.add(ContextEntity(crate, "livepublication-interface", properties={
-        "@type": "Dataset",
+        "@type": "Thing",
         "name": "LivePublication Interface Outputs",
-        "description": "This Dataset represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
+        "description": "This entity represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
         "datePublished": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
         "version": URL.get_commit_info_for_file("update.sh")["commit_url"]}
         ))
     
     E1 = crate.add(ContextEntity(crate, "E1-data-producer", properties={
-        "@type": "Collection",
+        "@type": "Thing",
         "name": "E1: Data Producer",
         "description": "This Collection includes both the process run metadata and external data sources relevant to data production."
     }))
     E2_1 = crate.add(ContextEntity(crate, "E2.1-workflow-infrastructure", properties={
-        "@type": "Dataset", 
+        "@type": "Thing", 
         "name": "E2.1: Workflow Infrastructure", 
         "description": "Description of hardware and software environments used."
     }))
     E2_2 = crate.add(ContextEntity(crate, "E2.2-wms", properties={
-        "@type": "Dataset", 
+        "@type": "Thing", 
         "name": "E2.2: Workflow Management System", 
         "description": "Provenance of workflow execution including workflow steps and parameters."
     }))
     E3 = crate.add(ContextEntity(crate, "E3-experimental-results", properties={
-        "@type": "Dataset", 
+        "@type": "Thing", 
         "name": "E3: Experimental Results and Outcomes", 
         "description": "Results of the executed workflow, such as figures and summary data products."
     }))
