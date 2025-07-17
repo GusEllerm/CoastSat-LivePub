@@ -413,17 +413,10 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
     transects_fp = crate.add_formal_parameter(
         name="fp-transects_xlsx", 
         additionalType="File",  
-        identifier="fp-transects_xlsx",
+        identifier="#fp-transects_xlsx",
         valueRequired=False,
         properties={}
     )  
-    transect_site_xlsx = crate.add_formal_parameter(
-        name="fp-transect_site_xlsx", 
-        additionalType="File",  
-        identifier="fp-transect_site_xlsx",
-        valueRequired=False,
-        properties={}
-    )
     info = URL.get(transects_path)
     props = {
         "@type": "File",
@@ -438,12 +431,17 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
         )
     file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
     make_xlsx_entity.append_to("output", transects_fp)
+    file_entity["exampleOfWork"] = transects_fp
+
+    transect_site_xlsx = crate.add_formal_parameter(
+            name="fp-transect_site_xlsx", 
+            additionalType="File",  
+            identifier="#fp-transect_site_xlsx",
+            valueRequired=False,
+            properties={}
+        )
     make_xlsx_entity.append_to("output", transect_site_xlsx)
-    transects_fp["exampleOfWork"] = file_entity
-
-
     for file in get_nzd_xlsx_files(coastsat_dir / "data", limit=None):
-        print(f"Adding {file} to crate")
         info = URL.get(file)
         props = {
             "@type": "File",
@@ -457,7 +455,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
                 "indicating changes happened between major releases."
             )
         file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
-        transect_site_xlsx.append_to("exampleOfWork", file_entity)
+        file_entity["exampleOfWork"] = file_entity
 
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
@@ -585,6 +583,8 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main():
     
+    #TODO: The fps for make_xlsx need to be unified with the update script entity.
+
     # Parse command line arguments
     parser = get_parser()
     args = parser.parse_args()

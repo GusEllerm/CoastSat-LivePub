@@ -5,7 +5,7 @@
             "@id": "./",
             "@type": "Dataset",
             "conformsTo": "https://w3id.org/ro/wfrun/process/0.5",
-            "datePublished": "2025-07-17T02:48:45+00:00",
+            "datePublished": "2025-07-17T03:08:32+00:00",
             "description": "Process Run Crate representing the Data Producer layer.",
             "mentions": [
                 {
@@ -58,6 +58,15 @@
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0005/transect_time_series.csv"
                 }
             ],
             "result": [
@@ -66,6 +75,15 @@
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv"
                 }
             ]
         },
@@ -100,6 +118,15 @@
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0005/transect_time_series.csv"
                 }
             ],
             "result": [
@@ -108,6 +135,15 @@
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0002/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv"
                 }
             ]
         },
@@ -144,6 +180,30 @@
             "sha256": "415a728c29820d38f2e04b687fd0aa9afee1ebbce1566a45bc0dcffb68b65178"
         },
         {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "41.04",
+            "description": "Transect time series for nzd0003",
+            "encodingFormat": "text/csv",
+            "sha256": "c9cbfd071b8a1d514f0f486af83041838198a7338bf45ac1abf5956ca1e7b930"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "73.83",
+            "description": "Transect time series for nzd0004",
+            "encodingFormat": "text/csv",
+            "sha256": "590321f5886af26ca949f7890b1ac29104e225db6cbb5c8b9d61661b52ba0ace"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "57.96",
+            "description": "Transect time series for nzd0005",
+            "encodingFormat": "text/csv",
+            "sha256": "9845c240343fadf62cd16ea129706c12a9f55d9678a67709ac53d0c706460bc8"
+        },
+        {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0001/transect_time_series.csv",
             "@type": "File",
             "contentSize": "53.92",
@@ -158,6 +218,30 @@
             "description": "Transect time series for sar0002",
             "encodingFormat": "text/csv",
             "sha256": "de4da36a10914bae3babe8bb658ae6ddb0dcf4f24690c10941968bf7f2f604f6"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "54.26",
+            "description": "Transect time series for sar0003",
+            "encodingFormat": "text/csv",
+            "sha256": "66c72d410a648396f98b64bb295b7da93008eec09abb17d2577d261bdb8eb7f0"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.76",
+            "description": "Transect time series for sar0004",
+            "encodingFormat": "text/csv",
+            "sha256": "0852a59553ff5ea8ab57f9ff2c07062d77a5ca69d0381c4b370663eef0c44c26"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.33",
+            "description": "Transect time series for sar0005",
+            "encodingFormat": "text/csv",
+            "sha256": "dea133610c4df53c96045c25da29d854445a91bbc00d06ffcfc7f4758ff34d3f"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0001/transect_time_series.csv",
@@ -176,6 +260,30 @@
             "sha256": "8604f651564de551220905a9c6b12c80760c78ca5c28142651c5207c5edd30a1"
         },
         {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "41.29",
+            "description": "Transect time series for nzd0003",
+            "encodingFormat": "text/csv",
+            "sha256": "33de9cb0413131e1f9052d1c6b662cb4a1a014e6552d8bab269ce1263978b922"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "75.02",
+            "description": "Transect time series for nzd0004",
+            "encodingFormat": "text/csv",
+            "sha256": "cc0b5add4e7289dad3cd116c0970efd62d4d21bdc83d8ba90db0182626775e8e"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "58.50",
+            "description": "Transect time series for nzd0005",
+            "encodingFormat": "text/csv",
+            "sha256": "ebaf5de3e99cb7ec9edbc83d766b3dbf60366ed9bee3f9ca415f20af8b3a51cd"
+        },
+        {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0001/transect_time_series.csv",
             "@type": "File",
             "contentSize": "54.00",
@@ -190,6 +298,30 @@
             "description": "Transect time series for sar0002",
             "encodingFormat": "text/csv",
             "sha256": "2e31433dde4cd3493e3acec988ed5a2ce36d6fac0aff3ceaa12e175eec3c2bee"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0003/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "54.40",
+            "description": "Transect time series for sar0003",
+            "encodingFormat": "text/csv",
+            "sha256": "bb664ac354fbf33b39b8169cbdcd87929fbda6f803b8607c69c50f9a89c642be"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0004/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.93",
+            "description": "Transect time series for sar0004",
+            "encodingFormat": "text/csv",
+            "sha256": "ae941ad878de2d3f67d60e561dd67530ea5aec7d87240b4d3080ef936f0d21e5"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/sar0005/transect_time_series.csv",
+            "@type": "File",
+            "contentSize": "59.49",
+            "description": "Transect time series for sar0005",
+            "encodingFormat": "text/csv",
+            "sha256": "e96913bb201624a93d47f7a51d5b937b2d72d186729bc1446780649569c2dfd5"
         },
         {
             "@id": "#university-of-auckland",
