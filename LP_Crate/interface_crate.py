@@ -227,7 +227,6 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                 if param_entity not in workflow_output_list:
                     workflow_entity.append_to("output", param_entity)
 
-            # Input files use URL.get_previous to get the files as their previous state (i.e. before update.sh ran)
             for file in (cell.input_files or []):
                 file_name = Path(file).name
                 if file_name not in seen_files:
@@ -248,7 +247,7 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
                             name_with_wildcard = file_name
                             if wildcard_values:
                                 name_with_wildcard = f"{file_name} ({', '.join(wildcard_values)})"
-                            prev_info = URL.get_previous(matched_path)
+                            prev_info = URL.get(matched_path)
                             props = {
                                 "@type": "File",
                                 "name": name_with_wildcard,
@@ -269,7 +268,7 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
 
                             input_files.add(file_entity)
                     else:
-                        prev_info = URL.get_previous(file_path)
+                        prev_info = URL.get(file_path)
                         props = {
                             "@type": "File",
                             "name": file_name,
