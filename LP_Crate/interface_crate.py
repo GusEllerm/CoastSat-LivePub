@@ -393,6 +393,72 @@ def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict],
         step_entity["exampleOfWork"] = notebook_crate_entity
     return notebook_crates, cell_prov
 
+def get_nzd_xlsx_files(data_dir, limit=None):
+    count = 0
+    for site_id in os.listdir(data_dir):
+        site_path = os.path.join(data_dir, site_id)
+        if os.path.isdir(site_path) and site_id.startswith("nzd"):
+            xlsx_file = os.path.join(site_path, f"{site_id}.xlsx")
+            if os.path.isfile(xlsx_file):
+                yield xlsx_file
+                count += 1
+                if limit is not None and count >= limit:
+                    break
+
+def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir: Path, URL: GitURL):
+    transects_path = coastsat_dir / "transects.xlsx"
+    if not transects_path.is_file():
+        raise FileNotFoundError(f"transects.xlsx not found in {coastsat_dir}")
+    
+    transects_fp = crate.add_formal_parameter(
+        name="fp-transects_xlsx", 
+        additionalType="File",  
+        identifier="fp-transects_xlsx",
+        valueRequired=False,
+        properties={}
+    )  
+    transect_site_xlsx = crate.add_formal_parameter(
+        name="fp-transect_site_xlsx", 
+        additionalType="File",  
+        identifier="fp-transect_site_xlsx",
+        valueRequired=False,
+        properties={}
+    )
+    info = URL.get(transects_path)
+    props = {
+        "@type": "File",
+        "name": transects_path.name,
+        "sha256": URL.get_file_hash(transects_path),
+        "size": URL.get_size_at_commit(transects_path, info['commit_hash'])
+    }
+    if not info.get("exists", True):
+        props["description"] = (
+            "This file did not exist in the current git commit; "
+            "indicating changes happened between major releases."
+        )
+    file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+    make_xlsx_entity.append_to("output", transects_fp)
+    make_xlsx_entity.append_to("output", transect_site_xlsx)
+    transects_fp["exampleOfWork"] = file_entity
+
+
+    for file in get_nzd_xlsx_files(coastsat_dir / "data", limit=None):
+        print(f"Adding {file} to crate")
+        info = URL.get(file)
+        props = {
+            "@type": "File",
+            "name": Path(file).name,
+            "sha256": URL.get_file_hash(file),
+            "size": URL.get_size_at_commit(file, info['commit_hash'])
+        }
+        if not info.get("exists", True):
+            props["description"] = (
+                "This file did not exist in the current git commit; "
+                "indicating changes happened between major releases."
+            )
+        file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+        transect_site_xlsx.append_to("exampleOfWork", file_entity)
+
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
     Build metadata for E2.2: Workflow Management System.
@@ -410,6 +476,13 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     notebook_crates, cell_prov = create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
 
     formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=None)
+    
+    # --- add formal params to make_xlsx ----
+    make_xlsx = crate.get("make_xlsx.py")
+    txfp = crate.get("#fp-transects_extended_geojson")
+    ttstcfp = crate.get("#fp-transect_time_series_tidally_corrected_csv")
+    make_xlsx["input"] = [txfp, ttstcfp]
+    add_xlsx_outputs(crate, make_xlsx, coastsat_dir, URL)
 
     # Remove code_blocks directory from {output_dir}/notebooks if it exists
     code_blocks_dir = Path(output_dir) / "notebooks" / "code_blocks"
