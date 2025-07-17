@@ -432,6 +432,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
     file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
     make_xlsx_entity.append_to("output", transects_fp)
     file_entity["exampleOfWork"] = transects_fp
+    crate.root_dataset.append_to("hasPart", file_entity)
 
     transect_site_xlsx = crate.add_formal_parameter(
             name="#fp-transect_site_xlsx", 
@@ -456,6 +457,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
             )
         file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
         file_entity["exampleOfWork"] = transect_site_xlsx
+        crate.root_dataset.append_to("hasPart", file_entity)
 
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
