@@ -411,7 +411,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
         raise FileNotFoundError(f"transects.xlsx not found in {coastsat_dir}")
     
     transects_fp = crate.add_formal_parameter(
-        name="fp-transects_xlsx", 
+        name="#fp-transects_xlsx", 
         additionalType="File",  
         identifier="#fp-transects_xlsx",
         valueRequired=False,
@@ -434,7 +434,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
     file_entity["exampleOfWork"] = transects_fp
 
     transect_site_xlsx = crate.add_formal_parameter(
-            name="fp-transect_site_xlsx", 
+            name="#fp-transect_site_xlsx", 
             additionalType="File",  
             identifier="#fp-transect_site_xlsx",
             valueRequired=False,
@@ -455,7 +455,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
                 "indicating changes happened between major releases."
             )
         file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
-        file_entity["exampleOfWork"] = file_entity
+        file_entity["exampleOfWork"] = transect_site_xlsx
 
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
