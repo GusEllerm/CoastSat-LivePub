@@ -74,8 +74,10 @@ def add_file_entity(crate: ROCrate, identifier: str, content_size, description, 
         "sha256": sha_256,
         "description": description
     }
-
-    return crate.add(ContextEntity(crate, identifier, properties))
+    file_entity = crate.add(ContextEntity(crate, identifier, properties))
+    crate.root_dataset.append_to("hasPart", file_entity)
+    
+    return file_entity
 
 def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir):
     """
@@ -107,6 +109,7 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
             encoding_format="text/csv"
         )
         file_entities.append(file_entity)
+        crate.root_dataset.append_to("hasPart", file_entity)
 
     return file_entities
 
@@ -144,6 +147,7 @@ def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: Context
             encoding_format="text/csv"
         )
         file_entities.append(file_entity)
+        crate.root_dataset.append_to("hasPart", file_entity)
 
     return file_entities
 
