@@ -29,7 +29,6 @@ def generate_prospective_entities(crate, notebook_path, crate_output_dir) -> Pro
 
     software_app = create_software_application(crate, notebook_path)
     cell_entities = create_code_cell_steps(crate, software_app, notebook_path)
-    print(f"Added {len(cell_entities)} HowToStep entities.")
 
     crate.update_jsonld({
         "@id": notebook_file.id,

@@ -123,29 +123,34 @@ class GitURL:
     def get_file_hash(self, local_path, which="current"):
         """
         Return SHA-256 hash of the file contents for the specified commit state.
-        which: "current" for working directory file, "previous" for the second most recent 'auto update' commit
+        which: "current" for working directory file, "previous" for the second most recent 'auto update' commit.
+        Returns None if the file does not exist.
         """
-        if which == "current":
-            abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
-            if not os.path.isfile(abs_path):
-                raise FileNotFoundError(f"{abs_path} is not a file.")
-            with open(abs_path, "rb") as f:
-                content = f.read()
-        elif which == "previous":
-            previous_hash = self.get_previous_commit_hash()
-            rel_path = os.path.relpath(
-                os.path.abspath(os.path.join(self.repo_path, local_path)),
-                self.repo_root
-            )
-            try:
-                content = subprocess.check_output(
-                    ["git", "-C", self.repo_path, "show", f"{previous_hash}:{rel_path}"],
-                    stderr=subprocess.DEVNULL
+        try:
+            if which == "current":
+                abs_path = os.path.abspath(os.path.join(self.repo_path, local_path))
+                if not os.path.isfile(abs_path):
+                    return None
+                with open(abs_path, "rb") as f:
+                    content = f.read()
+            elif which == "previous":
+                previous_hash = self.get_previous_commit_hash()
+                rel_path = os.path.relpath(
+                    os.path.abspath(os.path.join(self.repo_path, local_path)),
+                    self.repo_root
                 )
-            except subprocess.CalledProcessError:
-                raise FileNotFoundError(f"{rel_path} does not exist at commit {previous_hash}")
-        else:
-            raise ValueError("Invalid 'which' parameter. Use 'current' or 'previous'.")
+                try:
+                    content = subprocess.check_output(
+                        ["git", "-C", self.repo_path, "show", f"{previous_hash}:{rel_path}"],
+                        stderr=subprocess.DEVNULL
+                    )
+                except subprocess.CalledProcessError:
+                    return None
+            else:
+                return None
+            return hashlib.sha256(content).hexdigest()
+        except Exception:
+            return None
 
         return hashlib.sha256(content).hexdigest()
     

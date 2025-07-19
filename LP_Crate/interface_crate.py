@@ -4,16 +4,11 @@ from rocrate.model.person import Person
 from rocrate.model.contextentity import ContextEntity
 from rocrate.model.data_entity import DataEntity
 from pathlib import Path
-from collections import Counter
+from collections import Counter, defaultdict
 
 from helper import GitURL
 from e1_crate import build_e1_crate
 from e2_2_crate import build_e2_2_crate
-from notebook_provenance.prospective_helper import (
-    create_software_application,
-    create_code_cell_steps,
-    create_formal_parameters
-)
 from notebook_provenance.provenance_types import NotebookCellProvenance
 
 import os
@@ -156,12 +151,16 @@ def normalize_identifier(text):
     """
     Normalize strings like '#fp-transect_time_series_csv' or 'transect_time_series.csv'
     to enable fuzzy comparison.
+    If the last character after processing is a number, remove it.
     """
     if text.startswith('#fp-'):
         text = text[4:]
     text = text.lower()
     text = re.sub(r'[^a-z0-9]+', '', text)  # Remove non-alphanumerics
     text = re.sub(r'(csv|geojson|json|txt)$', '', text)  # Remove extensions
+    # Remove last character if it's a digit
+    if text and text[-1].isdigit():
+        text = text[:-1]
     return text
 
 def is_fuzzy_match(formal_param_id: str, filename: str) -> bool:
@@ -172,196 +171,221 @@ def is_fuzzy_match(formal_param_id: str, filename: str) -> bool:
     norm_file = normalize_identifier(filename)
     return norm_id == norm_file
 
-def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[NotebookCellProvenance]], coastsat_dir, URL: GitURL, limit=5):
 
-    workflow_entity = crate.get("update.sh") # An assumption is made that the update script is the main workflow entity
-    if not workflow_entity:
-        raise ValueError("Workflow entity (update.sh) not found in the crate.")
+# Helper to manage formal parameter versions and reuse
+def get_or_create_formal_param(crate, param_id, is_output, param_versions):
+    base_id = normalize_identifier(param_id)
 
-    # Add unique formal parameters from all cells
-    seen_input_ids = set()
-    seen_output_ids = set()
-    seen_files = set()
+    if base_id not in param_versions:
+        # First time seen — initialize
+        version = 1
+        identifier = f"#fp-{base_id}-{version}"
+        param_versions[base_id] = {"version": version, "current_id": identifier}
+        return crate.add_formal_parameter(
+            name=identifier,
+            additionalType="File",
+            identifier=identifier,
+            valueRequired=True,
+            properties={}
+        )
+
+    if is_output:
+        # Create new version
+        param_versions[base_id]["version"] += 1
+        version = param_versions[base_id]["version"]
+        identifier = f"#fp-{base_id}-{version}"
+        param_versions[base_id]["current_id"] = identifier
+        return crate.add_formal_parameter(
+            name=identifier,
+            additionalType="File",
+            identifier=identifier,
+            valueRequired=True,
+            properties={}
+        )
+    else:
+        # Reuse current version
+        identifier = param_versions[base_id]["current_id"]
+        existing = crate.get(identifier)
+        if existing:
+            return existing
+        return crate.add_formal_parameter(
+            name=identifier,
+            additionalType="File",
+            identifier=identifier,
+            valueRequired=True,
+            properties={}
+        )
+
+def add_parameter_to_entities(param, notebook_entity, workflow_entity, io_type):
+    for entity in (notebook_entity, workflow_entity):
+        if io_type not in entity:
+            entity[io_type] = []
+        if param not in entity[io_type]:
+            entity.append_to(io_type, param)
+
+def create_file_entity(crate, file_path, URL, name_override=None, description_override=None, previous=False):
+
+    if previous:
+        # Collect information from the previous commit
+        info = URL.get_previous(file_path)
+        hash = URL.get_file_hash(file_path, which="previous")
+        size = URL.get_size_at_commit(file_path, info['commit_hash'])
+        # print(f"[create_file_entity] Using previous commit info for {file_path}: hash={hash}, size={size}")
+    else:
+        # Collect information from the current commit
+        info = URL.get(file_path)
+        hash = URL.get_file_hash(file_path)
+        size = URL.get_size(file_path)
+        # print(f"[create_file_entity] Using current commit info for {file_path}: hash={hash}, size={size}")
+
+    props = {
+        "@type": "File",
+        "name": name_override or file_path.name,
+        "sha256": hash,
+        "size": size,
+    }
+    if not info.get("exists", True):
+        props["description"] = description_override or "This file did not exist in the current git commit."
+
+    file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+    crate.root_dataset.append_to("hasPart", file_entity)
+    return file_entity
+
+def add_file_entities(crate, file_list, coastsat_dir, URL, limit, previous=False):
+    file_entities = set()
+
+    for file in file_list:
+        file_path = coastsat_dir / file
+        file_name = Path(file).name
+        # If the file is a glob pattern, expand it
+        if "*" in str(file_path):
+            matched_paths = glob(str(file_path))
+            if limit is not None:
+                matched_paths = matched_paths[:limit]
+            # print(f"[add_file_entities] Glob pattern detected. Matched files (limited): {matched_paths}")
+            for matched_path in matched_paths:
+                matched_path = Path(matched_path)
+                file_entities.add(create_file_entity(crate, matched_path, URL, previous=previous))
+        else:
+            file_entities.add(create_file_entity(crate, file_path, URL, previous=previous))
+
+    # print(f"[add_file_entities] Total file entities added: {len(file_entities)}")
+    return file_entities
+
+def link_files_to_parameters(files, parameters):
+    for file in files:
+        for param in parameters:
+            if is_fuzzy_match(Path(file["@id"]).name, param["@id"]):
+                file.append_to("exampleOfWork", param)
+
+def add_files_to_parameters(crate, cell_provenance: dict[str, List[NotebookCellProvenance]], workflow_fp, coastsat_dir, URL, limit=None):
+
     input_files = set()
     output_files = set()
 
-    for notebook, cells in cell_provenance.items():
+    for step_idx, (notebook, cells) in enumerate(cell_provenance.items()):
         for cell in cells:
-            for param in (cell.input_params or []):
-                param_id = param["@id"]
-                if param_id not in seen_input_ids:
-                    seen_input_ids.add(param_id)
-                    formal_param = crate.add_formal_parameter(
-                        name=param_id, 
-                        additionalType="File",  
-                        identifier=param_id,
-                        valueRequired=True,
-                        properties={}
-                    )
-                notebook_entity = crate.get(notebook)
-                notebook_input_list = notebook_entity.get("input", [])
-                workflow_input_list = workflow_entity.get("input", [])
-                param_entity = crate.get(param_id)
-                # Check if param_entity is already in the input list
-                if param_entity not in notebook_input_list:
-                    notebook_entity.append_to("input", param_entity)
-                if param_entity not in workflow_input_list:
-                    workflow_entity.append_to("input", param_entity)
+            if hasattr(cell, "input_files") and cell.input_files:
+                input_files.update(cell.input_files)
+            if hasattr(cell, "output_files") and cell.output_files:
+                output_files.update(cell.output_files)
 
-            for param in (cell.output_params or []):
-                param_id = param["@id"]
-                if param_id not in seen_output_ids:
-                    seen_output_ids.add(param_id)
-                    formal_param = crate.add_formal_parameter(name=param_id, 
-                                               additionalType="File",  
-                                               identifier=param_id,
-                                               valueRequired=True,
-                                               properties={})
-                notebook_entity = crate.get(notebook)
-                notebook_output_list = notebook_entity.get("output", [])
-                workflow_output_list = workflow_entity.get("output", [])
-                param_entity = crate.get(param_id)
-                # Check if param_entity is already in the output list
-                if param_entity not in notebook_output_list:
-                    notebook_entity.append_to("output", param_entity)
-                if param_entity not in workflow_output_list:
-                    workflow_entity.append_to("output", param_entity)
-
-            for file in (cell.input_files or []):
-                file_name = Path(file).name
-                if file_name not in seen_files:
-                    seen_files.add(file_name)
-                    file_path = coastsat_dir / file
-                    if "*" in str(file_path):
-                        pattern_parts = Path(str(file_path)).parts
-                        for i, matched_path in enumerate(glob(str(file_path))):
-                            if limit is not None and i >= limit:
-                                break
-                            matched_parts = Path(matched_path).parts
-                            # Find which part(s) of the pattern are wildcards and what they matched
-                            wildcard_values = []
-                            for p_part, m_part in zip(pattern_parts, matched_parts):
-                                if "*" in p_part:
-                                    wildcard_values.append(m_part)
-                            # If there are wildcard values, append them to the name
-                            name_with_wildcard = file_name
-                            if wildcard_values:
-                                name_with_wildcard = f"{file_name} ({', '.join(wildcard_values)})"
-                            prev_info = URL.get(matched_path)
-                            props = {
-                                "@type": "File",
-                                "name": name_with_wildcard,
-                                "sha256": URL.get_file_hash(matched_path),
-                                "size": URL.get_size_at_commit(matched_path, prev_info['commit_hash'])
-                            }
-                            if not prev_info.get("exists", True):
-                                props["description"] = (
-                                    "This file did not exist in the previous git commit; "
-                                    "indicating changes happened between major releases."
-                                )
-                            file_entity = crate.add(ContextEntity(crate, prev_info["permalink_url"], properties=props))
-
-                            existing_parts = crate.root_dataset.get("hasPart", [])
-                            if not isinstance(existing_parts, list):
-                                existing_parts = [existing_parts] if existing_parts else []
-                            crate.root_dataset["hasPart"] = existing_parts + [file_entity]
-
-                            input_files.add(file_entity)
-                    else:
-                        prev_info = URL.get(file_path)
-                        props = {
-                            "@type": "File",
-                            "name": file_name,
-                            "sha256": URL.get_file_hash(file_path),
-                            "size": URL.get_size_at_commit(file_path, prev_info['commit_hash'])
-                        }
-                        if not prev_info.get("exists", True):
-                            props["description"] = (
-                                "This file did not exist in the previous git commit; "
-                                "indicating changes happened between major releases."
-                            )
-                        file_entity = crate.add(ContextEntity(crate, prev_info["permalink_url"], properties=props))
-
-                        existing_parts = crate.root_dataset.get("hasPart", [])
-                        if not isinstance(existing_parts, list):
-                            existing_parts = [existing_parts] if existing_parts else []
-                        crate.root_dataset["hasPart"] = existing_parts + [file_entity]
-
-                        input_files.add(file_entity)
-
-            for file in (cell.output_files or []):
-                file_name = Path(file).name
-                if file_name not in seen_files:
-                    seen_files.add(file_name)
-                    file_path = coastsat_dir / file
-                    if "*" in str(file_path):
-                        pattern_parts = Path(str(file_path)).parts
-                        for i, matched_path in enumerate(glob(str(file_path))):
-                            if limit is not None and i >= limit:
-                                break
-                            matched_parts = Path(matched_path).parts
-                            wildcard_values = []
-                            for p_part, m_part in zip(pattern_parts, matched_parts):
-                                if "*" in p_part:
-                                    wildcard_values.append(m_part)
-                            name_with_wildcard = file_name
-                            if wildcard_values:
-                                name_with_wildcard = f"{file_name} ({', '.join(wildcard_values)})"
-                            info = URL.get(matched_path)
-                            props = {
-                                "@type": "File",
-                                "name": name_with_wildcard,
-                                "sha256": URL.get_file_hash(matched_path),
-                                "size": URL.get_size_at_commit(matched_path, info['commit_hash'])
-                            }
-                            if not info.get("exists", True):
-                                props["description"] = (
-                                    "This file did not exist in the current git commit; "
-                                    "indicating changes happened between major releases."
-                                )
-                            file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
-
-                            existing_parts = crate.root_dataset.get("hasPart", [])
-                            if not isinstance(existing_parts, list):
-                                existing_parts = [existing_parts] if existing_parts else []
-                            crate.root_dataset["hasPart"] = existing_parts + [file_entity]
-
-                            output_files.add(file_entity)
-                    else:
-                        info = URL.get(file_path)
-                        props = {
-                            "@type": "File",
-                            "name": file_name,
-                            "sha256": URL.get_file_hash(file_path),
-                            "size": URL.get_size_at_commit(file_path, info['commit_hash'])
-                        }
-                        if not info.get("exists", True):
-                            props["description"] = (
-                                "This file did not exist in the current git commit; "
-                                "indicating changes happened between major releases."
-                            )
-                        file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
-
-                        existing_parts = crate.root_dataset.get("hasPart", [])
-                        if not isinstance(existing_parts, list):
-                            existing_parts = [existing_parts] if existing_parts else []
-                        crate.root_dataset["hasPart"] = existing_parts + [file_entity]
-
-                        output_files.add(file_entity)
-                    
-        
-        formal_param_entities = [e for e in crate.get_entities() if "FormalParameter" in (e.get("@type") or [])]
+    for fp in workflow_fp["input"]:
+        # print("Linking input files to formal parameters...")
         for file in input_files:
-            for param in formal_param_entities:
-                if is_fuzzy_match(Path(file["@id"]).name, param["@id"]):
-                    if param not in file.get("exampleOfWork", []):
-                        file.append_to("exampleOfWork", param)
+            if is_fuzzy_match(fp["@id"], Path(file).name):
+                # print(f"Linking input file {file} to formal parameter {fp['@id']}")
+                file_entities = add_file_entities(crate, [file], coastsat_dir, URL, limit=limit, previous=True)
+                link_files_to_parameters(file_entities, [fp])
 
+    for fp in workflow_fp["output"]:
+        # print("Linking output files to formal parameters...")
         for file in output_files:
-            for param in formal_param_entities:
-                if is_fuzzy_match(Path(file["@id"]).name, param["@id"]):
-                    if param not in file.get("exampleOfWork", []):
-                        file.append_to("exampleOfWork", param)
+            if is_fuzzy_match(fp["@id"], Path(file).name):
+                # print(f"Linking output file {file} to formal parameter {fp['@id']}")
+                file_entities = add_file_entities(crate, [file], coastsat_dir, URL, limit=limit)
+                link_files_to_parameters(file_entities, [fp])
+
+    
+def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[NotebookCellProvenance]], coastsat_dir, URL: GitURL):
+    workflow_entity = crate.get("update.sh")
+    if not workflow_entity:
+        raise ValueError("Workflow entity (update.sh) not found in the crate.")
+
+    param_versions = {}
+    all_formal_params = set()
+
+    for step_idx, (notebook, cells) in enumerate(cell_provenance.items()):
+        notebook_entity = crate.get(notebook)
+        if notebook_entity is None:
+            continue
+
+        for cell in cells:
+            input_ids = {param["@id"] for param in (cell.input_params or [])}
+            # Process all inputs using current versions
+            cell.input_params = []
+            for param_id in input_ids:
+                fp = get_or_create_formal_param(crate, param_id, is_output=False, param_versions=param_versions)
+                cell.input_params.append(fp) 
+                add_parameter_to_entities(fp, notebook_entity, workflow_entity, "input")
+                all_formal_params.add(fp)
+
+        for cell in cells:
+            # Process all outputs, always creating a new version
+            output_ids = {param["@id"] for param in (cell.output_params or [])}
+            cell.output_params = []
+            for param_id in output_ids:
+                fp = get_or_create_formal_param(crate, param_id, is_output=True, param_versions=param_versions)
+                cell.output_params.append(fp)
+                add_parameter_to_entities(fp, notebook_entity, workflow_entity, "output")
+                all_formal_params.add(fp)
+
+    def extract_base_and_version(identifier: str) -> tuple[str, int]:
+        # Matches #fp-name-1
+        match = re.match(r"#fp-([a-z0-9_]+)-(\d+)", identifier)
+        if not match:
+            return identifier, 0
+        base, version = match.groups()
+        return base, int(version)
+
+    param_versions_by_base = defaultdict(list)
+
+    for param in all_formal_params:
+        base, version = extract_base_and_version(param["@id"])
+        param_versions_by_base[base].append((version, param))
+
+    workflow_inputs = []
+    workflow_outputs = []
+
+    for base, versions in param_versions_by_base.items():
+        versions.sort()
+        for version, param in versions:
+            if version == 1:
+                workflow_inputs.append(param)
+        max_version_param = max(versions, key=lambda x: x[0])[1]
+        if max_version_param["@id"] not in {fp["@id"] for fp in workflow_inputs}:
+            workflow_outputs.append(max_version_param)
+
+    # Clear existing inputs and outputs
+    workflow_entity["input"] = []
+    workflow_entity["output"] = []
+
+    # Collapsed list of all cell.output_params
+    all_output_params = [param for cells in cell_provenance.values() for cell in cells for param in (cell.output_params or [])]
+    
+    workflow_fp = {"input": [], "output": []}
+    for fp in workflow_inputs:
+        # We dont want to add inputs if they appear first as outputs.
+        # I.e. they are generated in an intermediate step.
+        if fp not in all_output_params:
+            workflow_entity.append_to("input", fp)
+            workflow_fp["input"].append(fp)
+
+    for fp in workflow_outputs:
+        workflow_entity.append_to("output", fp)
+        workflow_fp["output"].append(fp)
+
+    add_files_to_parameters(crate, cell_provenance, workflow_fp, coastsat_dir, URL, limit=None)
     
 
 def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict], coastsat_dir: Path, output_dir: Path):
@@ -411,9 +435,9 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
         raise FileNotFoundError(f"transects.xlsx not found in {coastsat_dir}")
     
     transects_fp = crate.add_formal_parameter(
-        name="#fp-transects_xlsx", 
+        name="#fp-transects_xlsx-1", 
         additionalType="File",  
-        identifier="#fp-transects_xlsx",
+        identifier="#fp-transects_xlsx-1",
         valueRequired=False,
         properties={}
     )  
@@ -435,9 +459,9 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
     crate.root_dataset.append_to("hasPart", file_entity)
 
     transect_site_xlsx = crate.add_formal_parameter(
-            name="#fp-transect_site_xlsx", 
+            name="#fp-transect_site_xlsx-1", 
             additionalType="File",  
-            identifier="#fp-transect_site_xlsx",
+            identifier="#fp-transect_site_xlsx-1",
             valueRequired=False,
             properties={}
         )
@@ -459,6 +483,10 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
         file_entity["exampleOfWork"] = transect_site_xlsx
         crate.root_dataset.append_to("hasPart", file_entity)
 
+    update_script = crate.get("update.sh")
+    update_script.append_to("output", transects_fp)
+    update_script.append_to("output", transect_site_xlsx)
+
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
     Build metadata for E2.2: Workflow Management System.
@@ -475,12 +503,13 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     # --- Add notebook provenance crates for each step file ---
     notebook_crates, cell_prov = create_notebook_provenance_crates(crate, step_entities, coastsat_dir, output_dir)
 
-    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL, limit=None)
+    formal_params = generate_formal_parameters(crate, cell_prov, coastsat_dir, URL)
     
-    # --- add formal params to make_xlsx ----
+    # TODO revisit when formal params are fully implemented
+    # # --- add formal params to make_xlsx ----
     make_xlsx = crate.get("make_xlsx.py")
-    txfp = crate.get("#fp-transects_extended_geojson")
-    ttstcfp = crate.get("#fp-transect_time_series_tidally_corrected_csv")
+    txfp = crate.get("#fp-transectsextended-1")
+    ttstcfp = crate.get("#fp-transecttimeseriestidallycorrected-2")
     make_xlsx["input"] = [txfp, ttstcfp]
     add_xlsx_outputs(crate, make_xlsx, coastsat_dir, URL)
 
