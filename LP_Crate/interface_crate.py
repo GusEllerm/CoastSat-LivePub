@@ -385,7 +385,7 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
         workflow_entity.append_to("output", fp)
         workflow_fp["output"].append(fp)
 
-    add_files_to_parameters(crate, cell_provenance, workflow_fp, coastsat_dir, URL, limit=2)
+    add_files_to_parameters(crate, cell_provenance, workflow_fp, coastsat_dir, URL, limit=None)
     
 
 def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict], coastsat_dir: Path, output_dir: Path):
@@ -466,7 +466,7 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
             properties={}
         )
     make_xlsx_entity.append_to("output", transect_site_xlsx)
-    for file in get_nzd_xlsx_files(coastsat_dir / "data", limit=2):
+    for file in get_nzd_xlsx_files(coastsat_dir / "data", limit=None):
         info = URL.get(file)
         props = {
             "@type": "File",
