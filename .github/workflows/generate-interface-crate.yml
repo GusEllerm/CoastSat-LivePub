@@ -54,7 +54,7 @@ jobs:
       - name: Patch release URL into interface.crate
         run: |
           RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/${RELEASE_NAME}"
-          python LP_Crate/patch_release_url.py "$RELEASE_URL"
+           conda run -n coastsat_stencila_env python LP_Crate/patch_release_url.py "$RELEASE_URL"
 
       - name: Re-zip patched interface crate
         run: (cd LP_Crate && zip -r ../interface-crate.zip interface.crate/)
