@@ -63,12 +63,13 @@ def add_organization(crate: ROCrate, identifier: str, name: str):
     return crate.add(ContextEntity(crate, identifier, properties))
 
 
-def add_file_entity(crate: ROCrate, identifier: str, content_size, description, encoding_format: None, sha_256: Optional[str] = None):
+def add_file_entity(crate: ROCrate, identifier: str, content_size, description, name, encoding_format: None, sha_256: Optional[str] = None):
     """
     Helper function to add a File entity to the RO-Crate.
     """
     properties = {
         "@type": "File",
+        "name": name,
         "encodingFormat": encoding_format,
         "contentSize": content_size,
         "sha256": sha_256,
@@ -102,6 +103,7 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
         local_path = f"{coastsat_dir}/data/{site_id}/transect_time_series.csv"
         file_entity = add_file_entity(
             crate,
+            name=f"{site_id} transect time series",
             identifier=URL.get(remote_path)["permalink_url"],
             content_size=URL.get_size(remote_path), 
             description=f"Transect time series for {site_id}",
@@ -140,6 +142,7 @@ def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: Context
         local_path = f"data/{site_id}/transect_time_series.csv"
         file_entity = add_file_entity(
             crate,
+            name=f"{site_id} transect time series",
             identifier=URL.get_previous(remote_path)["permalink_url"],
             content_size=URL.get_size_at_commit(remote_path, URL.get_previous(remote_path)['commit_hash']), 
             description=f"Transect time series for {site_id}",
@@ -213,24 +216,31 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
         orcid="https://orcid.org/example")
     
     input_files = [
-        add_file_entity(crate,
-                        URL.get_previous("polygons.geojson")['permalink_url'],
-                        content_size=URL.get_size_at_commit("polygons.geojson", URL.get_previous("polygons.geojson")['commit_hash']),
-                        description="Polygon bounding boxes defining where to download imagery.",
-                        sha_256=URL.get_file_hash("polygons.geojson"),
-                        encoding_format="application/geo+json"),
-        add_file_entity(crate,
-                        URL.get_previous("shorelines.geojson")['permalink_url'],
-                        content_size=URL.get_size_at_commit("shorelines.geojson", URL.get_previous("shorelines.geojson")['commit_hash']),
-                        description="Reference shorelines for transects.",
-                        sha_256=URL.get_file_hash("shorelines.geojson"),
-                        encoding_format="application/geo+json"),
-        add_file_entity(crate,
-                        URL.get_previous("transects_extended.geojson")['permalink_url'],
-                        content_size=URL.get_size_at_commit("transects_extended.geojson", URL.get_previous("transects_extended.geojson")['commit_hash']),
-                        description="Transects with extended geometry for processing.",
-                        sha_256=URL.get_file_hash("transects_extended.geojson"),
-                        encoding_format="application/geo+json")
+        add_file_entity(
+            crate=crate,
+            name="Polygons GeoJSON",
+            identifier=URL.get_previous("polygons.geojson")['permalink_url'],
+            content_size=URL.get_size_at_commit("polygons.geojson", URL.get_previous("polygons.geojson")['commit_hash']),
+            description="Polygon bounding boxes defining where to download imagery.",
+            sha_256=URL.get_file_hash("polygons.geojson", "previous"),
+            encoding_format="application/geo+json"),
+        add_file_entity(
+            crate=crate,
+            name="Shorelines GeoJSON",
+            identifier=URL.get_previous("shorelines.geojson")['permalink_url'],
+            content_size=URL.get_size_at_commit("shorelines.geojson", URL.get_previous("shorelines.geojson")['commit_hash']),
+            description="Reference shorelines for transects.",
+            sha_256=URL.get_file_hash("shorelines.geojson", "previous"),
+            encoding_format="application/geo+json"
+            ),
+        add_file_entity(
+            crate=crate,
+            name="Transects Extended GeoJSON",
+            identifier=URL.get_previous("transects_extended.geojson")['permalink_url'],
+            content_size=URL.get_size_at_commit("transects_extended.geojson", URL.get_previous("transects_extended.geojson")['commit_hash']),
+            description="Transects with extended geometry for processing.",
+            sha_256=URL.get_file_hash("transects_extended.geojson"),
+            encoding_format="application/geo+json")
     ]
     polygon_file, shoreline_file, transects_file = input_files
    

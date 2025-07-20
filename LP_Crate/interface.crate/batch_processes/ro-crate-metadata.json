@@ -5,7 +5,7 @@
             "@id": "./",
             "@type": "Dataset",
             "conformsTo": "https://w3id.org/ro/wfrun/process/0.5",
-            "datePublished": "2025-07-19T23:16:50+00:00",
+            "datePublished": "2025-07-20T00:23:08+00:00",
             "description": "Process Run Crate representing the Data Producer layer.",
             "hasPart": [
                 {
@@ -192,6 +192,7 @@
             "contentSize": "45.65",
             "description": "Transect time series for nzd0001",
             "encodingFormat": "text/csv",
+            "name": "nzd0001 transect time series",
             "sha256": "3949852504fe0e10299d786c85847cb2298c080da944d0d98dea7c23a6e7e9d0"
         },
         {
@@ -200,6 +201,7 @@
             "contentSize": "31.55",
             "description": "Transect time series for nzd0002",
             "encodingFormat": "text/csv",
+            "name": "nzd0002 transect time series",
             "sha256": "415a728c29820d38f2e04b687fd0aa9afee1ebbce1566a45bc0dcffb68b65178"
         },
         {
@@ -208,6 +210,7 @@
             "contentSize": "53.92",
             "description": "Transect time series for sar0001",
             "encodingFormat": "text/csv",
+            "name": "sar0001 transect time series",
             "sha256": "94fbbbcbecd44c221a56de691c76c3dae5269c893afb2c86835d446f298f16fe"
         },
         {
@@ -216,6 +219,7 @@
             "contentSize": "39.47",
             "description": "Transect time series for sar0002",
             "encodingFormat": "text/csv",
+            "name": "sar0002 transect time series",
             "sha256": "de4da36a10914bae3babe8bb658ae6ddb0dcf4f24690c10941968bf7f2f604f6"
         },
         {
@@ -224,6 +228,7 @@
             "contentSize": "45.91",
             "description": "Transect time series for nzd0001",
             "encodingFormat": "text/csv",
+            "name": "nzd0001 transect time series",
             "sha256": "0ca7f23f3d9c634f6dbcff27a152327eca1b90694eb7988922a045ae57e64596"
         },
         {
@@ -232,6 +237,7 @@
             "contentSize": "31.91",
             "description": "Transect time series for nzd0002",
             "encodingFormat": "text/csv",
+            "name": "nzd0002 transect time series",
             "sha256": "8604f651564de551220905a9c6b12c80760c78ca5c28142651c5207c5edd30a1"
         },
         {
@@ -240,6 +246,7 @@
             "contentSize": "54.00",
             "description": "Transect time series for sar0001",
             "encodingFormat": "text/csv",
+            "name": "sar0001 transect time series",
             "sha256": "2ade1f1469b2aa456211590dea76b19fba4ef3fed2dbc0203636040148b80875"
         },
         {
@@ -248,6 +255,7 @@
             "contentSize": "39.53",
             "description": "Transect time series for sar0002",
             "encodingFormat": "text/csv",
+            "name": "sar0002 transect time series",
             "sha256": "2e31433dde4cd3493e3acec988ed5a2ce36d6fac0aff3ceaa12e175eec3c2bee"
         },
         {
@@ -269,6 +277,7 @@
             "contentSize": "2264.32",
             "description": "Polygon bounding boxes defining where to download imagery.",
             "encodingFormat": "application/geo+json",
+            "name": "Polygons GeoJSON",
             "sha256": "c314aec4d532936610e33cd85512bb56c52e2ad09d4cc53c086eee396015a2cc"
         },
         {
@@ -277,6 +286,7 @@
             "contentSize": "27174.53",
             "description": "Reference shorelines for transects.",
             "encodingFormat": "application/geo+json",
+            "name": "Shorelines GeoJSON",
             "sha256": "df2bebd8df533056c148852d626defb4744279c823f458114d2467015b0ff9a3"
         },
         {
@@ -285,6 +295,7 @@
             "contentSize": "89972.61",
             "description": "Transects with extended geometry for processing.",
             "encodingFormat": "application/geo+json",
+            "name": "Transects Extended GeoJSON",
             "sha256": "cb40b868dcef0f03fe4e31f8105ed3c4d9084a5be49564b676ef10aa752d89b3"
         }
     ]
