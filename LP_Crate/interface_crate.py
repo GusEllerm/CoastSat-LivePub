@@ -559,7 +559,7 @@ def add_aggregate_entities(crate: ROCrate, URL: GitURL):
         "@type": "Thing",
         "name": "LivePublication Interface Outputs",
         "description": "This entity represents the outputs of the Experiment Infrastructure required by the LivePublication interface. It includes references to data produced by E1 (Data Producer), E2.1 (Workflow Infrastructure), E2.2 (Workflow Management System), and E3 (Experimental Results and Outcomes).",
-        "datePublished": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        "datePublished": URL.get_commit_date(),
         "version": URL.get_commit_info_for_file("update.sh")["commit_url"]}
         ))
     

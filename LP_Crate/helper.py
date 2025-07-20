@@ -177,6 +177,20 @@ class GitURL:
         except subprocess.CalledProcessError:
             raise ValueError(f"Could not retrieve commit info for file: {rel_path}")
 
+    def get_commit_date(self):
+        """
+        Returns the ISO 8601 timestamp of the current commit.
+        Format: YYYY-MM-DDTHH:MM:SS+00:00
+        """
+        try:
+            commit_date = subprocess.check_output(
+                ["git", "-C", self.repo_path, "show", "-s", "--format=%cI", self.commit_hash],
+                text=True
+            ).strip()
+            return commit_date
+        except subprocess.CalledProcessError:
+            raise ValueError("Could not retrieve commit date.")
+
 if __name__ == "__main__":
     # Example usage
     url_gen = GitURL(
