@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-21T01:57:36+00:00",
+            "datePublished": "2025-07-21T04:02:33+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -46,19 +46,19 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson"
                 },
                 {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
+                },
+                {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/tides.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/tides.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/transect_time_series.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar1214/transect_time_series.csv"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/transect_time_series.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
@@ -70,10 +70,10 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0939/transect_time_series.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/transect_time_series.csv"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/transect_time_series.csv"
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar1214/transect_time_series.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/csv_run7/aus0023/time_series_tidally_corrected.csv"
@@ -152,7 +152,7 @@
                     "@id": "batch_processes/ro-crate-metadata.json"
                 },
                 {
-                    "@id": "https://zenodo.org/records/15614554"
+                    "@id": "external-data"
                 }
             ],
             "name": "E1: Data Producer"
@@ -200,9 +200,18 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-21T01:57:40.685529+00:00",
+            "dateCreated": "2025-07-21T04:02:35.558167+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
+        },
+        {
+            "@id": "external-data",
+            "@type": "Dataset",
+            "description": "External data sources used in the data production process.",
+            "hasPart": {
+                "@id": "https://zenodo.org/records/15614554"
+            },
+            "name": "External Data Sources"
         },
         {
             "@id": "https://zenodo.org/records/15614554",
@@ -233,10 +242,10 @@
                     "@id": "#fp-transectsextended-1"
                 },
                 {
-                    "@id": "#fp-tides-1"
+                    "@id": "#fp-polygons-1"
                 },
                 {
-                    "@id": "#fp-polygons-1"
+                    "@id": "#fp-tides-1"
                 },
                 {
                     "@id": "#fp-transecttimeseries-1"
@@ -650,6 +659,18 @@
             "size": "89972.61"
         },
         {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson",
+            "@type": "File",
+            "exampleOfWork": [
+                {
+                    "@id": "#fp-polygons-1"
+                }
+            ],
+            "name": "polygons.geojson",
+            "sha256": "c314aec4d532936610e33cd85512bb56c52e2ad09d4cc53c086eee396015a2cc",
+            "size": "2264.32"
+        },
+        {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/tides.csv",
             "@type": "File",
             "exampleOfWork": [
@@ -674,16 +695,28 @@
             "size": "13.55"
         },
         {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson",
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/transect_time_series.csv",
             "@type": "File",
             "exampleOfWork": [
                 {
-                    "@id": "#fp-polygons-1"
+                    "@id": "#fp-transecttimeseries-1"
                 }
             ],
-            "name": "polygons.geojson",
-            "sha256": "c314aec4d532936610e33cd85512bb56c52e2ad09d4cc53c086eee396015a2cc",
-            "size": "2264.32"
+            "name": "transect_time_series.csv",
+            "sha256": "c703f08ea128f0dfb49e6f335d1e6d1ec5637ab879be5a6ded4e418f5f70b6ed",
+            "size": "84.51"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/transect_time_series.csv",
+            "@type": "File",
+            "exampleOfWork": [
+                {
+                    "@id": "#fp-transecttimeseries-1"
+                }
+            ],
+            "name": "transect_time_series.csv",
+            "sha256": "d470cbdbc5fc7933659a09e8ca7f5f594204289fb579fce2d9d88721494ea24c",
+            "size": "23.83"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv",
@@ -720,30 +753,6 @@
             "name": "transect_time_series.csv",
             "sha256": "61eb8559a36e1b01f069d8f2ed6915c5e828cefd4101a2f01d5168564323b142",
             "size": "93.32"
-        },
-        {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/transect_time_series.csv",
-            "@type": "File",
-            "exampleOfWork": [
-                {
-                    "@id": "#fp-transecttimeseries-1"
-                }
-            ],
-            "name": "transect_time_series.csv",
-            "sha256": "c703f08ea128f0dfb49e6f335d1e6d1ec5637ab879be5a6ded4e418f5f70b6ed",
-            "size": "84.51"
-        },
-        {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/transect_time_series.csv",
-            "@type": "File",
-            "exampleOfWork": [
-                {
-                    "@id": "#fp-transecttimeseries-1"
-                }
-            ],
-            "name": "transect_time_series.csv",
-            "sha256": "d470cbdbc5fc7933659a09e8ca7f5f594204289fb579fce2d9d88721494ea24c",
-            "size": "23.83"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/csv_run7/aus0023/time_series_tidally_corrected.csv",

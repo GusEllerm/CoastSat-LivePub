@@ -42,6 +42,13 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     # Add Pacific Rim data source
     # This is an external dataset used in the data production process
     # It is not part of the process run crate but is linked to E1
+    external_data = crate.add(ContextEntity(crate, "external-data", properties={
+        "name": "External Data Sources",
+        "@type": "Dataset",
+        "name": "External Data Sources",
+        "description": "External data sources used in the data production process."
+        }))
+
     pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554", properties={
         "@type": "Dataset",
         "name": "Pacific Rim Data",
@@ -50,13 +57,15 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
         "sameAs": "https://doi.org/10.5281/zenodo.15614554"
     }))
 
+    external_data["hasPart"] = pacific_rim_data
+
     # Link E1 entity to the external crate directory
     existing_parts = crate.root_dataset.get("hasPart", [])
     if not isinstance(existing_parts, list):
         existing_parts = [existing_parts] if existing_parts else []
     crate.root_dataset["hasPart"] = existing_parts + [pacific_rim_data]
 
-    E1["hasPart"] = [process_run_crate, pacific_rim_data]
+    E1["hasPart"] = [process_run_crate, external_data]
 
 def build_e2_1(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_1):
     """
