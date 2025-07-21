@@ -49,7 +49,7 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
         "description": "External data sources used in the data production process."
         }))
 
-    pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554", properties={
+    pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554/", properties={
         "@type": "Dataset",
         "name": "Pacific Rim Data",
         "description": "External data sources used in the data production process.",
