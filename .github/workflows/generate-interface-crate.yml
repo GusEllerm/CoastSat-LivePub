@@ -21,6 +21,9 @@ jobs:
           environment-file: environment.yaml
           python-version: "3.10"
 
+      - name: Export GitHub Gist token
+        run: echo "GITHUB_TOKEN=${{ secrets.GH_GIST_TOKEN }}" >> $GITHUB_ENV
+
       - name: Generate Interface Crate
         run: |
           conda run -n coastsat_stencila_env python LP_Crate/interface_crate.py 

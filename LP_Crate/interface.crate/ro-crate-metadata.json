@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2025-07-20T08:01:32+00:00",
+            "datePublished": "2025-07-21T01:57:36+00:00",
             "hasPart": [
                 {
                     "@id": "batch_processes/ro-crate-metadata.json"
@@ -43,10 +43,22 @@
                     "@id": "notebooks/linear_models/ro-crate-metadata.json"
                 },
                 {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson"
+                },
+                {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/tides.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/tides.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar1214/transect_time_series.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
@@ -58,28 +70,19 @@
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar0939/transect_time_series.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar1214/transect_time_series.csv"
-                },
-                {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/transect_time_series.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0172/transect_time_series.csv"
                 },
                 {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson"
-                },
-                {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/csv_run7/aus0023/time_series_tidally_corrected.csv"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/csv_run7/usa_CA_0239/time_series_tidally_corrected.csv"
+                },
+                {
+                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0516/tides.csv"
@@ -92,9 +95,6 @@
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0172/transect_time_series_tidally_corrected.csv"
-                },
-                {
-                    "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson"
                 },
                 {
                     "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects.xlsx"
@@ -200,7 +200,7 @@
             "conformsTo": {
                 "@id": "https://w3id.org/ro/wfrun/process/0.5"
             },
-            "dateCreated": "2025-07-20T08:01:34.070070+00:00",
+            "dateCreated": "2025-07-21T01:57:40.685529+00:00",
             "description": "This Process Run represents the execution of the data production scripts.",
             "name": "Data Producer Process Run"
         },
@@ -230,16 +230,16 @@
             "encodingFormat": "text/x-sh",
             "input": [
                 {
-                    "@id": "#fp-tides-1"
+                    "@id": "#fp-transectsextended-1"
                 },
                 {
-                    "@id": "#fp-transecttimeseries-1"
+                    "@id": "#fp-tides-1"
                 },
                 {
                     "@id": "#fp-polygons-1"
                 },
                 {
-                    "@id": "#fp-transectsextended-1"
+                    "@id": "#fp-transecttimeseries-1"
                 },
                 {
                     "@id": "#fp-timeseriestidallycorrected-1"
@@ -248,13 +248,13 @@
             "name": "CoastSat Update Script",
             "output": [
                 {
+                    "@id": "#fp-transectsextended-3"
+                },
+                {
                     "@id": "#fp-tides-5"
                 },
                 {
                     "@id": "#fp-transecttimeseriestidallycorrected-2"
-                },
-                {
-                    "@id": "#fp-transectsextended-3"
                 },
                 {
                     "@id": "#fp-transects_xlsx-1"
@@ -322,10 +322,10 @@
                     "@id": "#fp-tides-2"
                 },
                 {
-                    "@id": "#fp-transecttimeseriestidallycorrected-1"
+                    "@id": "#fp-tides-3"
                 },
                 {
-                    "@id": "#fp-tides-3"
+                    "@id": "#fp-transecttimeseriestidallycorrected-1"
                 }
             ],
             "position": "0",
@@ -351,10 +351,10 @@
                     "@id": "#fp-transectsextended-1"
                 },
                 {
-                    "@id": "#fp-transecttimeseries-1"
+                    "@id": "#fp-tides-3"
                 },
                 {
-                    "@id": "#fp-tides-3"
+                    "@id": "#fp-transecttimeseries-1"
                 }
             ],
             "name": "slope_estimation.ipynb",
@@ -401,10 +401,10 @@
                     "@id": "#fp-tides-4"
                 },
                 {
-                    "@id": "#fp-transecttimeseriestidallycorrected-2"
+                    "@id": "#fp-tides-5"
                 },
                 {
-                    "@id": "#fp-tides-5"
+                    "@id": "#fp-transecttimeseriestidallycorrected-2"
                 }
             ],
             "position": "2",
@@ -558,16 +558,6 @@
             "valueRequired": true
         },
         {
-            "@id": "#fp-transecttimeseriestidallycorrected-1",
-            "@type": "FormalParameter",
-            "additionalType": "File",
-            "conformsTo": {
-                "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
-            },
-            "name": "#fp-transecttimeseriestidallycorrected-1",
-            "valueRequired": true
-        },
-        {
             "@id": "#fp-tides-3",
             "@type": "FormalParameter",
             "additionalType": "File",
@@ -575,6 +565,16 @@
                 "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
             },
             "name": "#fp-tides-3",
+            "valueRequired": true
+        },
+        {
+            "@id": "#fp-transecttimeseriestidallycorrected-1",
+            "@type": "FormalParameter",
+            "additionalType": "File",
+            "conformsTo": {
+                "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
+            },
+            "name": "#fp-transecttimeseriestidallycorrected-1",
             "valueRequired": true
         },
         {
@@ -598,16 +598,6 @@
             "valueRequired": true
         },
         {
-            "@id": "#fp-transecttimeseriestidallycorrected-2",
-            "@type": "FormalParameter",
-            "additionalType": "File",
-            "conformsTo": {
-                "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
-            },
-            "name": "#fp-transecttimeseriestidallycorrected-2",
-            "valueRequired": true
-        },
-        {
             "@id": "#fp-tides-5",
             "@type": "FormalParameter",
             "additionalType": "File",
@@ -615,6 +605,16 @@
                 "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
             },
             "name": "#fp-tides-5",
+            "valueRequired": true
+        },
+        {
+            "@id": "#fp-transecttimeseriestidallycorrected-2",
+            "@type": "FormalParameter",
+            "additionalType": "File",
+            "conformsTo": {
+                "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
+            },
+            "name": "#fp-transecttimeseriestidallycorrected-2",
             "valueRequired": true
         },
         {
@@ -636,6 +636,18 @@
             },
             "name": "#fp-transectsextended-3",
             "valueRequired": true
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson",
+            "@type": "File",
+            "exampleOfWork": [
+                {
+                    "@id": "#fp-transectsextended-1"
+                }
+            ],
+            "name": "transects_extended.geojson",
+            "sha256": "b64b266a174b0239530eaa0f84659f3765e9c88975ed2093ed918cb83f4d0d7c",
+            "size": "89972.61"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/nzd0516/tides.csv",
@@ -660,6 +672,18 @@
             "name": "tides.csv",
             "sha256": "f22c691b4d12455d82ae8799ca7008e90366f927f2e8443bc5d1e31f903e86df",
             "size": "13.55"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson",
+            "@type": "File",
+            "exampleOfWork": [
+                {
+                    "@id": "#fp-polygons-1"
+                }
+            ],
+            "name": "polygons.geojson",
+            "sha256": "c314aec4d532936610e33cd85512bb56c52e2ad09d4cc53c086eee396015a2cc",
+            "size": "2264.32"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/data/sar2491/transect_time_series.csv",
@@ -722,30 +746,6 @@
             "size": "23.83"
         },
         {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/polygons.geojson",
-            "@type": "File",
-            "exampleOfWork": [
-                {
-                    "@id": "#fp-polygons-1"
-                }
-            ],
-            "name": "polygons.geojson",
-            "sha256": "c314aec4d532936610e33cd85512bb56c52e2ad09d4cc53c086eee396015a2cc",
-            "size": "2264.32"
-        },
-        {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/ab3c821047f4ced689d618eaeefebccf29af44dd/transects_extended.geojson",
-            "@type": "File",
-            "exampleOfWork": [
-                {
-                    "@id": "#fp-transectsextended-1"
-                }
-            ],
-            "name": "transects_extended.geojson",
-            "sha256": "b64b266a174b0239530eaa0f84659f3765e9c88975ed2093ed918cb83f4d0d7c",
-            "size": "89972.61"
-        },
-        {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/csv_run7/aus0023/time_series_tidally_corrected.csv",
             "@type": "File",
             "description": "This file did not exist in the current git commit.",
@@ -770,6 +770,18 @@
             "name": "time_series_tidally_corrected.csv",
             "sha256": null,
             "size": "188.81"
+        },
+        {
+            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson",
+            "@type": "File",
+            "exampleOfWork": [
+                {
+                    "@id": "#fp-transectsextended-3"
+                }
+            ],
+            "name": "transects_extended.geojson",
+            "sha256": "cb40b868dcef0f03fe4e31f8105ed3c4d9084a5be49564b676ef10aa752d89b3",
+            "size": "89989.05"
         },
         {
             "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/data/nzd0516/tides.csv",
@@ -818,18 +830,6 @@
             "name": "transect_time_series_tidally_corrected.csv",
             "sha256": "1fcd39497a528a75f35502f84aa93d6c822d60e48d62a5f7c6340983744d7f81",
             "size": "34.39"
-        },
-        {
-            "@id": "https://github.com/UoA-eResearch/CoastSat/blob/d61c2052a4a0b9ed9763c6fb89fa7cabdba034ff/transects_extended.geojson",
-            "@type": "File",
-            "exampleOfWork": [
-                {
-                    "@id": "#fp-transectsextended-3"
-                }
-            ],
-            "name": "transects_extended.geojson",
-            "sha256": "cb40b868dcef0f03fe4e31f8105ed3c4d9084a5be49564b676ef10aa752d89b3",
-            "size": "89989.05"
         },
         {
             "@id": "#fp-transects_xlsx-1",

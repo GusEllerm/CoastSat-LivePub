@@ -4,6 +4,8 @@ from helper import GitURL
 import argparse
 import os
 from typing import Optional
+import requests
+import hashlib
 
 def add_create_action(crate: ROCrate, action_id: str, name: str, description: str):
     """
@@ -17,12 +19,59 @@ def add_create_action(crate: ROCrate, action_id: str, name: str, description: st
 
     return crate.add(ContextEntity(crate, action_id, properties))
 
+def get_or_create_gist(local_file_path: str, github_token: str) -> tuple[str, str]:
+    """
+    Checks for an existing Gist containing the file, or creates a new one.
+    Returns (gist_url, embed_code).
+    """
+    filename = os.path.basename(local_file_path)
+    with open(local_file_path, 'r', encoding='utf-8') as f:
+        file_content = f.read()
+
+    file_hash = hashlib.sha256(file_content.encode('utf-8')).hexdigest()
+    description_marker = f"[RO-Crate] {filename} SHA256: {file_hash}"
+
+    # Check existing Gists
+    headers = {
+        "Authorization": f"token {github_token}",
+        "Accept": "application/vnd.github+json"
+    }
+    response = requests.get("https://api.github.com/gists", headers=headers)
+    if response.status_code == 200:
+        gists = response.json()
+        for gist in gists:
+            if gist.get("description", "") == description_marker:
+                gist_url = gist["html_url"]
+                embed_code = f'<script src="{gist_url}.js"></script>'
+                return gist_url, embed_code
+
+    # Create a new Gist
+    data = {
+        "description": description_marker,
+        "public": True,
+        "files": {
+            filename: {
+                "content": file_content
+            }
+        }
+    }
+    create_response = requests.post("https://api.github.com/gists", headers=headers, json=data)
+    if create_response.status_code == 201:
+        gist = create_response.json()
+        gist_url = gist["html_url"]
+        embed_code = f'<script src="{gist_url}.js"></script>'
+        return gist_url, embed_code
+    else:
+        raise RuntimeError(f"Failed to create Gist: {create_response.text}")
+
 def add_software_application(crate: ROCrate, 
                              app_id: str, 
                              name: str, 
                              description: str, 
                              programming_language: str, 
-                             code_repository):
+                             code_repository: str,
+                             local_file_path: str,
+                             github_token: str):
     """
     Helper function to add a SoftwareApplication entity to the RO-Crate.
     """
@@ -33,6 +82,9 @@ def add_software_application(crate: ROCrate,
         "programmingLanguage": programming_language,
         "codeRepository": code_repository
     }
+    gist_url, embed_code = get_or_create_gist(local_file_path, github_token)
+    properties["associatedMedia"] = gist_url
+    properties["embedCode"] = embed_code
 
     return crate.add(ContextEntity(crate, app_id, properties))
 
@@ -186,13 +238,19 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
             "Batch Process NZ Application",
             "Application for batch processing New Zealand transect time series.",
             programming_language="Python",
-            code_repository=URL.get("batch_process_NZ.py")['permalink_url']),
+            code_repository=URL.get("batch_process_NZ.py")['permalink_url'],
+            local_file_path=os.path.join(coastsat_dir, "batch_process_NZ.py"),
+            github_token=os.environ.get("GITHUB_TOKEN", "")
+            ),
         add_software_application(crate,
             "#batch-process-sardinia-app",
             "Batch Process Sardinia Application",
             "Application for batch processing Sardinia transect time series.",
             programming_language="Python",
-            code_repository=URL.get("batch_process_Sardinia.py")['permalink_url'])
+            code_repository=URL.get("batch_process_sar.py")['permalink_url'],
+            local_file_path=os.path.join(coastsat_dir, "batch_process_sar.py"),
+            github_token=os.environ.get("GITHUB_TOKEN", "")
+            )
     ]
     nz_app, sardinia_app = software
 

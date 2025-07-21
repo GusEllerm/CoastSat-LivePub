@@ -57,11 +57,22 @@ conda activate coastsat_stencila_env
 
 ### 4. Run the Interface Crate Generator
 
+
 Once the environment is active, you can generate the `interface.crate` by running:
 
 ```bash
 python LP_Crate/interface_crate.py --coastsat-dir CoastSat --output-dir interface.crate
 ```
+
+#### ⚠️ GitHub Token Requirement
+
+This project uses the GitHub API to create or retrieve Gists for source code files. Before running the generator, make sure you have a GitHub Personal Access Token with Gist permissions and set it as an environment variable:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+```
+
+You can create a token at [https://github.com/settings/tokens](https://github.com/settings/tokens).
 
 ---
 
