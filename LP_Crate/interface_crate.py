@@ -59,6 +59,21 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
 
     external_data["hasPart"] = pacific_rim_data
 
+    # Loop over directories in csv_run7 within coastsat_dir
+    csv_run7_dir = Path(coastsat_dir) / "csv_run7"
+    file_entities = []
+    if csv_run7_dir.exists() and csv_run7_dir.is_dir():
+        files_to_add = []
+        for subdir in csv_run7_dir.iterdir():
+            if subdir.is_dir():
+                target_file = subdir / "time_series_tidally_corrected.csv"
+                if target_file.exists():
+                    files_to_add.append(target_file.relative_to(coastsat_dir).as_posix())
+        file_entities = add_file_entities(crate, files_to_add, Path(coastsat_dir), URL, limit=None)
+    
+    for file in file_entities:
+        pacific_rim_data.append_to("hasPart", file)
+
     # Link E1 entity to the external crate directory
     existing_parts = crate.root_dataset.get("hasPart", [])
     if not isinstance(existing_parts, list):
