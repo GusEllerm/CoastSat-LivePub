@@ -1,13 +1,14 @@
 from rocrate.rocrate import ROCrate
 from rocrate.model.contextentity import ContextEntity
 from helper import GitURL
+from config import get_file_limit
 import argparse
 import os
 from typing import Optional
 import requests
 import hashlib
 
-def add_create_action(crate: ROCrate, action_id: str, name: str, description: str):
+def add_create_action(crate: ROCrate, action_id: str, name: str, description: str) -> ContextEntity:
     """
     Helper function to create a CreateAction entity in the RO-Crate.
     """
@@ -17,7 +18,7 @@ def add_create_action(crate: ROCrate, action_id: str, name: str, description: st
         "description": description,
     }
 
-    return crate.add(ContextEntity(crate, action_id, properties))
+    return crate.add(ContextEntity(crate, action_id, properties))  # type: ignore
 
 def get_or_create_gist(local_file_path: str, github_token: str) -> tuple[str, str]:
     """
@@ -27,6 +28,16 @@ def get_or_create_gist(local_file_path: str, github_token: str) -> tuple[str, st
     filename = os.path.basename(local_file_path)
     with open(local_file_path, 'r', encoding='utf-8') as f:
         file_content = f.read()
+
+    # If no GitHub token is provided, return placeholder values
+    if not github_token:
+        print(f"⚠️  WARNING: No GitHub token found in GITHUB_TOKEN environment variable.")
+        print(f"   Gist creation for '{filename}' will be skipped.")
+        print(f"   To enable Gist creation, set GITHUB_TOKEN with a valid GitHub personal access token.")
+        print(f"   See: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token")
+        placeholder_url = f"https://example.com/gist/{filename}"
+        embed_code = f'<!-- Gist not created: {filename} -->'
+        return placeholder_url, embed_code
 
     file_hash = hashlib.sha256(file_content.encode('utf-8')).hexdigest()
     description_marker = f"[RO-Crate] {filename} SHA256: {file_hash}"
@@ -62,7 +73,15 @@ def get_or_create_gist(local_file_path: str, github_token: str) -> tuple[str, st
         embed_code = f'<script src="{gist_url}.js"></script>'
         return gist_url, embed_code
     else:
-        raise RuntimeError(f"Failed to create Gist: {create_response.text}")
+        # Fallback to placeholder values if Gist creation fails
+        print(f"⚠️  WARNING: Failed to create Gist for '{filename}'")
+        print(f"   HTTP {create_response.status_code}: {create_response.reason}")
+        if create_response.status_code == 401:
+            print(f"   This usually means the GITHUB_TOKEN is invalid or has insufficient permissions.")
+            print(f"   Please check your GitHub personal access token and ensure it has 'gist' scope.")
+        placeholder_url = f"https://example.com/gist/{filename}"
+        embed_code = f'<!-- Gist creation failed: {filename} -->'
+        return placeholder_url, embed_code
 
 def add_software_application(crate: ROCrate, 
                              app_id: str, 
@@ -71,7 +90,7 @@ def add_software_application(crate: ROCrate,
                              programming_language: str, 
                              code_repository: str,
                              local_file_path: str,
-                             github_token: str):
+                             github_token: str) -> ContextEntity:
     """
     Helper function to add a SoftwareApplication entity to the RO-Crate.
     """
@@ -86,10 +105,10 @@ def add_software_application(crate: ROCrate,
     properties["associatedMedia"] = gist_url
     properties["embedCode"] = embed_code
 
-    return crate.add(ContextEntity(crate, app_id, properties))
+    return crate.add(ContextEntity(crate, app_id, properties))  # type: ignore
 
 
-def add_person(crate: ROCrate, name: str, affiliation=None, orcid=None):
+def add_person(crate: ROCrate, name: str, affiliation=None, orcid=None) -> ContextEntity:
     """
     Helper function to add a Person entity to the RO-Crate.
     """
@@ -99,10 +118,10 @@ def add_person(crate: ROCrate, name: str, affiliation=None, orcid=None):
         "affiliation": affiliation
     }
 
-    return crate.add(ContextEntity(crate, orcid, properties))
+    return crate.add(ContextEntity(crate, orcid, properties))  # type: ignore
 
 
-def add_organization(crate: ROCrate, identifier: str, name: str):
+def add_organization(crate: ROCrate, identifier: str, name: str) -> ContextEntity:
     """
     Helper function to add an Organization entity to the RO-Crate.
     """
@@ -112,10 +131,10 @@ def add_organization(crate: ROCrate, identifier: str, name: str):
         "name": name
     }
 
-    return crate.add(ContextEntity(crate, identifier, properties))
+    return crate.add(ContextEntity(crate, identifier, properties))  # type: ignore
 
 
-def add_file_entity(crate: ROCrate, identifier: str, content_size, description, name, encoding_format: None, sha_256: Optional[str] = None):
+def add_file_entity(crate: ROCrate, identifier: str, content_size, description, name, encoding_format: Optional[str] = None, sha_256: Optional[str] = None) -> ContextEntity:
     """
     Helper function to add a File entity to the RO-Crate.
     """
@@ -127,12 +146,12 @@ def add_file_entity(crate: ROCrate, identifier: str, content_size, description, 
         "sha256": sha_256,
         "description": description
     }
-    file_entity = crate.add(ContextEntity(crate, identifier, properties))
+    file_entity = crate.add(ContextEntity(crate, identifier, properties))  # type: ignore
     crate.root_dataset.append_to("hasPart", file_entity)
     
-    return file_entity
+    return file_entity  # type: ignore
 
-def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir):
+def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir) -> list[ContextEntity]:
     """
     Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
     based on its @id (nz or sardinia) and sets a Dataset as its result.
@@ -143,7 +162,7 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
     elif "sardinia" in action_id:
         tag = "sar"
     else:
-        return  # unrecognized action id
+        return []  # unrecognized action id
 
     site_root = os.path.join(URL.repo_path, "data")
     matched_dirs = sorted([d for d in os.listdir(site_root) if d.startswith(tag)])
@@ -167,7 +186,7 @@ def add_time_series_outputs(crate: ROCrate, limit: Optional[int], action: Contex
 
     return file_entities
 
-def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir):
+def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: ContextEntity, URL: GitURL, coastsat_dir) -> list[ContextEntity]:
     """
     Adds up to 'limit' example transect_time_series.csv output files for the given CreateAction
     based on its @id (nz or sardinia) and sets a Dataset as its result.
@@ -182,7 +201,7 @@ def add_time_series_inputs(crate: ROCrate, limit: Optional[int], action: Context
         output_id = "#sardinia-transect-series-input"
         dataset_name = "Sardinia Transect Time Series Input Dataset"
     else:
-        return  # unrecognized action id
+        return []  # unrecognized action id
 
     site_root = os.path.join(URL.repo_path, "data")
     matched_dirs = sorted([d for d in os.listdir(site_root) if d.startswith(tag)])
@@ -256,7 +275,7 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
 
     # Add example inputs. This draws from the previous commit's data files
     # to ensure reproducibility, as the current commit may not have the same files.
-    limit = None
+    limit = get_file_limit()
     nz_timeseries_inputs = add_time_series_inputs(crate, limit, nz_action, URL, coastsat_dir)
     sar_timeseries_inputs = add_time_series_inputs(crate, limit, sardinia_action, URL, coastsat_dir)
 
@@ -323,10 +342,13 @@ def build_e1_crate(output_dir: str, coastsat_dir: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", required=True, help="Output directory for E1 RO-Crate")
+    parser.add_argument("--coastsat-dir", required=True, help="CoastSat directory path")
     args = parser.parse_args()
 
     output_path = os.path.abspath(args.output_dir)
     os.makedirs(output_path, exist_ok=True)
+    
+    build_e1_crate(output_path, args.coastsat_dir)
 
 if __name__ == "__main__":
     main()

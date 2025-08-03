@@ -1,6 +1,8 @@
 # RO-Crate Metadata Summary Tools
 
-This directory contains tools for generating summarized versions of RO-Crate metadata files from the LivePublication system.
+# RO-Crate Metadata Summary Tools
+
+This directory contains tools for generating summarized versions of RO-Crate metadata files from the LivePublication system. All tools now support flexible interface-crate path specification for maximum portability.
 
 ## Quick Start
 
@@ -8,21 +10,40 @@ To generate all summaries at once:
 
 ```bash
 cd tools/
+# Use default interface crate (../interface.crate)
 ./generate_all_summaries.sh
+
+# Use custom interface crate path
+./generate_all_summaries.sh /path/to/interface.crate
+
+# Use custom interface crate and output directory
+./generate_all_summaries.sh /path/to/interface.crate /custom/output/
 ```
 
-This will create a `../summaries/` directory with all generated summary files and an overview report.
+This will create summaries and an overview report in the specified output directory.
+
+## Path Handling
+
+All tools now intelligently handle interface crate paths:
+
+1. **Automatic Detection**: If an argument contains `ro-crate-metadata.json`, it's treated as an interface crate path
+2. **Relative Path Support**: Relative paths are automatically converted to absolute paths
+3. **Default Fallback**: If no path is specified, defaults to `../interface.crate`
+4. **Path Validation**: Scripts verify the interface crate directory exists and contains metadata
 
 ## Individual Tools
 
 ### Master Script
 - **`generate_all_summaries.sh`** - Generates all summaries and copies them to a single output directory
   ```bash
-  # Use default output directory (../summaries/)
+  # Default paths
   ./generate_all_summaries.sh
   
-  # Use custom output directory
-  ./generate_all_summaries.sh /path/to/output
+  # Custom interface crate
+  ./generate_all_summaries.sh /path/to/interface.crate
+  
+  # Custom interface crate and output directory
+  ./generate_all_summaries.sh /path/to/interface.crate /custom/output/
   ```
 
 ### Individual Generators
@@ -31,29 +52,54 @@ This will create a `../summaries/` directory with all generated summary files an
 - **`generate_interface_summary.py`** - Python script for interface crate summaries
 - **`generate_interface_summary.sh`** - Shell wrapper
   ```bash
+  # Default interface crate
   ./generate_interface_summary.sh
-  python3 generate_interface_summary.py --help
+  
+  # Custom interface crate path
+  ./generate_interface_summary.sh /path/to/interface.crate
+  
+  # Custom interface crate and output file
+  ./generate_interface_summary.sh /path/to/interface.crate /custom/output.json
+  
+  # Direct Python usage
+  python3 generate_interface_summary.py --input /path/to/ro-crate-metadata.json --output summary.json
   ```
 
 #### Batch Processes Summaries  
 - **`generate_batch_summary.py`** - Python script for batch processes summaries
 - **`generate_batch_summary.sh`** - Shell wrapper
   ```bash
+  # Default interface crate
   ./generate_batch_summary.sh
-  python3 generate_batch_summary.py --help
+  
+  # Custom interface crate path
+  ./generate_batch_summary.sh /path/to/interface.crate
+  
+  # Custom interface crate and output file
+  ./generate_batch_summary.sh /path/to/interface.crate /custom/output.json
+  
+  # Direct Python usage
+  python3 generate_batch_summary.py --input /path/to/batch_processes/ro-crate-metadata.json --output summary.json
   ```
 
 #### Notebook Summaries
 - **`generate_notebook_summary.py`** - Python script for notebook provenance summaries
 - **`generate_notebook_summary.sh`** - Shell wrapper
   ```bash
-  # Generate all notebook summaries
-  ./generate_notebook_summary.sh --all
+  # Generate all notebook summaries (default interface crate)
+  ./generate_notebook_summary.sh
+  
+  # Generate all notebook summaries (custom interface crate)
+  ./generate_notebook_summary.sh /path/to/interface.crate
   
   # Generate specific notebook summary
-  ./generate_notebook_summary.sh linear_models
+  ./generate_notebook_summary.sh /path/to/interface.crate slope_estimation
   
-  python3 generate_notebook_summary.py --help
+  # Legacy usage - specific notebook with default interface crate
+  ./generate_notebook_summary.sh slope_estimation
+  
+  # Direct Python usage
+  python3 generate_notebook_summary.py --interface-crate /path/to/interface.crate --all
   ```
 
 ## Output Files

@@ -1,10 +1,10 @@
 from notebook_provenance.notebook_to_provcrate import generate_provenance_crate_for_notebook
-from notebook_provenance.provenance_types import NotebookCellProvenance
+from notebook_provenance.provenance_types import NotebookCellProvenance, ProspectiveIndex
 
 from rocrate.rocrate import ROCrate
 from pathlib import Path
 import argparse
-from typing import List
+from typing import List, Union
 
 def build_e2_2_crate(output_dir: str, coastsat_dir: str, notebook_path: str) -> List[NotebookCellProvenance]:
     """
@@ -14,7 +14,12 @@ def build_e2_2_crate(output_dir: str, coastsat_dir: str, notebook_path: str) -> 
 
     crate, cell_prov = generate_provenance_crate_for_notebook(notebook_path, output_dir)
     crate.write(output_dir)
-    return cell_prov
+    
+    # Handle both ProspectiveIndex and List[NotebookCellProvenance] return types
+    if hasattr(cell_prov, 'steps'):
+        return cell_prov.steps  # type: ignore
+    else:
+        return cell_prov  # type: ignore
 
 def main():
     parser = argparse.ArgumentParser(description="Build LivePublication provenance crate.")

@@ -4,7 +4,6 @@ import nbformat
 import json
 import hashlib
 from pathlib import Path
-from glob import glob
 from typing import List, Dict, Set, Tuple, Any
 from rocrate.rocrate import ROCrate
 from rocrate.model.contextentity import ContextEntity
@@ -16,6 +15,7 @@ def parse_notebook_cells(notebook_path: str) -> List[str]:
         notebook = nbformat.read(f, as_version=4)
     return [cell["source"] for cell in notebook.cells if cell.cell_type == "code"]
 
+
 def create_code_cell_steps(crate: ROCrate, software_app: ContextEntity, notebook_path: str) -> List[NotebookCellProvenance]:
     sources = parse_notebook_cells(notebook_path)
     cell_entities = []
@@ -25,21 +25,20 @@ def create_code_cell_steps(crate: ROCrate, software_app: ContextEntity, notebook
             "position": i + 1,
             "name": f"Code cell {i+1}",
             "tool": {"@id": software_app.id}
-        }))
+        }))  # type: ignore
         cell_entities.append(NotebookCellProvenance(source=src, howto_step=step))
     return cell_entities
 
-def create_software_application(crate: ROCrate, notebook_path: str) -> ContextEntity:
-    
-    with open(notebook_path, 'r', encoding='utf-8') as f:
-      nb_data = json.load(f)
-      nb_metadata = nb_data.get("metadata", {})
-      kernel_info = nb_metadata.get("kernelspec", {})
-      kernel_name = kernel_info.get("name", "python3")
-      kernel_display_name = kernel_info.get("display_name", "Python 3")
-      kernel_version = nb_metadata.get("language_info", {}).get("version", "unknown")
 
-    
+def create_software_application(crate: ROCrate, notebook_path: str) -> ContextEntity:
+    with open(notebook_path, 'r', encoding='utf-8') as f:
+        nb_data = json.load(f)
+        nb_metadata = nb_data.get("metadata", {})
+        kernel_info = nb_metadata.get("kernelspec", {})
+        kernel_name = kernel_info.get("name", "python3")
+        kernel_display_name = kernel_info.get("display_name", "Python 3")
+        kernel_version = nb_metadata.get("language_info", {}).get("version", "unknown")
+
     software_app: Any = crate.add(ContextEntity(crate, "#jupyter-kernel", properties={
         "@type": "SoftwareApplication",
         "name": "Jupyter Notebook Kernel",
@@ -50,6 +49,7 @@ def create_software_application(crate: ROCrate, notebook_path: str) -> ContextEn
         "softwareVersion": kernel_version
     }))
     return software_app
+
 
 def extract_unique_file_paths(sources: List[str]) -> Tuple[Set[str], Set[str]]:
     read_patterns = [
@@ -73,6 +73,7 @@ def extract_unique_file_paths(sources: List[str]) -> Tuple[Set[str], Set[str]]:
 
     return input_paths, output_paths
 
+
 def _normalize_interpolated_path(path: str) -> str:
     """
     Normalize interpolated or globbed paths by:
@@ -91,6 +92,7 @@ def _normalize_interpolated_path(path: str) -> str:
 
     return path
 
+
 def file_sha256(filepath: str) -> str:
     """
     Compute the SHA256 hash of a file.
@@ -107,8 +109,8 @@ def file_sha256(filepath: str) -> str:
             sha256.update(chunk)
     return sha256.hexdigest()
 
+
 def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_path, notebook_file, cell_entities, formal_params):
-    
     code_blocks_dir = Path(crate_output_dir).parent / "code_blocks"
     code_blocks_dir.mkdir(parents=True, exist_ok=True)
 
@@ -127,9 +129,9 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
                 "name": f"Code Cell {i+1}",
                 "sha256": file_sha256(str(code_path)),
             }
-        )
+        )  # type: ignore
         cell.software_app = code_file
-        cell.howto_step["workExample"] = {"@id": code_file.id}
+        cell.howto_step["workExample"] = {"@id": code_file.id}  # type: ignore
 
         # Match file paths used in this code block
         input_paths, output_paths = extract_unique_file_paths([cell.source])
@@ -143,12 +145,12 @@ def link_steps_to_code_blocks(crate: ROCrate, crate_output_dir: Path, notebook_p
         cell.notebook_path = notebook_path
 
         # Attach formal parameters to this code file (avoid duplicates, use basename as key)
-        code_file["input"] = [
+        code_file["input"] = [  # type: ignore
             {"@id": formal_params[os.path.basename(p)].id}
             for p in sorted(set(input_paths))
             if os.path.basename(p) in formal_params
         ] if input_paths else []
-        code_file["output"] = [
+        code_file["output"] = [  # type: ignore
             {"@id": formal_params[os.path.basename(p)].id}
             for p in sorted(set(output_paths))
             if os.path.basename(p) in formal_params
@@ -192,6 +194,7 @@ def create_formal_parameters(crate, source_lines: List[str], notebook_file, soft
 
     return formal_params
 
+
 def get_matching_notebook_cell(cell_entity: NotebookCellProvenance, notebook_path: str) -> Dict:
     """
     Given a NotebookCellProvenance object and a notebook path, return the matching notebook cell.
@@ -212,22 +215,19 @@ def add_create_actions(crate: ROCrate, cell_entities: List[NotebookCellProvenanc
     for cell in cell_entities:
         action = crate.add(ContextEntity(crate, f"#create-action-{cell.howto_step.id.split('-')[-1]}", properties={
             "@type": "CreateAction",
-            "instrument": {"@id": cell.software_app.id},
-        }))
-        
+            "instrument": {"@id": cell.software_app.id if cell.software_app else ""},  # type: ignore
+        }))  # type: ignore
+
         cell.create_action = action
-        cell.howto_step["about"] = {"@id": action.id}
+        cell.howto_step["about"] = {"@id": action.id}  # type: ignore
 
     return cell_entities
 
+
 def add_prov_results(crate: ROCrate, cell_entities: List[NotebookCellProvenance], notebook_path, crate_output_dir):
     """
-    Add ProvResult entities for each CreateAction, scraping the jupyter notebook for Plotly results. 
+    Add ProvResult entities for each CreateAction, scraping the jupyter notebook for Plotly results.
     """
-    # Open the notebook
-    with open(notebook_path, "r", encoding="utf-8") as f:
-        notebook = nbformat.read(f, as_version=4)
-
     # Find crate output directory
     crate_output_dir = Path(crate_output_dir).parent
     plotly_output_dir = crate_output_dir / "plotly_results"
@@ -263,10 +263,10 @@ def add_prov_results(crate: ROCrate, cell_entities: List[NotebookCellProvenance]
                         "encodingFormat": "application/vnd.plotly.v1+json",
                         "name": f"Plotly chart from {cell.howto_step.id}"
                     }
-                )
+                )  # type: ignore
 
                 cell.prov_result = result_file
-                cell.create_action["result"] = {"@id": result_file.id}
+                if cell.create_action:
+                    cell.create_action["result"] = {"@id": result_file.id}  # type: ignore
 
     return cell_entities
-

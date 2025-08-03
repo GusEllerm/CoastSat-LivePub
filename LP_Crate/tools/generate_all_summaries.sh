@@ -1,8 +1,10 @@
 #!/bin/bash
 # Master script to generate all RO-Crate metadata summaries
-# Usage: ./generate_all_summaries.sh [output_directory]
+# Usage: ./generate_all_summaries.sh [interface_crate_path] [output_directory]
 
 set -e  # Exit on error
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Handle help request
 if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
@@ -10,17 +12,19 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 RO-Crate Metadata Summary Generator
 ==================================
 
-Usage: ./generate_all_summaries.sh [output_directory]
+Usage: ./generate_all_summaries.sh [interface_crate_path] [output_directory]
 
 This script generates summarized versions of all RO-Crate metadata files
 from the LivePublication system and copies them to a single output directory.
 
 Arguments:
-  output_directory    Directory to store all summary files (default: ../summaries/)
+  interface_crate_path   Path to interface.crate directory (default: ../interface.crate/)
+  output_directory       Directory to store all summary files (default: ../summaries/)
 
 Examples:
-  ./generate_all_summaries.sh                    # Use default output directory
-  ./generate_all_summaries.sh /tmp/summaries     # Use custom output directory
+  ./generate_all_summaries.sh                               # Use default paths
+  ./generate_all_summaries.sh ../interface.crate/           # Specify interface crate path
+  ./generate_all_summaries.sh ../interface.crate/ /tmp/summaries  # Both paths
 
 Generated Files:
   - interface-crate-summary.json         (Main interface crate summary)
@@ -43,18 +47,54 @@ EOF
     exit 0
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Set default paths and parse arguments
+DEFAULT_INTERFACE_CRATE="$SCRIPT_DIR/../interface.crate"
 DEFAULT_OUTPUT_DIR="$SCRIPT_DIR/../summaries"
-OUTPUT_DIR="${1:-$DEFAULT_OUTPUT_DIR}"
+
+if [ $# -eq 0 ]; then
+    # No arguments - use defaults
+    INTERFACE_CRATE_PATH="$DEFAULT_INTERFACE_CRATE"
+    OUTPUT_DIR="$DEFAULT_OUTPUT_DIR"
+elif [ $# -eq 1 ]; then
+    # One argument - could be interface crate path or output dir
+    if [ -d "$1" ] && [ -f "$1/ro-crate-metadata.json" ]; then
+        # Looks like interface crate path
+        INTERFACE_CRATE_PATH="$1"
+        OUTPUT_DIR="$DEFAULT_OUTPUT_DIR"
+    else
+        # Treat as output directory
+        INTERFACE_CRATE_PATH="$DEFAULT_INTERFACE_CRATE"
+        OUTPUT_DIR="$1"
+    fi
+elif [ $# -eq 2 ]; then
+    # Two arguments - interface crate path and output dir
+    INTERFACE_CRATE_PATH="$1"
+    OUTPUT_DIR="$2"
+else
+    echo "Error: Too many arguments. See --help for usage."
+    exit 1
+fi
+
+# Convert to absolute paths and validate
+if [ ! -d "$INTERFACE_CRATE_PATH" ]; then
+    echo "Error: Interface crate directory not found: $INTERFACE_CRATE_PATH"
+    exit 1
+fi
+
+if [ ! -f "$INTERFACE_CRATE_PATH/ro-crate-metadata.json" ]; then
+    echo "Error: Interface crate metadata not found: $INTERFACE_CRATE_PATH/ro-crate-metadata.json"
+    exit 1
+fi
+
+INTERFACE_CRATE_PATH="$(cd "$INTERFACE_CRATE_PATH" && pwd)"
+OUTPUT_DIR="$(mkdir -p "$OUTPUT_DIR" && cd "$OUTPUT_DIR" && pwd)"
 
 echo "==============================================="
 echo "RO-Crate Metadata Summary Generator"
 echo "==============================================="
+echo "Interface crate path: $INTERFACE_CRATE_PATH"
 echo "Output directory: $OUTPUT_DIR"
 echo
-
-# Create output directory
-mkdir -p "$OUTPUT_DIR"
 
 # Function to copy summary file with better naming
 copy_summary() {
@@ -73,32 +113,46 @@ copy_summary() {
 echo "1. Generating Interface Crate Summary..."
 echo "----------------------------------------"
 cd "$SCRIPT_DIR"
-python3 generate_interface_summary.py
+python3 generate_interface_summary.py --input "$INTERFACE_CRATE_PATH/ro-crate-metadata.json" --output "$INTERFACE_CRATE_PATH/ro-crate-metadata.summary.json"
 
 # Copy interface summary
-copy_summary "../interface.crate/ro-crate-metadata.summary.json" "interface-crate-summary.json"
+copy_summary "$INTERFACE_CRATE_PATH/ro-crate-metadata.summary.json" "interface-crate-summary.json"
 echo
 
 # Generate batch processes summary  
 echo "2. Generating Batch Processes Summary..."
 echo "----------------------------------------"
-python3 generate_batch_summary.py
+BATCH_INPUT="$INTERFACE_CRATE_PATH/batch_processes/ro-crate-metadata.json"
+BATCH_OUTPUT="$INTERFACE_CRATE_PATH/batch_processes/ro-crate-metadata.summary.json"
 
-# Copy batch summary
-copy_summary "../interface.crate/batch_processes/ro-crate-metadata.summary.json" "batch-processes-summary.json"
+if [ -f "$BATCH_INPUT" ]; then
+    python3 generate_batch_summary.py --input "$BATCH_INPUT" --output "$BATCH_OUTPUT"
+    copy_summary "$BATCH_OUTPUT" "batch-processes-summary.json"
+else
+    echo "  Warning: Batch processes metadata not found at $BATCH_INPUT"
+fi
 echo
 
 # Generate notebook summaries
 echo "3. Generating Notebook Summaries..."
 echo "-----------------------------------"
-python3 generate_notebook_summary.py --all
+NOTEBOOKS_DIR="$INTERFACE_CRATE_PATH/notebooks"
 
-# Copy notebook summaries with descriptive names
-echo "  Copying notebook summaries..."
-copy_summary "../interface.crate/notebooks/linear_models/ro-crate-metadata.summary.json" "notebook-linear-models-summary.json"
-copy_summary "../interface.crate/notebooks/slope_estimation/ro-crate-metadata.summary.json" "notebook-slope-estimation-summary.json"
-copy_summary "../interface.crate/notebooks/tidal_correction-1/ro-crate-metadata.summary.json" "notebook-tidal-correction-1-summary.json"
-copy_summary "../interface.crate/notebooks/tidal_correction-2/ro-crate-metadata.summary.json" "notebook-tidal-correction-2-summary.json"
+if [ -d "$NOTEBOOKS_DIR" ]; then
+    python3 generate_notebook_summary.py --interface-crate "$INTERFACE_CRATE_PATH" --all
+    
+    # Copy notebook summaries with descriptive names
+    echo "  Copying notebook summaries..."
+    for notebook_dir in "$NOTEBOOKS_DIR"/*; do
+        if [ -d "$notebook_dir" ]; then
+            notebook_name="$(basename "$notebook_dir")"
+            summary_file="$notebook_dir/ro-crate-metadata.summary.json"
+            copy_summary "$summary_file" "notebook-${notebook_name}-summary.json"
+        fi
+    done
+else
+    echo "  Warning: Notebooks directory not found at $NOTEBOOKS_DIR"
+fi
 echo
 
 # Generate overview report
@@ -125,10 +179,7 @@ This directory contains summarized versions of all RO-Crate metadata files from 
   - Achieves 99.9%+ size reduction due to high file count
 
 ### Notebook Provenance
-- **notebook-linear-models-summary.json** - Linear models analysis workflow
-- **notebook-slope-estimation-summary.json** - Slope estimation workflow  
-- **notebook-tidal-correction-1-summary.json** - Tidal correction workflow (instance 1)
-- **notebook-tidal-correction-2-summary.json** - Tidal correction workflow (instance 2)
+- **notebook-*-summary.json** - Individual notebook workflow summaries
   - Each preserves complete workflow structure with HowToSteps and formal parameters
   - Size reduction: 40-65% while maintaining computational narrative
 
@@ -136,8 +187,9 @@ This directory contains summarized versions of all RO-Crate metadata files from 
 
 EOF
 
-# Add generation timestamp and file sizes
+# Add generation timestamp and source path
 echo "Generated on: $(date)" >> "$OVERVIEW_FILE"
+echo "Source interface crate: $INTERFACE_CRATE_PATH" >> "$OVERVIEW_FILE"
 echo "" >> "$OVERVIEW_FILE"
 echo "## File Sizes" >> "$OVERVIEW_FILE"
 echo "" >> "$OVERVIEW_FILE"
@@ -157,8 +209,8 @@ echo
 echo "==============================================="
 echo "Summary Generation Complete!"
 echo "==============================================="
-echo "All summaries have been generated and copied to:"
-echo "  $OUTPUT_DIR"
+echo "Source: $INTERFACE_CRATE_PATH"
+echo "Output: $OUTPUT_DIR"
 echo
 echo "Files generated:"
 ls -la "$OUTPUT_DIR" | grep -E '\.(json|md)$' | awk '{print "  " $9 " (" $5 " bytes)"}'

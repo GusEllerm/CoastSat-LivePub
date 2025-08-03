@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Optional, Any, Dict
-from rocrate.rocrate import ROCrate
 from rocrate.model.contextentity import ContextEntity
+
 
 @dataclass
 class NotebookCellProvenance:
@@ -18,6 +18,7 @@ class NotebookCellProvenance:
     output_files: Optional[List[ContextEntity]] = None
     notebook_path: Optional[str] = None
     parent_notebook: Optional[ContextEntity] = None
+
 
 @dataclass
 class ProspectiveIndex:

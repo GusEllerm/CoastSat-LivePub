@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from rocrate.rocrate import ROCrate
 from rocrate.model.person import Person
 from rocrate.model.contextentity import ContextEntity
@@ -10,6 +10,7 @@ from helper import GitURL
 from e1_crate import build_e1_crate
 from e2_2_crate import build_e2_2_crate
 from notebook_provenance.provenance_types import NotebookCellProvenance
+from config import get_file_limit
 
 import os
 import re
@@ -42,37 +43,8 @@ def build_e1(crate: ROCrate, coastsat_dir: str, URL: GitURL, E1, output_dir):
     # Add Pacific Rim data source
     # This is an external dataset used in the data production process
     # It is not part of the process run crate but is linked to E1
-    external_data = crate.add(ContextEntity(crate, "external-data", properties={
-        "name": "External Data Sources",
-        "@type": "Dataset",
-        "name": "External Data Sources",
-        "description": "External data sources used in the data production process."
-        }))
-
-    pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554/", properties={
-        "@type": "Dataset",
-        "name": "Pacific Rim Data",
-        "description": "External data sources used in the data production process.",
-        "encodingFormat": "text/csv",
-        "sameAs": "https://doi.org/10.5281/zenodo.15614554"
-    }))
-
-    external_data["hasPart"] = pacific_rim_data
-
-    # Loop over directories in csv_run7 within coastsat_dir
-    csv_run7_dir = Path(coastsat_dir) / "csv_run7"
-    file_entities = []
-    if csv_run7_dir.exists() and csv_run7_dir.is_dir():
-        files_to_add = []
-        for subdir in csv_run7_dir.iterdir():
-            if subdir.is_dir():
-                target_file = subdir / "time_series_tidally_corrected.csv"
-                if target_file.exists():
-                    files_to_add.append(target_file.relative_to(coastsat_dir).as_posix())
-        file_entities = add_file_entities(crate, files_to_add, Path(coastsat_dir), URL, limit=None)
-    
-    for file in file_entities:
-        pacific_rim_data.append_to("hasPart", file)
+    pacific_rim_data = add_pacific_rim_data(crate, coastsat_dir, URL)
+    external_data = crate.get("external-data")
 
     # Link E1 entity to the external crate directory
     existing_parts = crate.root_dataset.get("hasPart", [])
@@ -112,9 +84,9 @@ def create_update_workflow_entity(crate: ROCrate, update_script_path: Path, comm
         "@type": "ComputerLanguage",
         "name": "Bash",
         "description": "Bash is a Unix shell and command language."
-    }))
+    }))  # type: ignore
 
-    return crate.add_file(
+    return crate.add_file(  # type: ignore
         update_script_path,
         properties={
             "@type": ["SoftwareSourceCode", "HowTo", "File"],
@@ -167,7 +139,7 @@ def create_workflow_step_entities(crate: ROCrate, coastsat_dir: Path, step_files
             "position": str(position),
             "sha256": compute_sha256(filepath) if filepath.is_file() else None,
         })
-        notebook_entities.append({"@id": entity.id})
+        notebook_entities.append({"@id": entity.id})  # type: ignore
 
     return notebook_entities
 
@@ -275,7 +247,9 @@ def create_file_entity(crate, file_path, URL, name_override=None, description_ov
     crate.root_dataset.append_to("hasPart", file_entity)
     return file_entity
 
-def add_file_entities(crate, file_list, coastsat_dir, URL, limit, previous=False):
+def add_file_entities(crate, file_list, coastsat_dir, URL, limit=None, previous=False):
+    if limit is None:
+        limit = get_file_limit()
     file_entities = set()
 
     for file in file_list:
@@ -303,6 +277,8 @@ def link_files_to_parameters(files, parameters):
                 file.append_to("exampleOfWork", param)
 
 def add_files_to_parameters(crate, cell_provenance: dict[str, List[NotebookCellProvenance]], workflow_fp, coastsat_dir, URL, limit=None):
+    if limit is None:
+        limit = get_file_limit()
 
     input_files = set()
     output_files = set()
@@ -409,7 +385,7 @@ def generate_formal_parameters(crate: ROCrate, cell_provenance: dict[str, List[N
         workflow_entity.append_to("output", fp)
         workflow_fp["output"].append(fp)
 
-    add_files_to_parameters(crate, cell_provenance, workflow_fp, coastsat_dir, URL, limit=None)
+    add_files_to_parameters(crate, cell_provenance, workflow_fp, coastsat_dir, URL, get_file_limit())
     
 
 def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict], coastsat_dir: Path, output_dir: Path):
@@ -424,8 +400,8 @@ def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict],
         e2_2_directory = "notebooks"
         e2_2_subdirectory = Path(output_dir) / e2_2_directory / stem
         e2_2_subdirectory.mkdir(parents=True, exist_ok=True)
-        notebook_path = coastsat_dir / crate.get(fileid)["name"]
-        result = build_e2_2_crate(str(e2_2_subdirectory), coastsat_dir, notebook_path)
+        notebook_path = coastsat_dir / crate.get(fileid)["name"]  # type: ignore
+        result = build_e2_2_crate(str(e2_2_subdirectory), str(coastsat_dir), str(notebook_path))
         cell_prov[fileid] = result
         crate_manifest_path = Path(e2_2_subdirectory) / "ro-crate-metadata.json"
         crate_manifest = crate_manifest_path.relative_to(output_dir).as_posix()
@@ -438,10 +414,12 @@ def create_notebook_provenance_crates(crate: ROCrate, step_entities: list[dict],
         
         # Link the notebook crate to its associated step entity
         step_entity = crate.get(fileid)
-        step_entity["exampleOfWork"] = notebook_crate_entity
+        step_entity["exampleOfWork"] = notebook_crate_entity  # type: ignore
     return notebook_crates, cell_prov
 
 def get_nzd_xlsx_files(data_dir, limit=None):
+    if limit is None:
+        limit = get_file_limit()
     count = 0
     for site_id in os.listdir(data_dir):
         site_path = os.path.join(data_dir, site_id)
@@ -453,18 +431,74 @@ def get_nzd_xlsx_files(data_dir, limit=None):
                 if limit is not None and count >= limit:
                     break
 
+def add_pacific_rim_data(crate: ROCrate, coastsat_dir: str, URL: GitURL, limit: Optional[int] = None) -> ContextEntity:
+    """
+    Add Pacific Rim external dataset to the crate with file limit applied.
+    
+    Args:
+        crate: The ROCrate instance
+        coastsat_dir: Path to the CoastSat directory
+        URL: GitURL helper instance
+        limit: Maximum number of files to add (uses get_file_limit() if None)
+    
+    Returns:
+        The pacific_rim_data ContextEntity
+    """
+    if limit is None:
+        limit = get_file_limit()
+    
+    # Create external data container
+    external_data = crate.add(ContextEntity(crate, "external-data", properties={
+        "name": "External Data Sources",
+        "@type": "Dataset",
+        "name": "External Data Sources",
+        "description": "External data sources used in the data production process."
+    }))  # type: ignore
+
+    # Create Pacific Rim dataset entity
+    pacific_rim_data = crate.add(ContextEntity(crate, "https://zenodo.org/records/15614554/", properties={
+        "@type": "Dataset",
+        "name": "Pacific Rim Data",
+        "description": "External data sources used in the data production process.",
+        "encodingFormat": "text/csv",
+        "sameAs": "https://doi.org/10.5281/zenodo.15614554"
+    }))  # type: ignore
+
+    external_data["hasPart"] = pacific_rim_data  # type: ignore
+
+    # Loop over directories in csv_run7 within coastsat_dir (with limit)
+    csv_run7_dir = Path(coastsat_dir) / "csv_run7"
+    file_entities = []
+    if csv_run7_dir.exists() and csv_run7_dir.is_dir():
+        files_to_add = []
+        count = 0
+        for subdir in csv_run7_dir.iterdir():
+            if subdir.is_dir():
+                target_file = subdir / "time_series_tidally_corrected.csv"
+                if target_file.exists():
+                    files_to_add.append(target_file.relative_to(coastsat_dir).as_posix())
+                    count += 1
+                    if limit is not None and count >= limit:
+                        break
+        file_entities = add_file_entities(crate, files_to_add, Path(coastsat_dir), URL, limit)
+    
+    for file in file_entities:
+        pacific_rim_data.append_to("hasPart", file)  # type: ignore
+
+    return pacific_rim_data  # type: ignore
+
+
 def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir: Path, URL: GitURL):
     transects_path = coastsat_dir / "transects.xlsx"
     if not transects_path.is_file():
         raise FileNotFoundError(f"transects.xlsx not found in {coastsat_dir}")
     
-    transects_fp = crate.add_formal_parameter(
-        name="#fp-transects_xlsx-1", 
-        additionalType="File",  
-        identifier="#fp-transects_xlsx-1",
-        valueRequired=False,
-        properties={}
-    )  
+    transects_fp = crate.add(ContextEntity(crate, "#fp-transects_xlsx-1", properties={
+        "@type": "FormalParameter",
+        "name": "#fp-transects_xlsx-1",
+        "additionalType": "File",
+        "valueRequired": False
+    }))  # type: ignore  
     info = URL.get(transects_path)
     props = {
         "@type": "File",
@@ -477,20 +511,19 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
             "This file did not exist in the current git commit; "
             "indicating changes happened between major releases."
         )
-    file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
+    file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))  # type: ignore
     make_xlsx_entity.append_to("output", transects_fp)
-    file_entity["exampleOfWork"] = transects_fp
+    file_entity["exampleOfWork"] = transects_fp  # type: ignore
     crate.root_dataset.append_to("hasPart", file_entity)
 
-    transect_site_xlsx = crate.add_formal_parameter(
-            name="#fp-transect_site_xlsx-1", 
-            additionalType="File",  
-            identifier="#fp-transect_site_xlsx-1",
-            valueRequired=False,
-            properties={}
-        )
+    transect_site_xlsx = crate.add(ContextEntity(crate, "#fp-transect_site_xlsx-1", properties={
+        "@type": "FormalParameter",
+        "name": "#fp-transect_site_xlsx-1",
+        "additionalType": "File",
+        "valueRequired": False
+    }))  # type: ignore
     make_xlsx_entity.append_to("output", transect_site_xlsx)
-    for file in get_nzd_xlsx_files(coastsat_dir / "data", limit=None):
+    for file in get_nzd_xlsx_files(coastsat_dir / "data", get_file_limit()):
         info = URL.get(file)
         props = {
             "@type": "File",
@@ -503,13 +536,13 @@ def add_xlsx_outputs(crate: ROCrate, make_xlsx_entity: DataEntity, coastsat_dir:
                 "This file did not exist in the current git commit; "
                 "indicating changes happened between major releases."
             )
-        file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))
-        file_entity["exampleOfWork"] = transect_site_xlsx
+        file_entity = crate.add(ContextEntity(crate, info["permalink_url"], properties=props))  # type: ignore
+        file_entity["exampleOfWork"] = transect_site_xlsx  # type: ignore
         crate.root_dataset.append_to("hasPart", file_entity)
 
     update_script = crate.get("update.sh")
-    update_script.append_to("output", transects_fp)
-    update_script.append_to("output", transect_site_xlsx)
+    update_script.append_to("output", transects_fp)  # type: ignore
+    update_script.append_to("output", transect_site_xlsx)  # type: ignore
 
 def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir):
     """
@@ -534,8 +567,8 @@ def build_e2_2(crate: ROCrate, coastsat_dir: Path, URL: GitURL, E2_2, output_dir
     make_xlsx = crate.get("make_xlsx.py")
     txfp = crate.get("#fp-transectsextended-1")
     ttstcfp = crate.get("#fp-transecttimeseriestidallycorrected-2")
-    make_xlsx["input"] = [txfp, ttstcfp]
-    add_xlsx_outputs(crate, make_xlsx, coastsat_dir, URL)
+    make_xlsx["input"] = [txfp, ttstcfp]  # type: ignore
+    add_xlsx_outputs(crate, make_xlsx, coastsat_dir, URL)  # type: ignore
 
     # Remove code_blocks directory from {output_dir}/notebooks if it exists
     code_blocks_dir = Path(output_dir) / "notebooks" / "code_blocks"
@@ -608,7 +641,7 @@ def add_aggregate_entities(crate: ROCrate, URL: GitURL):
         "description": "Results of the executed workflow, such as figures and summary data products."
     }))
     
-    crate.mainEntity["hasPart"] = [E1, E2_1, E2_2, E3]
+    crate.mainEntity["hasPart"] = [E1, E2_1, E2_2, E3]  # type: ignore
 
     return {
         "E1": E1,

@@ -14,6 +14,74 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 
+def compact_simple_objects(json_str: str) -> str:
+    """
+    Post-process JSON string to inline simple objects and arrays.
+    Converts patterns like:
+    
+    "key": [
+     {
+      "@id": "value"
+     }
+    ],
+    
+    To: "key": [{"@id": "value"}],
+    
+    And:
+    
+    "@type": [
+     "FormalParameter"
+    ],
+    
+    To: "@type": ["FormalParameter"],
+    """
+    import re
+    
+    # Pattern 1: Simple single-property objects in arrays
+    pattern1 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n\s*{\s*\n\s*("@id"):\s*("[^"]*")\s*\n\s*}\s*\n\s*\],?',
+        re.MULTILINE
+    )
+    json_str = pattern1.sub(r'\1: [{\2: \3}],', json_str)
+    
+    # Pattern 2: Simple single-property objects (not in arrays)
+    pattern2 = re.compile(
+        r'("[\w@-]+"):\s*{\s*\n\s*("@id"):\s*("[^"]*")\s*\n\s*},?',
+        re.MULTILINE
+    )
+    json_str = pattern2.sub(r'\1: {\2: \3},', json_str)
+    
+    # Pattern 3: Simple single-string arrays
+    # Matches: "key": [\n  "value"\n ],
+    pattern3 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n\s*("[^"]*")\s*\n\s*\],?',
+        re.MULTILINE
+    )
+    json_str = pattern3.sub(r'\1: [\2],', json_str)
+    
+    # Pattern 4: Multi-string arrays on separate lines (common for @type arrays)
+    # Matches: "key": [\n  "value1",\n  "value2",\n  "value3"\n ],
+    pattern4 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n((?:\s*"[^"]*",?\s*\n)+)\s*\],?',
+        re.MULTILINE
+    )
+    
+    def inline_array_items(match):
+        key = match.group(1)
+        items_text = match.group(2)
+        # Extract all quoted strings from the items
+        items = re.findall(r'"[^"]*"', items_text)
+        items_str = ', '.join(items)
+        return f'{key}: [{items_str}],'
+    
+    json_str = pattern4.sub(inline_array_items, json_str)
+    
+    # Clean up any trailing commas before closing brackets/braces
+    json_str = re.sub(r',(\s*[}\]])', r'\1', json_str)
+    
+    return json_str
+
+
 def count_items_by_type(graph: List[Dict[str, Any]]) -> Dict[str, int]:
     """Count items by their @type."""
     type_counts = {}
@@ -106,8 +174,66 @@ def create_notebook_summary(data: Dict[str, Any]) -> Dict[str, Any]:
     if jupyter_kernel:
         summary["@graph"].append(jupyter_kernel)
     
-    # Add enumerated workflow steps
-    summary["@graph"].extend(workflow_steps)
+    # Add collapsed workflow steps summary instead of individual steps
+    if workflow_steps:
+        # Analyze workflow step patterns
+        step_positions = [step.get("position", 0) for step in workflow_steps]
+        step_names = [step.get("name", "Unknown") for step in workflow_steps]
+        step_tools = set()
+        step_actions = set()
+        
+        for step in workflow_steps:
+            tool_id = step.get("tool", {}).get("@id", "")
+            if tool_id:
+                step_tools.add(tool_id)
+            
+            about_id = step.get("about", {}).get("@id", "")
+            if about_id:
+                step_actions.add(about_id)
+        
+        # Create summary representation
+        workflow_summary = {
+            "@id": "... workflow steps ...",
+            "@type": "HowToStepSummary",
+            "count": len(workflow_steps),
+            "position_range": [min(step_positions), max(step_positions)] if step_positions else [0, 0],
+            "step_pattern": f"{step_names[0]} to {step_names[-1]}" if len(step_names) > 1 else step_names[0] if step_names else "No steps",
+            "tools_used": list(step_tools),
+            "actions_referenced": len(step_actions),
+            "note": f"Collapsed {len(workflow_steps)} HowToStep entities for readability"
+        }
+        
+        # Keep first and last few steps if there are many
+        if len(workflow_steps) <= 6:
+            # For small numbers, show all steps individually
+            summary["@graph"].extend(workflow_steps)
+        else:
+            # For large numbers, show first 2, summary of middle steps, last 2
+            first_steps = workflow_steps[:2]
+            last_steps = workflow_steps[-2:]
+            collapsed_count = len(workflow_steps) - 4  # Total minus first 2 and last 2
+            
+            # Add first 2 steps
+            summary["@graph"].extend(first_steps)
+            
+            # Create summary for the collapsed middle steps
+            workflow_summary = {
+                "@id": "... workflow steps ...",
+                "@type": "HowToStepSummary", 
+                "count": collapsed_count,
+                "position_range": [workflow_steps[2].get("position", 0), workflow_steps[-3].get("position", 0)] if len(workflow_steps) > 4 else [0, 0],
+                "step_pattern": f"{workflow_steps[2].get('name', 'Unknown')} to {workflow_steps[-3].get('name', 'Unknown')}" if len(workflow_steps) > 4 else "No middle steps",
+                "tools_used": list(step_tools),
+                "actions_referenced": len(step_actions),
+                "note": f"Collapsed {collapsed_count} middle HowToStep entities (showing first 2 and last 2)"
+            }
+            
+            # Add summary only if there are actually middle steps to collapse
+            if collapsed_count > 0:
+                summary["@graph"].append(workflow_summary)
+            
+            # Add last 2 steps
+            summary["@graph"].extend(last_steps)
     
     # Add enumerated formal parameters
     summary["@graph"].extend(formal_parameters)
@@ -187,6 +313,11 @@ def main():
         help="JSON indentation (default: 2)"
     )
     parser.add_argument(
+        "--interface-crate", "-c",
+        default=None,
+        help="Path to interface.crate directory (overrides default path resolution)"
+    )
+    parser.add_argument(
         "--all", "-a",
         action="store_true",
         help="Process all notebook directories"
@@ -213,7 +344,10 @@ def main():
     
     elif args.all or args.notebook_dir is None:
         # Process all notebook directories
-        notebooks_base = script_dir / ".." / "interface.crate" / "notebooks"
+        if args.interface_crate:
+            notebooks_base = Path(args.interface_crate) / "notebooks"
+        else:
+            notebooks_base = script_dir / ".." / "interface.crate" / "notebooks"
         if notebooks_base.exists():
             for nb_dir in notebooks_base.iterdir():
                 if nb_dir.is_dir():
@@ -224,7 +358,10 @@ def main():
     
     else:
         # Process specific notebook directory
-        input_path = script_dir / ".." / "interface.crate" / "notebooks" / args.notebook_dir / "ro-crate-metadata.json"
+        if args.interface_crate:
+            input_path = Path(args.interface_crate) / "notebooks" / args.notebook_dir / "ro-crate-metadata.json"
+        else:
+            input_path = script_dir / ".." / "interface.crate" / "notebooks" / args.notebook_dir / "ro-crate-metadata.json"
         output_path = input_path.parent / "ro-crate-metadata.summary.json"
         
         if args.output:
@@ -260,7 +397,16 @@ def main():
             
             # Write summary
             with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump(summary, f, indent=args.indent, ensure_ascii=False)
+                json.dump(summary, f, indent=1, ensure_ascii=False, separators=(',', ': '))
+            
+            # Post-process to inline simple objects
+            with open(output_path, 'r', encoding='utf-8') as f:
+                json_content = f.read()
+            
+            compact_content = compact_simple_objects(json_content)
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(compact_content)
             
             # Print statistics
             original_size = input_path.stat().st_size

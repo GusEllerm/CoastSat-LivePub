@@ -14,6 +14,74 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 
+def compact_simple_objects(json_str: str) -> str:
+    """
+    Post-process JSON string to inline simple objects and arrays.
+    Converts patterns like:
+    
+    "key": [
+     {
+      "@id": "value"
+     }
+    ],
+    
+    To: "key": [{"@id": "value"}],
+    
+    And:
+    
+    "@type": [
+     "FormalParameter"
+    ],
+    
+    To: "@type": ["FormalParameter"],
+    """
+    import re
+    
+    # Pattern 1: Simple single-property objects in arrays
+    pattern1 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n\s*{\s*\n\s*("@id"):\s*("[^"]*")\s*\n\s*}\s*\n\s*\],?',
+        re.MULTILINE
+    )
+    json_str = pattern1.sub(r'\1: [{\2: \3}],', json_str)
+    
+    # Pattern 2: Simple single-property objects (not in arrays)
+    pattern2 = re.compile(
+        r'("[\w@-]+"):\s*{\s*\n\s*("@id"):\s*("[^"]*")\s*\n\s*},?',
+        re.MULTILINE
+    )
+    json_str = pattern2.sub(r'\1: {\2: \3},', json_str)
+    
+    # Pattern 3: Simple single-string arrays
+    # Matches: "key": [\n  "value"\n ],
+    pattern3 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n\s*("[^"]*")\s*\n\s*\],?',
+        re.MULTILINE
+    )
+    json_str = pattern3.sub(r'\1: [\2],', json_str)
+    
+    # Pattern 4: Multi-string arrays on separate lines (common for @type arrays)
+    # Matches: "key": [\n  "value1",\n  "value2",\n  "value3"\n ],
+    pattern4 = re.compile(
+        r'("[\w@-]+"):\s*\[\s*\n((?:\s*"[^"]*",?\s*\n)+)\s*\],?',
+        re.MULTILINE
+    )
+    
+    def inline_array_items(match):
+        key = match.group(1)
+        items_text = match.group(2)
+        # Extract all quoted strings from the items
+        items = re.findall(r'"[^"]*"', items_text)
+        items_str = ', '.join(items)
+        return f'{key}: [{items_str}],'
+    
+    json_str = pattern4.sub(inline_array_items, json_str)
+    
+    # Clean up any trailing commas before closing brackets/braces
+    json_str = re.sub(r',(\s*[}\]])', r'\1', json_str)
+    
+    return json_str
+
+
 def count_items_by_type(graph: List[Dict[str, Any]]) -> Dict[str, int]:
     """Count items by their @type."""
     type_counts = {}
@@ -101,9 +169,9 @@ def create_batch_summary(data: Dict[str, Any]) -> Dict[str, Any]:
     if formal_parameters:
         summary["@graph"].extend(formal_parameters)
     
-    # Add file count summary
+    # Add file examples with summary (similar to notebook workflow steps)
     if files:
-        # Group files by type/pattern
+        # Group files by type/pattern for the summary
         file_patterns = {}
         for file_item in files:
             file_id = file_item.get("@id", "")
@@ -116,11 +184,35 @@ def create_batch_summary(data: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 file_patterns["other"] = file_patterns.get("other", 0) + 1
         
-        summary["@graph"].append({
-            "@id": "... files ...",
-            "count": len(files),
-            "breakdown": file_patterns
-        })
+        # Apply the same pattern as notebook summaries: first few + summary + last few
+        if len(files) <= 10:
+            # For small numbers, show all files
+            summary["@graph"].extend(files)
+        else:
+            # For large numbers, show first 3, summary of middle files, last 3
+            first_files = files[:3]
+            last_files = files[-3:]
+            collapsed_count = len(files) - 6  # Total minus first 3 and last 3
+            
+            # Add first 3 files
+            summary["@graph"].extend(first_files)
+            
+            # Create summary for the collapsed middle files
+            file_summary = {
+                "@id": "... files ...",
+                "@type": "FileSummary",
+                "count": collapsed_count,
+                "total_files": len(files),
+                "breakdown": file_patterns,
+                "note": f"Collapsed {collapsed_count} middle file entities (showing first 3 and last 3)"
+            }
+            
+            # Add summary only if there are actually middle files to collapse
+            if collapsed_count > 0:
+                summary["@graph"].append(file_summary)
+            
+            # Add last 3 files
+            summary["@graph"].extend(last_files)
     
     # Add other entities count summary
     if other_entities:
@@ -179,7 +271,16 @@ def main():
         
         # Write summary
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(summary, f, indent=args.indent, ensure_ascii=False)
+            json.dump(summary, f, indent=1, ensure_ascii=False, separators=(',', ': '))
+        
+        # Post-process to inline simple objects
+        with open(output_path, 'r', encoding='utf-8') as f:
+            json_content = f.read()
+        
+        compact_content = compact_simple_objects(json_content)
+        
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(compact_content)
         
         # Print statistics
         original_size = input_path.stat().st_size

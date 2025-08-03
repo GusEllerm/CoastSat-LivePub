@@ -1,13 +1,7 @@
-from dataclasses import dataclass
-import re
-from typing import List, Optional, Any, Set, Tuple, Dict
 import os
-import json
 from pathlib import Path
+from typing import Any
 from rocrate.rocrate import ROCrate
-from datetime import datetime
-from rocrate.rocrate import DataEntity
-from rocrate.model.contextentity import ContextEntity
 from .prospective_helper import (
     create_software_application,
     create_code_cell_steps,
@@ -18,13 +12,14 @@ from .prospective_helper import (
 )
 from .provenance_types import ProspectiveIndex
 
+
 def generate_prospective_entities(crate, notebook_path, crate_output_dir) -> ProspectiveIndex:
     notebook_file: Any = crate.add_file(
         source=notebook_path,
         properties={
             "@type": ["File", "SoftwareSourceCode", "HowTo"]
         }
-    )
+    )  # type: ignore
     crate.mainEntity = notebook_file
 
     software_app = create_software_application(crate, notebook_path)
@@ -51,8 +46,9 @@ def generate_provenance_crate_for_notebook(notebook_path, crate_path):
     crate = ROCrate()
     crate.name = f"Notebook Provenance Crate ({str(notebook_path).split(os.sep)[-1]})"
     cell_prov = generate_prospective_entities(crate, notebook_path, crate_path)
-    
+
     return crate, cell_prov
+
 
 if __name__ == "__main__":
     import argparse
